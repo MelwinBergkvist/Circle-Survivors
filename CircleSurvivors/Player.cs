@@ -12,7 +12,7 @@ namespace CircleSurvivors
         public float x;
         public float y;
         float radius;
-        float movementSpeed = 100;
+        float movementSpeed = 500; //temporärt hög movement speed för debugging
         public Player(int x, int y)
         {
             this.x = x;
@@ -30,6 +30,12 @@ namespace CircleSurvivors
             if (Raylib.IsKeyDown(KeyboardKey.S)) y += movementSpeed * deltaTime;
             if (Raylib.IsKeyDown(KeyboardKey.A)) x -= movementSpeed * deltaTime;
             if (Raylib.IsKeyDown(KeyboardKey.D)) x += movementSpeed * deltaTime;
+
+            //Player kan inte lämna Canvas
+            if (x-radius <= 0) x = radius;
+            if (x+radius >= Config.WindowSizeWidth) x = Config.WindowSizeWidth - radius;
+            if (y - radius <= 0) y = radius;
+            if (y + radius >= Config.WindowSizeHeight) y = Config.WindowSizeHeight - radius;
         }
     }
 }
