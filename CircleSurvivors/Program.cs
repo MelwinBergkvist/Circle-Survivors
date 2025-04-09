@@ -1,4 +1,4 @@
-﻿using Raylib_cs; //Initierar Raylibs library
+﻿using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors
 {
@@ -8,7 +8,7 @@ namespace CircleSurvivors
         {
             //class initieringar
             Player player = new Player(Config.WindowSizeWidth/2, Config.WindowSizeHeight/2);
-
+            NPC npc = new NPC();
             //class initieringar - Variabler
             float deltaTime;
 
@@ -22,6 +22,8 @@ namespace CircleSurvivors
                 //confines
                 player.update(deltaTime);
                 player.draw();
+                npc.update();
+                npc.draw();
                 Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
