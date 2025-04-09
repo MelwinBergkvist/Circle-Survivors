@@ -23,22 +23,22 @@ namespace CircleSurvivors
             // 1 = vänster, 2 = höger, 3 = up, 4 = nere
             if (side == 1)
             {
-                this.x = 0;
+                this.x = -radius;
                 this.y = randomY.Next(0, Config.WindowSizeHeight);
             }
             else if (side == 2)
             {
-                this.x = Config.WindowSizeWidth;
+                this.x = Config.WindowSizeWidth + radius;
                 this.y = randomY.Next(0, Config.WindowSizeHeight);
             }
             else if (side == 3)
             {
-                this.y = 0;
+                this.y = -radius;
                 this.x = randomX.Next(0, Config.WindowSizeWidth);
             }
             else
             {
-                this.y = Config.WindowSizeHeight;
+                this.y = Config.WindowSizeHeight + radius;
                 this.x = randomX.Next(0, Config.WindowSizeWidth);
             }
 
@@ -47,9 +47,23 @@ namespace CircleSurvivors
         {
             Raylib.DrawCircle((int)x, (int)y, radius, Color.Red);
         }
-        public void update()
+        public void update(float deltaTime, Player player)
         {
+            float dx = player.x - x;
+            float dy = player.y - y;
+            float distance = MathF.Sqrt(dx * dx + dy * dy);
 
+            if (distance > 0)
+            {
+                float moveX = (dx / distance) * movementSpeed * deltaTime;
+                float moveY = (dy / distance) * movementSpeed * deltaTime;
+
+                float newX = x + moveX;
+                float newY = y + moveY;
+
+                x = newX;
+                y = newY;
+            }
         }
     }
 }

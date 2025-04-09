@@ -9,8 +9,13 @@ namespace CircleSurvivors
             //class initieringar
             Player player = new Player(Config.WindowSizeWidth/2, Config.WindowSizeHeight/2);
             NPC npc = new NPC();
-            //class initieringar - Variabler
+            //class initieringar - Variabler och skit
             float deltaTime;
+            List<NPC> enemies = new List<NPC>();
+            for (int i = 0; i < 10; i++)
+            {
+                enemies.Add(new NPC());
+            }
 
             //Variabler
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
@@ -22,8 +27,11 @@ namespace CircleSurvivors
                 //confines
                 player.update(deltaTime);
                 player.draw();
-                npc.update();
-                npc.draw();
+                foreach (var enemy in enemies)
+                {
+                    enemy.update(deltaTime, player);
+                    enemy.draw();
+                }
                 Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
