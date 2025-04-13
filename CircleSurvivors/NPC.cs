@@ -13,7 +13,7 @@ namespace CircleSurvivors
         public float y;
         float radius;
         float movementSpeed = 80;
-        public NPC()
+        public NPC() //constructor
         {
             this.radius = 10;
             Random randomSide = new Random();
@@ -43,12 +43,14 @@ namespace CircleSurvivors
             }
 
         }
-        public void draw()
+        public void draw(bool closest = false)
         {
-            Raylib.DrawCircle((int)x, (int)y, radius, Color.Red);
+            Color drawColor = closest ? Color.Pink : Color.Red; //if closest == true, pink, else, red
+            Raylib.DrawCircle((int)x, (int)y, radius, drawColor); //tar x & y som ints istället för floats
         }
         public void update(float deltaTime, Player player)
         {
+            //Så de går mot spelaren
             float dx = player.x - x;
             float dy = player.y - y;
             float distance = MathF.Sqrt(dx * dx + dy * dy);

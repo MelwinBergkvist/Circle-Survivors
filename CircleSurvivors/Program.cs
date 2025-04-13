@@ -1,4 +1,8 @@
-﻿using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
+﻿/* Notes:
+ * Kommentarerna kommer vara lite svengelska
+ * 
+*/
+using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors
 {
@@ -16,6 +20,7 @@ namespace CircleSurvivors
             {
                 enemies.Add(new NPC());
             }
+            
 
             //Variabler
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
@@ -23,21 +28,34 @@ namespace CircleSurvivors
             {
                 Raylib.ClearBackground(Color.White);
                 deltaTime = Raylib.GetFrameTime();
+
                 Raylib.BeginDrawing();
-                //confines
+                //drawing confines
                 player.update(deltaTime);
                 player.draw();
-                foreach (var enemy in enemies)
+
+                enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
+                //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
+                //sedan skriver över orginella listan med sorterade veriationen
+
+                for (int i = 0; i < enemies.Count; i++)
                 {
-                    enemy.update(deltaTime, player);
-                    enemy.draw();
+                    bool closest = i == 0;
+                    enemies[i].update(deltaTime, player);
+                    enemies[i].draw(closest);
                 }
                 Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
-                //confines
+                //drawing confines
                 Raylib.EndDrawing();
             }
+        }
+        static float enemyDistance(Player player, NPC npc)
+        {
+            float dx = npc.x - player.x;
+            float dy = npc.y - player.y;
+            return dx * dx + dy * dy;
         }
     }
     public static class Config
