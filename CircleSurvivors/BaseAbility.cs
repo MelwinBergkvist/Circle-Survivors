@@ -39,5 +39,10 @@ namespace CircleSurvivors
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
+        public bool offScreenBullet()
+        {
+            if (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight) return true;
+            else return false;
+        }
     }
 }

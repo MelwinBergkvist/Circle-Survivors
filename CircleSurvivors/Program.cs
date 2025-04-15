@@ -38,10 +38,17 @@ namespace CircleSurvivors
                 //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
                 //sedan skriver över orginella listan med sorterade veriationen
 
-                foreach (var bullet in bullets)
+                for (int i = bullets.Count-1; i >= 0; i--)
                 {
-                    bullet.update(deltaTime);
-                    bullet.draw();
+                    if (bullets[i].offScreenBullet())
+                    {
+                        bullets.RemoveAt(i);
+                    }
+                    else
+                    {
+                        bullets[i].update(deltaTime);
+                        bullets[i].draw();
+                    }
                 }
 
                 bulletCooldownTimer += deltaTime;
