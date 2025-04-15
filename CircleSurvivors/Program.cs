@@ -20,6 +20,11 @@ namespace CircleSurvivors
             {
                 enemies.Add(new NPC());
             }
+            enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
+            NPC closestEnemy = enemies[0];
+            //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
+            //sedan skriver över orginella listan med sorterade veriationen, måste vara föra BaseAbility initieringen
+            BaseAbility baseAbility = new BaseAbility(player, enemies[0]);
             
 
             //Variabler
@@ -34,9 +39,9 @@ namespace CircleSurvivors
                 player.update(deltaTime);
                 player.draw();
 
-                enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
-                //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
-                //sedan skriver över orginella listan med sorterade veriationen
+                baseAbility.update(deltaTime);
+                baseAbility.draw();
+
 
                 for (int i = 0; i < enemies.Count; i++)
                 {

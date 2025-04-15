@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,21 +10,34 @@ namespace CircleSurvivors
 {
     public class BaseAbility
     {
-        public float x;
-        public float y;
-        float radiusH = 3f;
-        float radiusV = 0.5f;
-        public BaseAbility() //constructor
+        public float bulletX;
+        public float bulletY;
+        float bulletSpeed = 300f;
+        float radius = 5f;
+        float moveX;
+        float moveY;
+        public BaseAbility(Player player, NPC closestEnemy) //constructor
         {
-            
+            bulletX = player.x;
+            bulletY = player.y;
+
+            float dx = closestEnemy.x - this.bulletX;
+            float dy = closestEnemy.y - this.bulletY;
+            float distance = MathF.Sqrt(dx * dx + dy * dy);
+
+            moveX = (dx / distance) * bulletSpeed;
+            moveY = (dy / distance) * bulletSpeed;
+            //vi gör calculations i constructorn så den inte blir en homing bullet
+            //nästan like som NPC movements bara på lite olika platser
         }
         public void draw()
         {
-            Raylib.DrawEllipse((int)x, (int)y, radiusH, radiusV, Color.Blue);
+            Raylib.DrawCircle((int)bulletX, (int)bulletY, radius, Color.Blue);
         }
-        public void update(List<NPC> enemies, Player player)
+        public void update(float deltaTime)
         {
-            
+            bulletX += moveX * deltaTime;
+            bulletY += moveY * deltaTime;
         }
     }
 }
