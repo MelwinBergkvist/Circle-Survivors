@@ -12,7 +12,7 @@ namespace CircleSurvivors
     {
         public float bulletX;
         public float bulletY;
-        float bulletSpeed = 300f;
+        float bulletSpeed = 300f;        
         float radius = 5f;
         float moveX;
         float moveY;
@@ -35,7 +35,7 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)bulletX, (int)bulletY, radius, Color.Blue);
         }
         public void update(float deltaTime)
-        {
+        {           
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }

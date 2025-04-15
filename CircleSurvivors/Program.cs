@@ -10,24 +10,18 @@ namespace CircleSurvivors
     {
         static void Main(string[] args) //Allt som ska ritas as raylibs måste vara inom Begin och End drawing
         {
-            //class initieringar
             Player player = new Player(Config.WindowSizeWidth/2, Config.WindowSizeHeight/2);
             NPC npc = new NPC();
-            //class initieringar - Variabler och skit
             float deltaTime;
+            List<BaseAbility> bullets = new List<BaseAbility>();
+            float bulletCooldown = 1.5f;
+            float bulletCooldownTimer = 0;
             List<NPC> enemies = new List<NPC>();
             for (int i = 0; i < 10; i++)
             {
                 enemies.Add(new NPC());
             }
-            enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
-            NPC closestEnemy = enemies[0];
-            //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
-            //sedan skriver över orginella listan med sorterade veriationen, måste vara föra BaseAbility initieringen
-            BaseAbility baseAbility = new BaseAbility(player, enemies[0]);
-            
 
-            //Variabler
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
             while (!Raylib.WindowShouldClose()) //Game loop
             {
@@ -39,9 +33,23 @@ namespace CircleSurvivors
                 player.update(deltaTime);
                 player.draw();
 
-                baseAbility.update(deltaTime);
-                baseAbility.draw();
+                enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
+                NPC closestEnemy = enemies[0];
+                //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
+                //sedan skriver över orginella listan med sorterade veriationen
 
+                foreach (var bullet in bullets)
+                {
+                    bullet.update(deltaTime);
+                    bullet.draw();
+                }
+
+                bulletCooldownTimer += deltaTime;
+                if (bulletCooldown <= bulletCooldownTimer)
+                {
+                    bullets.Add(new BaseAbility(player, closestEnemy));
+                    bulletCooldownTimer = 0;
+                }
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
