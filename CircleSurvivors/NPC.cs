@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors
 {
-    public class NPC
+    public class NPC : Drawable
     {
         public float x;
         public float y;
+        int hitpoints = 100;
         float radius;
         float movementSpeed = 80;
         public NPC() //constructor
@@ -43,16 +44,22 @@ namespace CircleSurvivors
             }
 
         }
-        public void draw(bool closest = false)
+        public void draw()
         {
-            Color drawColor = closest ? Color.Pink : Color.Red; //if closest == true, pink, else, red
-            Raylib.DrawCircle((int)x, (int)y, radius, drawColor); //tar x & y som ints istället för floats
+            //Color drawColor = closest ? Color.Pink : Color.Red; //if closest == true, pink, else, red
+            Raylib.DrawCircle((int)x, (int)y, radius, Color.Red); //tar x & y som ints istället för floats
         }
-        public void update(float deltaTime, Player player)
+
+        public bool shouldDespawn()
+        {
+            return hitpoints <= 0;
+        }
+
+        public void update(float deltaTime)
         {
             //Så de går mot spelaren
-            float dx = player.x - x;
-            float dy = player.y - y;
+            float dx = Config.player.x - x;
+            float dy = Config.player.y - y;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
 
             if (distance > 0)

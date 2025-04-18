@@ -10,17 +10,22 @@ namespace CircleSurvivors
     {
         static void Main(string[] args) //Allt som ska ritas as raylibs måste vara inom Begin och End drawing
         {
-            Player player = new Player(Config.WindowSizeWidth/2, Config.WindowSizeHeight/2);
-            NPC npc = new NPC();
-            float deltaTime;
+            Player player = Config.player;
             List<BaseAbility> bullets = new List<BaseAbility>();
+            float deltaTime;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
+
+            //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
+            List<Drawable> drawableList = new List<Drawable>();
             List<NPC> enemies = new List<NPC>();
             for (int i = 0; i < 10; i++)
             {
-                enemies.Add(new NPC());
+                NPC npc = new NPC();
+                enemies.Add(npc);
+                drawableList.Add(npc);
             }
+            drawableList.Add(player);
 
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
             while (!Raylib.WindowShouldClose()) //Game loop
@@ -29,41 +34,35 @@ namespace CircleSurvivors
                 deltaTime = Raylib.GetFrameTime();
 
                 Raylib.BeginDrawing();
-                //drawing confines
-                player.update(deltaTime);
-                player.draw();
+                //drawing confines;
 
                 enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
                 NPC closestEnemy = enemies[0];
+                //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
                 //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
                 //sedan skriver över orginella listan med sorterade veriationen
 
-                for (int i = bullets.Count-1; i >= 0; i--)
-                {
-                    if (bullets[i].offScreenBullet())
-                    {
-                        bullets.RemoveAt(i);
-                    }
-                    else
-                    {
-                        bullets[i].update(deltaTime);
-                        bullets[i].draw();
-                    }
-                }
 
                 bulletCooldownTimer += deltaTime;
                 if (bulletCooldown <= bulletCooldownTimer)
                 {
-                    bullets.Add(new BaseAbility(player, closestEnemy));
                     bulletCooldownTimer = 0;
+                    drawableList.Add(new BaseAbility(player, closestEnemy));
                 }
 
-                for (int i = 0; i < enemies.Count; i++)
+                //Kollar om jag  ska despawn itemen annars så draw och update
+                for (int i = drawableList.Count-1; i >= 0; i--)
                 {
-                    bool closest = i == 0;
-                    enemies[i].update(deltaTime, player);
-                    enemies[i].draw(closest);
+                    var item = drawableList[i];
+                    if (item.shouldDespawn())
+                    {
+                        drawableList.RemoveAt(i);
+                        continue;
+                    }
+                    item.update(deltaTime);
+                    item.draw();
                 }
+
                 Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
@@ -82,5 +81,8 @@ namespace CircleSurvivors
     {
         public static int WindowSizeWidth = 1600;
         public static int WindowSizeHeight = 800;
+
+        //global för alla, det får bara finnas en instans
+        public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
     }
 }

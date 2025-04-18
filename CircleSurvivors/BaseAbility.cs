@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors
 {
-    public class BaseAbility
+    public class BaseAbility : Drawable
     {
         public float bulletX;
         public float bulletY;
@@ -39,10 +39,9 @@ namespace CircleSurvivors
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
-        public bool offScreenBullet()
+        public bool shouldDespawn()
         {
-            if (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight) return true;
-            else return false;
+            return (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight);
         }
     }
 }
