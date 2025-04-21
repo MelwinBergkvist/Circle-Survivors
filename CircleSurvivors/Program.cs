@@ -36,22 +36,25 @@ namespace CircleSurvivors
                 Raylib.BeginDrawing();
                 //drawing confines;
 
-                enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
-                NPC closestEnemy = enemies[0];
-                //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
-                //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
-                //sedan skriver över orginella listan med sorterade veriationen
-
-
-                bulletCooldownTimer += deltaTime;
-                if (bulletCooldown <= bulletCooldownTimer)
+                //make sure att det faktist finns enemies på skärmen,
+                //så vi inte försöker skjuta mot något som inte finns
+                if (enemies.Count > 0)
                 {
-                    bulletCooldownTimer = 0;
-                    BaseAbility bullet = new BaseAbility(player, closestEnemy);
-                    drawableList.Add(bullet);
-                    bullets.Add(bullet);
-                }
-                
+                    enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
+                    NPC closestEnemy = enemies[0];
+                    //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
+                    //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
+                    //sedan skriver över orginella listan med sorterade veriationen
+
+                    bulletCooldownTimer += deltaTime;
+                    if (bulletCooldown <= bulletCooldownTimer)
+                    {
+                        bulletCooldownTimer = 0;
+                        BaseAbility bullet = new BaseAbility(player, closestEnemy);
+                        drawableList.Add(bullet);
+                        bullets.Add(bullet);
+                    }
+                }                
 
                 //Kollar om jag ska despawn itemen annars så draw och update
                 for (int i = drawableList.Count-1; i >= 0; i--)

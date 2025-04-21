@@ -48,6 +48,10 @@ namespace CircleSurvivors
         {
             //Color drawColor = closest ? Color.Pink : Color.Red; //if closest == true, pink, else, red
             Raylib.DrawCircle((int)x, (int)y, radius, Color.Red); //tar x & y som ints istället för floats
+
+            //2nd radius som en healthmeter typ
+            float healthRadius = radius - (radius * hitpoints / 100f);
+            Raylib.DrawCircle((int)x, (int)y, healthRadius, Color.Orange);
         }
 
         public bool shouldDespawn()
@@ -76,13 +80,14 @@ namespace CircleSurvivors
         }
         public void bulletCollision(BaseAbility bullets)
         {
+            //Kollar om bullet och enemies overlappar
             float bulletEnemyDx = bullets.bulletX - x;
             float bulletEnemyDy = bullets.bulletY - y;
             float distanceBulletEnemy = bulletEnemyDx * bulletEnemyDx + bulletEnemyDy * bulletEnemyDy;
             float radiusSum = Config.bulletRadius + Config.npcRadius;
             if (distanceBulletEnemy <= radiusSum * radiusSum)
             {
-                hitpoints -= 101;
+                hitpoints -= 10;
             }
         }
     }
