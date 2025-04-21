@@ -47,22 +47,37 @@ namespace CircleSurvivors
                 if (bulletCooldown <= bulletCooldownTimer)
                 {
                     bulletCooldownTimer = 0;
-                    drawableList.Add(new BaseAbility(player, closestEnemy));
+                    BaseAbility bullet = new BaseAbility(player, closestEnemy);
+                    drawableList.Add(bullet);
+                    bullets.Add(bullet);
                 }
+                
 
-                //Kollar om jag  ska despawn itemen annars så draw och update
+                //Kollar om jag ska despawn itemen annars så draw och update
                 for (int i = drawableList.Count-1; i >= 0; i--)
                 {
                     var item = drawableList[i];
                     if (item.shouldDespawn())
                     {
+                        if (item is NPC enemyNpc)
+                        {
+                            enemies.Remove(enemyNpc);
+                        }
                         drawableList.RemoveAt(i);
                         continue;
                     }
+                    
                     item.update(deltaTime);
+                    if (item is NPC npc)
+                    {
+                        foreach (var bullet in bullets)
+                        {
+                            npc.bulletCollision(bullet);
+                        }
+                    }
                     item.draw();
                 }
-
+                
                 Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
@@ -81,6 +96,8 @@ namespace CircleSurvivors
     {
         public static int WindowSizeWidth = 1600;
         public static int WindowSizeHeight = 800;
+        public static int npcRadius = 10;
+        public static int bulletRadius = 5;
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);

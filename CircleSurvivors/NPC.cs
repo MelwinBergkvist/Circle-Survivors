@@ -16,7 +16,7 @@ namespace CircleSurvivors
         float movementSpeed = 80;
         public NPC() //constructor
         {
-            this.radius = 10;
+            this.radius = Config.npcRadius;
             Random randomSide = new Random();
             Random randomX = new Random();
             Random randomY = new Random();
@@ -72,6 +72,17 @@ namespace CircleSurvivors
 
                 x = newX;
                 y = newY;
+            }
+        }
+        public void bulletCollision(BaseAbility bullets)
+        {
+            float bulletEnemyDx = bullets.bulletX - x;
+            float bulletEnemyDy = bullets.bulletY - y;
+            float distanceBulletEnemy = bulletEnemyDx * bulletEnemyDx + bulletEnemyDy * bulletEnemyDy;
+            float radiusSum = Config.bulletRadius + Config.npcRadius;
+            if (distanceBulletEnemy <= radiusSum * radiusSum)
+            {
+                hitpoints -= 101;
             }
         }
     }

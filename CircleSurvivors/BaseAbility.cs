@@ -13,7 +13,7 @@ namespace CircleSurvivors
         public float bulletX;
         public float bulletY;
         float bulletSpeed = 300f;        
-        float radius = 5f;
+        float radius = Config.bulletRadius;
         float moveX;
         float moveY;
         public BaseAbility(Player player, NPC closestEnemy) //constructor
