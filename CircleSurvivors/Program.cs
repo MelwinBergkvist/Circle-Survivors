@@ -13,6 +13,8 @@ namespace CircleSurvivors
             Player player = Config.player;
             List<BaseAbility> bullets = new List<BaseAbility>();
             float deltaTime;
+            float gameOverAlpha = 0f;
+            float fadeInSpeed = 100f;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
             int killCount = 0;
@@ -27,16 +29,28 @@ namespace CircleSurvivors
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
             while (!Raylib.WindowShouldClose()) //Game loop
             {
+                deltaTime = Raylib.GetFrameTime();
                 //om spelaren är död, sluta köra och bara visa en you lose text
                 if(player.shouldDespawn())
                 {
-                    Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth/2-300, Config.WindowSizeHeight/2, 64, Color.Black);
+                    //fade in effect för you lose screen
+                    if (gameOverAlpha < 255)
+                    {
+                        gameOverAlpha += fadeInSpeed * deltaTime;
+                        if (gameOverAlpha > 255) gameOverAlpha = 255;
+                    }                    
+                    Color fade = Raylib.Fade(Color.Red, gameOverAlpha / 255f);
+                    //raylib vill ha mellan 0-1 medan vi kör mellan 0-255 så vi kör /255 för att göra raylibs glad
+                    //raylibs inbyggda fade in
+
+                    int endTextWidth = Raylib.MeasureText("Game over, You lost!", 64);
+                    //x post räknas från början av texten, så vi kör en measureText så vi kan centrera texten
+                    Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth / 2 - endTextWidth/2, Config.WindowSizeHeight / 4, 64, fade);
                     Raylib.EndDrawing();
                     continue;
                 }
 
                 Raylib.ClearBackground(Color.White);
-                deltaTime = Raylib.GetFrameTime();
 
                 Raylib.BeginDrawing();
                 //drawing confines;
