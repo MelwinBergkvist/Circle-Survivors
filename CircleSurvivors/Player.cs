@@ -12,7 +12,7 @@ namespace CircleSurvivors
         public float x;
         public float y;
         float radius;
-        float movementSpeed = 500; //temporärt hög movement speed för debugging
+        float movementSpeed = 100; //temporärt hög movement speed för debugging
         public Player(int x, int y) //constructor
         {
             this.x = x;

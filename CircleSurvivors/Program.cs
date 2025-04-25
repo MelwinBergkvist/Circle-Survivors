@@ -15,17 +15,13 @@ namespace CircleSurvivors
             float deltaTime;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
+            int killCount = 0;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
             List<NPC> enemies = new List<NPC>();
-            for (int i = 0; i < 10; i++)
-            {
-                NPC npc = new NPC();
-                enemies.Add(npc);
-                drawableList.Add(npc);
-            }
             drawableList.Add(player);
+
 
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
             while (!Raylib.WindowShouldClose()) //Game loop
@@ -35,6 +31,16 @@ namespace CircleSurvivors
 
                 Raylib.BeginDrawing();
                 //drawing confines;
+
+                if (enemies.Count <= 0)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        NPC npc = new NPC();
+                        enemies.Add(npc);
+                        drawableList.Add(npc);
+                    }                    
+                }
 
                 //make sure att det faktist finns enemies på skärmen,
                 //så vi inte försöker skjuta mot något som inte finns
@@ -65,8 +71,9 @@ namespace CircleSurvivors
                         if (item is NPC enemyNpc)
                         {
                             enemies.Remove(enemyNpc);
+                            killCount++;
                         }
-                        drawableList.RemoveAt(i);
+                        drawableList.RemoveAt(i);                        
                         continue;
                     }
                     
@@ -81,7 +88,8 @@ namespace CircleSurvivors
                     item.draw();
                 }
                 
-                Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
+                //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
+                Raylib.DrawText($"Kill count:{killCount}", 0,0,32, Color.Red);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
                 //drawing confines
