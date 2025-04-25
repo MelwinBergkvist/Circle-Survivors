@@ -16,6 +16,7 @@ namespace CircleSurvivors
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
             int killCount = 0;
+            int wave = 0;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -26,20 +27,30 @@ namespace CircleSurvivors
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
             while (!Raylib.WindowShouldClose()) //Game loop
             {
+                //om spelaren är död, sluta köra och bara visa en you lose text
+                if(player.shouldDespawn())
+                {
+                    Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth/2-300, Config.WindowSizeHeight/2, 64, Color.Black);
+                    Raylib.EndDrawing();
+                    continue;
+                }
+
                 Raylib.ClearBackground(Color.White);
                 deltaTime = Raylib.GetFrameTime();
 
                 Raylib.BeginDrawing();
                 //drawing confines;
 
+                //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0)
                 {
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 10 + (wave*wave); i++)
                     {
                         NPC npc = new NPC();
                         enemies.Add(npc);
                         drawableList.Add(npc);
-                    }                    
+                    }
+                    wave++;
                 }
 
                 //make sure att det faktist finns enemies på skärmen,
@@ -80,9 +91,14 @@ namespace CircleSurvivors
                     item.update(deltaTime);
                     if (item is NPC npc)
                     {
+                        //kollar igenom alla bullets och enemies för collision
                         foreach (var bullet in bullets)
                         {
                             npc.bulletCollision(bullet);
+                        }
+                        foreach (var enemy in enemies)
+                        {
+                            player.playerCollision(enemy, deltaTime);
                         }
                     }
                     item.draw();
@@ -90,6 +106,7 @@ namespace CircleSurvivors
                 
                 //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.DrawText($"Kill count:{killCount}", 0,0,32, Color.Red);
+                Raylib.DrawText($"Wave:{wave}", 0,25,32, Color.Red);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
                 //drawing confines
