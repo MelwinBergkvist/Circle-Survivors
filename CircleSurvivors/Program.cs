@@ -14,11 +14,12 @@ namespace CircleSurvivors
             List<BaseAbility> bullets = new List<BaseAbility>();
             float deltaTime;
             float gameOverAlpha = 0f;
-            float fadeInSpeed = 100f;
+            float fadeInSpeed = 50f;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
             int killCount = 0;
             int wave = 0;
+            float waveCooldown = 5.99f;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -58,13 +59,21 @@ namespace CircleSurvivors
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0)
                 {
-                    for (int i = 0; i < 10 + (wave*wave); i++)
+                    int waveCooldownIntParse = (int)waveCooldown;
+                    waveCooldown -= deltaTime;
+                    int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
+                    Raylib.DrawText($"Next wave in: {waveCooldownIntParse}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
+                    if (waveCooldown < 1)
                     {
-                        NPC npc = new NPC();
-                        enemies.Add(npc);
-                        drawableList.Add(npc);
+                        for (int i = 0; i < 10 + (wave * wave); i++)
+                        {
+                            NPC npc = new NPC();
+                            enemies.Add(npc);
+                            drawableList.Add(npc);
+                        }
+                        waveCooldown = 5.99f;
+                        wave++;
                     }
-                    wave++;
                 }
 
                 //make sure att det faktist finns enemies på skärmen,
