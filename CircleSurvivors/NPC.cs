@@ -14,6 +14,8 @@ namespace CircleSurvivors
         int hitpoints = 100;
         float radius;
         float movementSpeed = 80;
+        public float spawnImmunity = 0.5f;
+        public float sinceSpawn = 0;
         public NPC() //constructor
         {
             this.radius = Config.npcRadius;
@@ -61,6 +63,7 @@ namespace CircleSurvivors
 
         public void update(float deltaTime)
         {
+            sinceSpawn += deltaTime;
             //Så de går mot spelaren
             float dx = Config.player.x - x;
             float dy = Config.player.y - y;
@@ -80,6 +83,8 @@ namespace CircleSurvivors
         }
         public void bulletCollision(BaseAbility bullets)
         {
+            if (sinceSpawn < spawnImmunity) return;
+
             //Kollar om bullet och enemies overlappar
             float bulletEnemyDx = bullets.bulletX - x;
             float bulletEnemyDy = bullets.bulletY - y;
