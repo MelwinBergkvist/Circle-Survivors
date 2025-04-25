@@ -19,7 +19,7 @@ namespace CircleSurvivors
             float bulletCooldownTimer = 0;
             int killCount = 0;
             int wave = 0;
-            float waveCooldown = 5.99f;
+            float waveCooldown = 5.99f; //5.99 så den inte flashar en 6 vid början av cooldownen
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -117,7 +117,7 @@ namespace CircleSurvivors
                         //kollar igenom alla bullets och enemies för collision
                         foreach (var bullet in bullets)
                         {
-                            npc.bulletCollision(bullet);
+                            npc.bulletCollision(bullet, deltaTime);
                         }
                         foreach (var enemy in enemies)
                         {
@@ -149,6 +149,7 @@ namespace CircleSurvivors
         public static int WindowSizeHeight = 800;
         public static int npcRadius = 10;
         public static int bulletRadius = 5;
+        //public static int wave;
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
