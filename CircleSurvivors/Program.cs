@@ -19,7 +19,7 @@ namespace CircleSurvivors
             float bulletCooldownTimer = 0;
             int killCount = 0;
             int wave = 0;
-            float waveCooldown = 5.99f; //5.99 så den inte flashar en 6 vid början av cooldownen
+            float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -86,7 +86,7 @@ namespace CircleSurvivors
                             enemies.Add(npc);
                             drawableList.Add(npc);
                         }
-                        waveCooldown = 5.99f;
+                        waveCooldown = 3.99f;
                         wave++;
                         //resettar alla states, annars så får vi inte välja om powerups waven efter
                         Config.isPicked = false;
