@@ -11,7 +11,6 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
-        float movementSpeed = 100; //temporärt hög movement speed för debugging
         float hitpoints = 100;
         float collisionCooldown = 0f;
         public Player(int x, int y) //constructor
@@ -40,13 +39,13 @@ namespace CircleSurvivors
         {
             //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
             if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up)) 
-                y -= movementSpeed * deltaTime;            
+                y -= Config.movementSpeed * deltaTime;            
             if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
-                y += movementSpeed * deltaTime;            
+                y += Config.movementSpeed * deltaTime;            
             if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left)) 
-                x -= movementSpeed * deltaTime;
+                x -= Config.movementSpeed * deltaTime;
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
-                x += movementSpeed * deltaTime;
+                x += Config.movementSpeed * deltaTime;
 
             //Player kan inte lämna Canvas
             if (x-Config.playerRadius <= 0) x = Config.playerRadius;

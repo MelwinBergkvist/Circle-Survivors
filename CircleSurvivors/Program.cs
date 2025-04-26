@@ -60,6 +60,7 @@ namespace CircleSurvivors
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0)
                 {
+                    Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw();
                     powerUps.update(player);
                     int waveCooldownIntParse = (int)waveCooldown;
@@ -92,6 +93,7 @@ namespace CircleSurvivors
                         Config.p1 = false;
                         Config.p2 = false;
                         Config.p3 = false;
+                        Config.movementSpeed = 100; //tillbaka till segis
                     }
                 }
 
@@ -149,6 +151,10 @@ namespace CircleSurvivors
                 //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.DrawText($"Kill count: {killCount}", 0,0,32, Color.Red);
                 Raylib.DrawText($"Wave: {wave}", 0,25,32, Color.Red);
+                Raylib.DrawText($"Stat cheet:",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
+                Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
+                Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
+                Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
                 //drawing confines
@@ -170,6 +176,7 @@ namespace CircleSurvivors
         public static int bulletRadius = 5;
         public static int playerRadius = 15;
         public static int bulletDamage = 50;
+        public static int movementSpeed = 100;
         public static float bulletSpeed = 300f;
         public static int enemyCollisionDamage = 5;
         public static bool isPicked = false;
