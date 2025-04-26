@@ -11,7 +11,6 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
-        float radius;
         float movementSpeed = 100; //temporärt hög movement speed för debugging
         float hitpoints = 100;
         float collisionCooldown = 0f;
@@ -19,12 +18,11 @@ namespace CircleSurvivors
         {
             this.x = x;
             this.y = y;
-            this.radius = 15;
         }
         public void draw()
         {
             //spelaren
-            Raylib.DrawCircle((int)x, (int)y, radius, Color.Green);
+            Raylib.DrawCircle((int)x, (int)y, Config.playerRadius, Color.Green);
 
             //health bar
             Raylib.DrawRectangle((int)x-15, (int)y+25, 30,8, Color.Green);
@@ -51,10 +49,10 @@ namespace CircleSurvivors
                 x += movementSpeed * deltaTime;
 
             //Player kan inte lämna Canvas
-            if (x-radius <= 0) x = radius;
-            if (x+radius >= Config.WindowSizeWidth) x = Config.WindowSizeWidth - radius;
-            if (y - radius <= 0) y = radius;
-            if (y + radius >= Config.WindowSizeHeight) y = Config.WindowSizeHeight - radius;
+            if (x-Config.playerRadius <= 0) x = Config.playerRadius;
+            if (x+Config.playerRadius >= Config.WindowSizeWidth) x = Config.WindowSizeWidth - Config.playerRadius;
+            if (y - Config.playerRadius <= 0) y = Config.playerRadius;
+            if (y + Config.playerRadius >= Config.WindowSizeHeight) y = Config.WindowSizeHeight - Config.playerRadius;
         }
         public void playerCollision(NPC enemies, float deltaTime)
         {
@@ -65,13 +63,13 @@ namespace CircleSurvivors
             float playerEnemyDx = x - enemies.x;
             float playerEnemyDy = y - enemies.y;
             float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
-            float radiusSum = radius + Config.npcRadius;
+            float radiusSum = Config.playerRadius + Config.npcRadius;
 
             if (distancePlayerEnemy <= radiusSum * radiusSum)
             {
                 if (collisionCooldown <= 0f)
                 {
-                    hitpoints -= 5;
+                    hitpoints -= Config.enemyCollisionDamage;
                     collisionCooldown = 15f;
                 }
             }

@@ -25,6 +25,7 @@ namespace CircleSurvivors
             List<Drawable> drawableList = new List<Drawable>();
             List<NPC> enemies = new List<NPC>();
             drawableList.Add(player);
+            PowerUps powerUps = new PowerUps();
 
 
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
@@ -59,10 +60,23 @@ namespace CircleSurvivors
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0)
                 {
+                    powerUps.draw();
+                    powerUps.update(player);
                     int waveCooldownIntParse = (int)waveCooldown;
-                    waveCooldown -= deltaTime;
+
+                    if (Config.isPicked)
+                        waveCooldown -= deltaTime;
+
                     int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
-                    Raylib.DrawText($"Next wave in: {waveCooldownIntParse}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
+                    int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
+                    if (!Config.isPicked)
+                    {
+                        Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+                    }
+                    else
+                    {
+                        Raylib.DrawText($"Next wave in: {waveCooldownIntParse}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
+                    }
                     if (waveCooldown < 1)
                     {
                         for (int i = 0; i < 10 + (wave * wave); i++)
@@ -73,6 +87,11 @@ namespace CircleSurvivors
                         }
                         waveCooldown = 5.99f;
                         wave++;
+                        //resettar alla states, annars så får vi inte välja om powerups waven efter
+                        Config.isPicked = false;
+                        Config.p1 = false;
+                        Config.p2 = false;
+                        Config.p3 = false;
                     }
                 }
 
@@ -128,8 +147,8 @@ namespace CircleSurvivors
                 }
                 
                 //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
-                Raylib.DrawText($"Kill count:{killCount}", 0,0,32, Color.Red);
-                Raylib.DrawText($"Wave:{wave}", 0,25,32, Color.Red);
+                Raylib.DrawText($"Kill count: {killCount}", 0,0,32, Color.Red);
+                Raylib.DrawText($"Wave: {wave}", 0,25,32, Color.Red);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
                 
                 //drawing confines
@@ -149,6 +168,14 @@ namespace CircleSurvivors
         public static int WindowSizeHeight = 800;
         public static int npcRadius = 10;
         public static int bulletRadius = 5;
+        public static int playerRadius = 15;
+        public static int bulletDamage = 50;
+        public static float bulletSpeed = 300f;
+        public static int enemyCollisionDamage = 5;
+        public static bool isPicked = false;
+        public static bool p1 = false;
+        public static bool p2 = false;
+        public static bool p3 = false;
         //public static int wave;
 
         //global för alla, det får bara finnas en instans

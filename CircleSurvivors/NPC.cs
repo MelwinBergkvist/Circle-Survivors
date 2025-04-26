@@ -97,8 +97,8 @@ namespace CircleSurvivors
             {
                 if (hitCooldown <= 0)
                 {
-                    hitpoints -= 50;
-                    hitCooldown = 5f;
+                    hitpoints -= Config.bulletDamage;
+                    hitCooldown = 0.5f;
                 }
             }
         }

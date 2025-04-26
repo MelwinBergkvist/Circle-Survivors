@@ -12,8 +12,6 @@ namespace CircleSurvivors
     {
         public float bulletX;
         public float bulletY;
-        float bulletSpeed = 300f;        
-        float radius = Config.bulletRadius;
         float moveX;
         float moveY;
         public BaseAbility(Player player, NPC closestEnemy) //constructor
@@ -25,14 +23,14 @@ namespace CircleSurvivors
             float dy = closestEnemy.y - this.bulletY;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
 
-            moveX = (dx / distance) * bulletSpeed;
-            moveY = (dy / distance) * bulletSpeed;
+            moveX = (dx / distance) * Config.bulletSpeed;
+            moveY = (dy / distance) * Config.bulletSpeed;
             //vi gör calculations i constructorn så den inte blir en homing bullet
             //nästan like som NPC movements bara på lite olika platser
         }
         public void draw()
         {
-            Raylib.DrawCircle((int)bulletX, (int)bulletY, radius, Color.Blue);
+            Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Blue);
         }
         public void update(float deltaTime)
         {           
