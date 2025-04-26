@@ -20,6 +20,7 @@ namespace CircleSurvivors
         int posY3 = Config.WindowSizeHeight / 4;
 
         int radius = 50;
+
         public PowerUps() { }
 
         public void update(Player player)
@@ -70,18 +71,25 @@ namespace CircleSurvivors
                 }
             }
         }
-        public void draw()
+        public void draw(float deltaTime)
         {
-            if (Config.isPicked) return; //vi kör denna så den slutar rita powerupsen efter någon har tagits
+            if (Config.isPicked)
+            {
+                if (Config.despawnTime <= 0)
+                {
+                    return; //vi kör denna så den slutar rita powerupsen efter någon har tagits
+                }
+                Config.despawnTime -= deltaTime;
+            }
 
             //väldigt confusing för allt ser så fult ut, den de skapar först cirkeln,
             //sen en grön rectangle, sen en vit rectangle för att göra det en outline
             //sedan texten efter, repeat på alla andra. alla -15 -100 och sånt är för centrering.
-            Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen);
-            Raylib.DrawRectangle(posX1 - 100,posY1 - 15, 200, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX1 - 95,posY1 - 13, 190, 26, Color.White);
-            int p1Text = Raylib.MeasureText("+5 Bullet Damage", 20);
-            Raylib.DrawText("+5 Bullet Damage", posX1 - p1Text/2, posY1-10, 20, Color.Black);
+            Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
+            Raylib.DrawRectangle(posX1 - 100,posY1 - 15, 200, 30, Color.DarkGreen); //dark green rektangel
+            Raylib.DrawRectangle(posX1 - 95,posY1 - 13, 190, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
+            int p1Text = Raylib.MeasureText("+5 Bullet Damage", 20); //kollar textens width för centrering
+            Raylib.DrawText("+5 Bullet Damage", posX1 - p1Text/2, posY1-10, 20, Color.Black); //texten som säger vad för powerup det är
 
             Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 100, posY2 - 15, 200, 30, Color.DarkGreen);

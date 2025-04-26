@@ -61,7 +61,7 @@ namespace CircleSurvivors
                 if (enemies.Count <= 0)
                 {
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
-                    powerUps.draw();
+                    powerUps.draw(deltaTime);
                     powerUps.update(player);
                     int waveCooldownIntParse = (int)waveCooldown;
 
@@ -93,6 +93,7 @@ namespace CircleSurvivors
                         Config.p1 = false;
                         Config.p2 = false;
                         Config.p3 = false;
+                        Config.despawnTime = 0.5f;
                         Config.movementSpeed = 100; //tillbaka till segis
                     }
                 }
@@ -170,20 +171,29 @@ namespace CircleSurvivors
     }
     public static class Config
     {
+        //program
         public static int WindowSizeWidth = 1600;
         public static int WindowSizeHeight = 800;
+
+        //npc,enemy
         public static int npcRadius = 10;
-        public static int bulletRadius = 5;
-        public static int playerRadius = 15;
-        public static int bulletDamage = 50;
-        public static int movementSpeed = 100;
-        public static float bulletSpeed = 300f;
         public static int enemyCollisionDamage = 5;
+
+        //player
+        public static int movementSpeed = 100;
+        public static int playerRadius = 15;
+
+        //bullets
+        public static int bulletRadius = 5;
+        public static int bulletDamage = 50;
+        public static float bulletSpeed = 300f;
+
+        //power-ups
         public static bool isPicked = false;
         public static bool p1 = false;
         public static bool p2 = false;
         public static bool p3 = false;
-        //public static int wave;
+        public static float despawnTime = 0.5f;
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);

@@ -81,13 +81,14 @@ namespace CircleSurvivors
                 x = newX;
                 y = newY;
             }
+
+            if (hitCooldown >= 0)
+                hitCooldown -= deltaTime;
         }
         public void bulletCollision(BaseAbility bullets, float deltaTime)
         {
             if (sinceSpawn < spawnImmunity) return;
-            if (hitCooldown >= 0)
-                hitCooldown -= deltaTime;
-
+            
             //Kollar om bullet och enemies overlappar
             float bulletEnemyDx = bullets.bulletX - x;
             float bulletEnemyDy = bullets.bulletY - y;
