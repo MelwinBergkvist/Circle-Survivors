@@ -15,7 +15,9 @@ namespace CircleSurvivors
             List<BaseAbility> bullets = new List<BaseAbility>();
             float deltaTime;
             float gameOverAlpha = 0f;
+            float startScreenAlpha = 0f;
             float fadeInSpeed = 50f;
+            float fadeInSpeedStart = 100f;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
@@ -23,6 +25,7 @@ namespace CircleSurvivors
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
             bool startScreen = false;
+            bool startFadeIn = false;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -73,9 +76,23 @@ namespace CircleSurvivors
                     //om den är sann och left click är också nedklickad samtidigt så körs inte denna if satsen nåmer, om den inte är sann så skippar allt annat för "continue;"
                     bool hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
                     bool clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
+
                     if (hoveredStart && clickedStart)
                     {
-                        startScreen = true;
+                        startFadeIn = true;
+                    }
+
+                    if (startFadeIn)
+                    {
+                        if (startScreenAlpha < 255)
+                        {
+                            startScreenAlpha += fadeInSpeedStart * deltaTime;
+                            if (startScreenAlpha > 255) startScreenAlpha = 255;
+                        }
+                        Color fadeIn = Raylib.Fade(Color.White, startScreenAlpha / 255f);
+                        Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, fadeIn);
+                        if (startScreenAlpha == 255)
+                            startScreen = true;
                     }
                     Raylib.EndDrawing();
                     continue;
