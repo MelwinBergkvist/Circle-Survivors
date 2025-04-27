@@ -27,6 +27,7 @@ namespace CircleSurvivors
             int splashText = 0;
             bool startScreen = false;
             bool startFadeIn = false;
+            bool firstWaveAfterRestart = false;
             string[] splashTextsArray = 
             {
                 //common
@@ -93,7 +94,10 @@ namespace CircleSurvivors
                         drawableList.Clear();
                         bullets.Clear();
                         drawableList.Add(player);
-                        Config.isPicked = true;
+                        firstWaveAfterRestart = true;
+                        enemieSpawnCount = 11;
+                        player.x = Config.WindowSizeWidth / 2;
+                        player.y = Config.WindowSizeHeight / 2;
                     }
                     else
                     {
@@ -174,7 +178,7 @@ namespace CircleSurvivors
                 //drawing confines;
 
                 //när alla enemies är döda, ny wave och +1 wave count
-                if (enemies.Count <= 0 && enemieSpawnCount <= 0)
+                if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
                 {
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
@@ -214,6 +218,8 @@ namespace CircleSurvivors
                         Config.movementSpeed = 100; //tillbaka till segis
                     }
                 }
+
+                firstWaveAfterRestart = false;
 
                 if (enemieSpawnCount > 0)
                 {
