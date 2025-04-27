@@ -71,14 +71,35 @@ namespace CircleSurvivors
                         if (gameOverAlpha > 255) gameOverAlpha = 255;
                     }                    
                     Color fade = Raylib.Fade(Color.Red, gameOverAlpha / 255f);
+                    Color fadeRestart = Raylib.Fade(Color.DarkGray, gameOverAlpha / 255f);
                     //raylib vill ha mellan 0-1 medan vi kör mellan 0-255 så vi kör /255 för att göra raylibs glad
                     //raylibs inbyggda fade in
 
+                    Raylib.ClearBackground(Color.Gray);
                     int endTextWidth = Raylib.MeasureText("Game over, You lost!", 64);
                     //x post räknas från början av texten, så vi kör en measureText så vi kan centrera texten
                     Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth / 2 - endTextWidth/2, Config.WindowSizeHeight / 4, 64, fade);
-                    Raylib.EndDrawing();
-                    continue;
+                    int restartTextWidth = Raylib.MeasureText("Press R to restart", 24);
+                    Raylib.DrawText("Press R to restart", Config.WindowSizeWidth / 2 - restartTextWidth/2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight/4, 24, fadeRestart);
+                    if (Raylib.IsKeyPressed(KeyboardKey.R))
+                    {
+                        Config.wave = 1;
+                        Config.bulletDamage = 50;
+                        Config.bulletRadius = 5;
+                        Config.bulletSpeed = 300f;
+                        Config.playerHealthpoints = 100;
+                        killCount = 0;
+                        enemies.Clear();
+                        drawableList.Clear();
+                        bullets.Clear();
+                        drawableList.Add(player);
+                        Config.isPicked = true;
+                    }
+                    else
+                    {
+                        Raylib.EndDrawing();
+                        continue;
+                    }
                 }
 
                 if (!startScreen)
@@ -290,11 +311,12 @@ namespace CircleSurvivors
 
         //npc,enemy
         public static int npcRadius = 10;
-        public static int enemyCollisionDamage = 5;
+        public static int enemyCollisionDamage = 50;
 
         //player
         public static int movementSpeed = 100;
         public static int playerRadius = 15;
+        public static int playerHealthpoints = 100;
 
         //bullets
         public static int bulletRadius = 5;
@@ -309,7 +331,7 @@ namespace CircleSurvivors
         public static float despawnTime = 0.5f;
 
         //wave
-        public static int wave = 0;
+        public static int wave = 1;
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);

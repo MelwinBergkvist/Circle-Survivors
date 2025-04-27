@@ -11,7 +11,6 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
-        float hitpoints = 100;
         float collisionCooldown = 0f;
         public Player(int x, int y) //constructor
         {
@@ -25,14 +24,14 @@ namespace CircleSurvivors
 
             //health bar
             Raylib.DrawRectangle((int)x-15, (int)y+25, 30,8, Color.Green);
-            float healthWidth = 30 - (30 * hitpoints / 100);
+            float healthWidth = 30 - (30 * Config.playerHealthpoints / 100);
             Raylib.DrawRectangle((int)x-15, (int)y+25, (int)healthWidth,8, Color.Red);
             //Raylib.DrawText($"Cooldown: {collisionCooldown:F2}", 10, 100, 20, Color.Gray);
         }
 
         public bool shouldDespawn()
         {
-            return hitpoints <= 0;
+            return Config.playerHealthpoints <= 0;
         }
 
         public void update(float deltaTime) //kallar över deltatime som ett argument
@@ -68,7 +67,7 @@ namespace CircleSurvivors
             {
                 if (collisionCooldown <= 0f)
                 {
-                    hitpoints -= Config.enemyCollisionDamage;
+                    Config.playerHealthpoints -= Config.enemyCollisionDamage;
                     collisionCooldown = 15f;
                 }
             }
