@@ -101,6 +101,10 @@ namespace CircleSurvivors
                     bool isTutorialHovered = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), tutorialButton);
                     if (isTutorialHovered)
                     {
+                        //ritar om rectangeln i annan färg så man ser att den är hovered
+                        Raylib.DrawRectangle(0, Config.WindowSizeHeight / 2, 120, 50, Color.Gray);
+                        Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight / 2 + 14, 16, Color.Black);
+                        
                         //tutorial så man vet vad man ska göra
                         Raylib.DrawRectangle(Config.WindowSizeWidth/6-10, Config.WindowSizeHeight/3-10, 320, 220, Color.DarkGray);
                         Raylib.DrawText("Welcome to Circle Survivors!", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3,16,Color.White);
@@ -117,9 +121,15 @@ namespace CircleSurvivors
                     bool hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
                     bool clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
 
-                    if (hoveredStart && clickedStart)
+                    //måste inte ha if satsen nestad men det ser finare ut tycker jag själv, fungerar exakt likadant att ha två ifs separate
+                    if (hoveredStart) //så man ser att den är hovered
                     {
-                        startFadeIn = true; //initierar fade-in
+                        Raylib.DrawRectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100, Color.Blue);
+                        Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.Black);
+                        if (hoveredStart && clickedStart)
+                        {
+                            startFadeIn = true; //initierar fade-in
+                        }
                     }
 
                     if (startFadeIn)
