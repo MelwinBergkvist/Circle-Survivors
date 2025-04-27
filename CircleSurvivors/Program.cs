@@ -2,7 +2,8 @@
  * Kommentarerna kommer vara lite svengelska
  * 
 */
-using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
+using Raylib_cs;
+using System.Numerics; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors
 {
@@ -21,6 +22,7 @@ namespace CircleSurvivors
             float spawnTime = 1f;
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
+            bool startScreen = false;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -53,10 +55,38 @@ namespace CircleSurvivors
                     continue;
                 }
 
-                Raylib.ClearBackground(Color.White);
+                if (!startScreen)
+                {
+                    Raylib.ClearBackground(Color.Black);
+                    Raylib.BeginDrawing();
 
+                    int startScreenText = Raylib.MeasureText("Welcome to Circle survivors!", 64);
+                    Raylib.DrawText("Welcome to Circle survivors!", Config.WindowSizeWidth/2 - startScreenText / 2,Config.WindowSizeHeight/8, 64, Color.White);
+
+                    Raylib.DrawRectangle((Config.WindowSizeWidth / 2)-150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4)-38, 300, 100, Color.SkyBlue);
+                    Rectangle startButton = new Rectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100);
+
+                    int startScreenBeginText = Raylib.MeasureText("Click here to begin!", 24);
+                    Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
+
+                    //checkcollisionpointrec kollar om vektoren getmouseposition är inom rektangel startButton vilken är en kopia av drawrectangle vi gjorde innan
+                    //om den är sann och left click är också nedklickad samtidigt så körs inte denna if satsen nåmer, om den inte är sann så skippar allt annat för "continue;"
+                    bool hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
+                    bool clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
+                    if (hoveredStart && clickedStart)
+                    {
+                        startScreen = true;
+                    }
+                    Raylib.EndDrawing();
+                    continue;
+
+                }
+
+                Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
+
+               
 
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0)
