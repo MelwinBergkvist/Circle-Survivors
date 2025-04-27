@@ -17,9 +17,10 @@ namespace CircleSurvivors
             float fadeInSpeed = 50f;
             float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0;
-            int killCount = 0;
-            int wave = 0;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
+            float spawnTime = 1f;
+            int enemieSpawnCount = 10 + (Config.wave * Config.wave);
+            int killCount = 0;
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -58,7 +59,7 @@ namespace CircleSurvivors
                 //drawing confines;
 
                 //när alla enemies är döda, ny wave och +1 wave count
-                if (enemies.Count <= 0)
+                if (enemies.Count <= 0 && enemieSpawnCount <= 0)
                 {
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
@@ -70,24 +71,24 @@ namespace CircleSurvivors
 
                     int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
                     int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
+                    int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle", 18);
+
                     if (!Config.isPicked)
                     {
                         Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+                        Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
+                        Raylib.DrawText($"Power-up is picked up by walking inside the circle", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
                     }
                     else
                     {
                         Raylib.DrawText($"Next wave in: {waveCooldownIntParse}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
                     }
+
                     if (waveCooldown < 1)
                     {
-                        for (int i = 0; i < 10 + (wave * wave); i++)
-                        {
-                            NPC npc = new NPC();
-                            enemies.Add(npc);
-                            drawableList.Add(npc);
-                        }
+                        enemieSpawnCount = 10 + (Config.wave * Config.wave);
                         waveCooldown = 3.99f;
-                        wave++;
+                        Config.wave++;
                         //resettar alla states, annars så får vi inte välja om powerups waven efter
                         Config.isPicked = false;
                         Config.p1 = false;
@@ -95,6 +96,23 @@ namespace CircleSurvivors
                         Config.p3 = false;
                         Config.despawnTime = 0.5f;
                         Config.movementSpeed = 100; //tillbaka till segis
+                    }
+                }
+
+                if (enemieSpawnCount > 0)
+                {
+                    spawnTime -= deltaTime;
+                    if (spawnTime <= 0)
+                    {
+                        NPC npc = new NPC();
+                        enemies.Add(npc);
+                        drawableList.Add(npc);
+                        if (enemieSpawnCount < 100)
+                        {
+                            spawnTime = 1f - (enemieSpawnCount/100f);
+                        }
+                        else spawnTime = 0.1f;
+                        enemieSpawnCount--;
                     }
                 }
 
@@ -151,7 +169,7 @@ namespace CircleSurvivors
                 
                 //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
                 Raylib.DrawText($"Kill count: {killCount}", 0,0,32, Color.Red);
-                Raylib.DrawText($"Wave: {wave}", 0,25,32, Color.Red);
+                Raylib.DrawText($"Wave: {Config.wave}", 0,25,32, Color.Red);
                 Raylib.DrawText($"Stat cheet:",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
                 Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
                 Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
@@ -194,6 +212,9 @@ namespace CircleSurvivors
         public static bool p2 = false;
         public static bool p3 = false;
         public static float despawnTime = 0.5f;
+
+        //wave
+        public static int wave = 0;
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
