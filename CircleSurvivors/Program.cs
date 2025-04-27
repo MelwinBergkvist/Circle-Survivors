@@ -2,8 +2,8 @@
  * Kommentarerna kommer vara lite svengelska
  * 
 */
-using Raylib_cs;
-using System.Numerics; //Initierar Raylibs library, måste göras på alla .cs
+using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
+using System.Numerics; 
 
 namespace CircleSurvivors
 {
@@ -24,8 +24,31 @@ namespace CircleSurvivors
             float spawnTime = 1f;
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
+            int splashText = 0;
             bool startScreen = false;
             bool startFadeIn = false;
+            string[] splashTextsArray = 
+            {
+                //common
+                "Bravo 6, going circles.", "Circle of life... and death, probably.", "Circle up buddy", "This isn't a drill! (it's a spiral)",
+                "I'm in love with the shape of you - by circle sheeran", "On edge? We don't have edges here.", "Pop a wheelie", "I'm going aRound in circles",
+                "alternative title: Geometry wars", "Also try Circle Diers", "360 degrees of dangers", "Axis of evil", "No corners to hide behind",
+                "Roundabout rage", "Wheel of misfortune", "esnälla ge mig ett A", "Rotating regrets", "Circle one: fight!... i mean round",
+                "I need to count how many splashes made after this", "Rolling until further notice", "You're on a roll!... or not",
+
+                //rare
+                "Insert better pun here.", "This text does nothing.", "in circles since 1997",
+                "Tested on humans, not responsibly.", "This splash text is {Shadow Slave chapter 360}"
+            }; //16st, rare 5st
+            Random randomSplashText = new Random();
+            if (randomSplashText.Next(0,101) < 90)
+            {
+                splashText = randomSplashText.Next(0,16);
+            }
+            else
+            {
+                splashText = randomSplashText.Next(16,21);
+            }
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<Drawable> drawableList = new List<Drawable>();
@@ -34,7 +57,7 @@ namespace CircleSurvivors
             PowerUps powerUps = new PowerUps();
 
 
-            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors");
+            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + splashTextsArray[splashText]);
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
@@ -72,6 +95,23 @@ namespace CircleSurvivors
                     int startScreenBeginText = Raylib.MeasureText("Click here to begin!", 24);
                     Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
 
+                    Rectangle tutorialButton = new Rectangle(0,Config.WindowSizeHeight/2, 120, 50);
+                    Raylib.DrawRectangle(0, Config.WindowSizeHeight/2, 120, 50, Color.DarkGray);
+                    Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight/2+14, 16, Color.Black);
+                    bool isTutorialHovered = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), tutorialButton);
+                    if (isTutorialHovered)
+                    {
+                        //tutorial så man vet vad man ska göra
+                        Raylib.DrawRectangle(Config.WindowSizeWidth/6-10, Config.WindowSizeHeight/3-10, 320, 220, Color.DarkGray);
+                        Raylib.DrawText("Welcome to Circle Survivors!", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3,16,Color.White);
+                        Raylib.DrawText("You play as the green circle,", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+40,16,Color.White);
+                        Raylib.DrawText("you move using WASD or direction keys.", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+60,16,Color.White);
+                        Raylib.DrawText("The game automatically shoots for you.", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+100,16,Color.White);
+                        Raylib.DrawText("So you just need to stay alive.", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+120,16,Color.White);
+                        Raylib.DrawText("Enemies spawn in waves,", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+160,16,Color.White);
+                        Raylib.DrawText("At the end a wave you get a powerup.", Config.WindowSizeWidth/6, Config.WindowSizeHeight/3+180,16,Color.White);
+                    }
+
                     //checkcollisionpointrec kollar om vektoren getmouseposition är inom rektangel startButton vilken är en kopia av drawrectangle vi gjorde innan
                     //om den är sann och left click är också nedklickad samtidigt så körs inte denna if satsen nåmer, om den inte är sann så skippar allt annat för "continue;"
                     bool hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
@@ -79,7 +119,7 @@ namespace CircleSurvivors
 
                     if (hoveredStart && clickedStart)
                     {
-                        startFadeIn = true;
+                        startFadeIn = true; //initierar fade-in
                     }
 
                     if (startFadeIn)
@@ -91,19 +131,16 @@ namespace CircleSurvivors
                         }
                         Color fadeIn = Raylib.Fade(Color.White, startScreenAlpha / 255f);
                         Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, fadeIn);
-                        if (startScreenAlpha == 255)
+                        if (startScreenAlpha == 255) //när fade-in är klar (opaciteten är 100%) så säger vi att startscreenen är klar
                             startScreen = true;
                     }
                     Raylib.EndDrawing();
                     continue;
-
                 }
 
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
-
-               
 
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0)
@@ -116,6 +153,7 @@ namespace CircleSurvivors
                     if (Config.isPicked)
                         waveCooldown -= deltaTime;
 
+                    //Ser lite dumt ut att köra om dessa varje frame men det fungerar inte att ha alla measureText i början utanför game lopp
                     int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
                     int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
                     int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle", 18);
