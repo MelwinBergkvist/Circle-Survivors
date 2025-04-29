@@ -23,14 +23,24 @@ namespace CircleSurvivors
         {
             Random random = new Random();
 
+            //Special enemies
             if (random.Next(0,100) > 90 )
             {
                 hitpoints += 100;
-                radius = 15f;
+                radius += 5f;
                 movementSpeed -= 30;
                 enemyColor = Color.DarkGreen;
                 enemyHealthColor = Color.Red;
                 Config.enemyCollisionDamage += 10;
+            }
+            else if (random.Next(0,101) > 80) 
+            {
+                hitpoints -= 50;
+                radius -= 5;
+                movementSpeed += 60;
+                enemyColor = Color.Purple;
+                enemyHealthColor = Color.Magenta;
+                Config.enemyCollisionDamage -= 4;
             }
 
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
