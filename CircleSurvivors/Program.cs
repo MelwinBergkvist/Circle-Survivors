@@ -30,6 +30,7 @@ namespace CircleSurvivors
             bool startScreen = false;
             bool startFadeIn = false;
             bool firstWaveAfterRestart = false;
+            bool countTime = true;
             string[] splashTextsArray = 
             {
                 //common
@@ -165,7 +166,7 @@ namespace CircleSurvivors
                     {
                         Raylib.DrawRectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100, Color.Blue);
                         Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.Black);
-                        if (hoveredStart && clickedStart)
+                        if (clickedStart)
                         {
                             startFadeIn = true; //initierar fade-in
                         }
@@ -190,16 +191,60 @@ namespace CircleSurvivors
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
-                timeAliveSeconds += deltaTime;
+                int timeMeasureType1 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
+                int timeMeasureType2 = Raylib.MeasureText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
+                int timeMeasureType3 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
+                int timeMeasureType4 = Raylib.MeasureText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
+                if (countTime)
+                    timeAliveSeconds += deltaTime;
+                else
+                {
+                    if (timeAliveSeconds < 10)
+                    {
+                        if (timeAliveMinutes < 10)
+                            Raylib.DrawText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType1/2, 20, 24, Color.Red);
+                        else
+                            Raylib.DrawText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType2/2, 20, 24, Color.Red);
+                    }
+                    else
+                    {
+                        if (timeAliveMinutes < 10)
+                            Raylib.DrawText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType3/2, 20, 24, Color.Red);
+                        else
+                            Raylib.DrawText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType4/2, 20, 24, Color.Red);
+                    }
+                }
+
+                if (countTime)
+                {
+                    if (timeAliveSeconds < 10)
+                    {
+                        if (timeAliveMinutes < 10)
+                            Raylib.DrawText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType1/2, 20, 24, Color.Black);
+                        else
+                            Raylib.DrawText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType2/2, 20, 24, Color.Black);
+                    }
+                    else
+                    {
+                        if (timeAliveMinutes < 10)
+                            Raylib.DrawText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType3/2, 20, 24, Color.Black);
+                        else
+                            Raylib.DrawText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType4/2, 20, 24, Color.Black);
+
+                    }
+                }
+
+                //resattas till 0 så vi får minuter
                 if (timeAliveSeconds > 60)
                 {
-                    timeAliveSeconds = 0;
+                    timeAliveSeconds = 0; 
                     timeAliveMinutes += 1;
                 }
 
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
                 {
+                    countTime = false;
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
                     powerUps.update(player);
@@ -210,13 +255,13 @@ namespace CircleSurvivors
                     //Ser lite dumt ut att köra om dessa varje frame men det fungerar inte att ha alla measureText i början utanför game lopp
                     int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
                     int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
-                    int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle", 18);
+                    int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
 
                     if (!Config.isPicked)
                     {
                         Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
                         Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
-                        Raylib.DrawText($"Power-up is picked up by walking inside the circle", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
+                        Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressig E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
                     }
                     else
                     {
@@ -261,6 +306,7 @@ namespace CircleSurvivors
                 //så vi inte försöker skjuta mot något som inte finns
                 if (enemies.Count > 0)
                 {
+                    countTime = true;
                     enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
                     NPC closestEnemy = enemies[0];
                     //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
