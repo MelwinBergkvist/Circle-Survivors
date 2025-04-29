@@ -292,7 +292,7 @@ namespace CircleSurvivors
                     spawnTime -= deltaTime;
                     if (spawnTime <= 0)
                     {
-                        NPC npc = new NPC();
+                        NPC npc = new NPC(player);
                         enemies.Add(npc);
                         drawableList.Add(npc);
                         if (enemieSpawnCount < 100)

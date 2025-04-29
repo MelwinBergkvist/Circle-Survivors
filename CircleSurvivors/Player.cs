@@ -26,7 +26,6 @@ namespace CircleSurvivors
             Raylib.DrawRectangle((int)x-15, (int)y+25, 30,8, Color.Green);
             float healthWidth = 30 - (30 * Config.playerHealthpoints / 100);
             Raylib.DrawRectangle((int)x-15, (int)y+25, (int)healthWidth,8, Color.Red);
-            //Raylib.DrawText($"Cooldown: {collisionCooldown:F2}", 10, 100, 20, Color.Gray);
         }
 
         public bool shouldDespawn()

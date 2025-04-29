@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CircleSurvivors
@@ -11,20 +13,25 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
+        public float moveX;
+        public float moveY;
+        public float bulletX;
+        public float bulletY;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
         int hitpoints = 100;
+        bool shouldShoot = false;
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
-        public NPC() //constructor
+        public NPC(Player player) //constructor
         {
             Random random = new Random();
 
             //Special enemies
-            if (random.Next(0,100) > 90 )
+            if (random.Next(0,100) > 99 )
             {
                 hitpoints += 100;
                 radius += 5f;
@@ -33,7 +40,7 @@ namespace CircleSurvivors
                 enemyHealthColor = Color.Red;
                 Config.enemyCollisionDamage += 10;
             }
-            else if (random.Next(0,101) > 80) 
+            else if (random.Next(0,101) > 99) 
             {
                 hitpoints -= 50;
                 radius -= 5;
@@ -42,6 +49,13 @@ namespace CircleSurvivors
                 enemyHealthColor = Color.Magenta;
                 Config.enemyCollisionDamage -= 4;
             }
+            else if (random.Next(0,101) > 10)
+            {
+                enemyColor = Color.Black;
+                enemyHealthColor = Color.White;
+                shouldShoot = true;
+            }
+
 
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
             // 1 = vänster, 2 = höger, 3 = up, 4 = nere
@@ -65,16 +79,30 @@ namespace CircleSurvivors
                 this.y = Config.WindowSizeHeight + radius;
                 this.x = random.Next(0, Config.WindowSizeWidth);
             }
+            if (shouldShoot)
+            {
+                bulletX = this.x;
+                bulletY = this.y;
+
+                float dxBullet = player.x - bulletX;
+                float dyBullet = player.y - bulletY;
+                float distance = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
+
+                moveX = (dxBullet / distance) * Config.bulletSpeed;
+                moveY = (dyBullet / distance) * Config.bulletSpeed;
+            }
 
         }
         public void draw()
         {
-            //Color drawColor = closest ? Color.Pink : Color.Red; //if closest == true, pink, else, red
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor); //tar x & y som ints istället för floats
 
             //2nd radius som en healthmeter typ
             float healthRadius = radius - (radius * hitpoints / 100f);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
+
+            //bullet
+            Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Black);
         }
 
         public bool shouldDespawn()
@@ -100,6 +128,12 @@ namespace CircleSurvivors
 
                 x = newX;
                 y = newY;
+            }
+
+            if (shouldShoot)
+            {
+                bulletX += moveX * deltaTime;
+                bulletY += moveY * deltaTime;
             }
 
             if (hitCooldown >= 0)
