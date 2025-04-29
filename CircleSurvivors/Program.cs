@@ -244,6 +244,7 @@ namespace CircleSurvivors
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
                 {
+                    bullets.Clear();
                     countTime = false;
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
@@ -287,6 +288,7 @@ namespace CircleSurvivors
 
                 if (enemieSpawnCount > 0)
                 {
+                    countTime = true;
                     spawnTime -= deltaTime;
                     if (spawnTime <= 0)
                     {
@@ -306,7 +308,7 @@ namespace CircleSurvivors
                 //så vi inte försöker skjuta mot något som inte finns
                 if (enemies.Count > 0)
                 {
-                    countTime = true;
+                    //countTime = true;
                     enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
                     NPC closestEnemy = enemies[0];
                     //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
