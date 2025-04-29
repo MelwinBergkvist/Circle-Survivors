@@ -13,7 +13,7 @@ namespace CircleSurvivors
         public float y;
         int hitpoints = 100;
         float radius;
-        float movementSpeed = 800;
+        float movementSpeed = 80;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
         float hitCooldown = 0f;

@@ -22,7 +22,8 @@ namespace CircleSurvivors
             float bulletCooldownTimer = 0;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
-            float timeAlive = 0f;
+            float timeAliveSeconds = 0f;
+            float timeAliveMinutes = 0f;
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
             int splashText = 0;
@@ -83,8 +84,8 @@ namespace CircleSurvivors
                     //x post räknas från början av texten, så vi kör en measureText så vi kan centrera texten
                     Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth / 2 - endTextWidth/2, Config.WindowSizeHeight / 4, 64, fadeRed);
 
-                    int timeAliveText = Raylib.MeasureText($"You stayed alive for {(int)timeAlive} seconds!",16);
-                    Raylib.DrawText($"You stayed alive for {(int)timeAlive} seconds!", Config.WindowSizeWidth / 2 - timeAliveText / 2, Config.WindowSizeHeight/ 4 + 100, 16, fadeSkyBlue);
+                    int timeAliveText = Raylib.MeasureText($"You stayed alive for {(int)timeAliveMinutes} minutes and {(int)timeAliveSeconds} seconds!",16);
+                    Raylib.DrawText($"You stayed alive for {(int)timeAliveMinutes} minutes and {(int)timeAliveSeconds} seconds!", Config.WindowSizeWidth / 2 - timeAliveText / 2, Config.WindowSizeHeight/ 4 + 100, 16, fadeSkyBlue);
                     int killCountText = Raylib.MeasureText($"You killed {killCount} enemies during your run!", 16);
                     Raylib.DrawText($"You killed {killCount} enemies during your run!", Config.WindowSizeWidth / 2 - killCountText / 2, Config.WindowSizeHeight / 4 + 120, 16, fadeSkyBlue);
                     int waveText = Raylib.MeasureText($"You survived for {Config.wave-1} waves!", 16);
@@ -107,7 +108,8 @@ namespace CircleSurvivors
                         drawableList.Add(player);
                         firstWaveAfterRestart = true;
                         enemieSpawnCount = 11;
-                        timeAlive = 0;
+                        timeAliveSeconds = 0;
+                        timeAliveMinutes = 0;
                         player.x = Config.WindowSizeWidth / 2;
                         player.y = Config.WindowSizeHeight / 2;
                     }
@@ -188,7 +190,13 @@ namespace CircleSurvivors
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
-                timeAlive += deltaTime;
+                timeAliveSeconds += deltaTime;
+                if (timeAliveSeconds > 60)
+                {
+                    timeAliveSeconds = 0;
+                    timeAliveMinutes += 1;
+                }
+
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
                 {
@@ -328,7 +336,7 @@ namespace CircleSurvivors
 
         //npc,enemy
         public static int npcRadius = 10;
-        public static int enemyCollisionDamage = 50;
+        public static int enemyCollisionDamage = 5;
 
         //player
         public static int movementSpeed = 100;
