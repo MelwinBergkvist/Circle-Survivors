@@ -407,6 +407,7 @@ namespace CircleSurvivors
         //npc,enemy
         public static int npcRadius = 10;
         public static int enemyCollisionDamage = 5;
+        public static int enemyBulletDamage = 5;
 
         //player
         public static int movementSpeed = 100;
