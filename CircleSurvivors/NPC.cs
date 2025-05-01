@@ -27,7 +27,7 @@ namespace CircleSurvivors
             Random random = new Random();
 
             //Special enemies
-            if (random.Next(0,100) > 99 )
+            if (random.Next(0,100) > 90 )
             {
                 hitpoints += 100;
                 radius += 5f;
@@ -36,7 +36,7 @@ namespace CircleSurvivors
                 enemyHealthColor = Color.Red;
                 Config.enemyCollisionDamage += 10;
             }
-            else if (random.Next(0,101) > 99) 
+            else if (random.Next(0,101) > 80) 
             {
                 hitpoints -= 50;
                 radius -= 5;
@@ -45,7 +45,7 @@ namespace CircleSurvivors
                 enemyHealthColor = Color.Magenta;
                 Config.enemyCollisionDamage -= 4;
             }
-            else if (random.Next(0,101) > 10)
+            else if (random.Next(0,101) > 90)
             {
                 enemyColor = Color.Black;
                 enemyHealthColor = Color.White;

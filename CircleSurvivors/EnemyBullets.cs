@@ -24,12 +24,12 @@ namespace CircleSurvivors
             float dyBullet = player.y - bulletY;
             float distance = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
 
-            moveX = (dxBullet / distance) * Config.bulletSpeed;
-            moveY = (dyBullet / distance) * Config.bulletSpeed;
+            moveX = (dxBullet / distance) * Config.enemyBulletSpeed;
+            moveY = (dyBullet / distance) * Config.enemyBulletSpeed;
         }
         public void draw()
         {
-            Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Black);
+            Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.enemyBulletRadius, Color.Black);
         }
         public void update(float deltaTime)
         {
