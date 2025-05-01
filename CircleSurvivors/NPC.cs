@@ -98,16 +98,33 @@ namespace CircleSurvivors
             float dy = Config.player.y - y;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
 
-            if (distance > 0)
+            if (!shouldShoot)
             {
-                float moveX = (dx / distance) * movementSpeed * deltaTime;
-                float moveY = (dy / distance) * movementSpeed * deltaTime;
+                if (distance > 0)
+                {
+                    float moveX = (dx / distance) * movementSpeed * deltaTime;
+                    float moveY = (dy / distance) * movementSpeed * deltaTime;
 
-                float newX = x + moveX;
-                float newY = y + moveY;
+                    float newX = x + moveX;
+                    float newY = y + moveY;
 
-                x = newX;
-                y = newY;
+                    x = newX;
+                    y = newY;
+                }
+            }
+            else if (shouldShoot) //kan bara ha "else" här, behövs ingen if (shouldShoot) men det är mest bara ifall jag lägger till något mer som har liknande condition
+            {
+                if (distance > 400) //numret 400 var mest trail and error, inget specielt.
+                {
+                    float moveX = (dx / distance) * movementSpeed * deltaTime;
+                    float moveY = (dy / distance) * movementSpeed * deltaTime;
+
+                    float newX = x + moveX;
+                    float newY = y + moveY;
+
+                    x = newX;
+                    y = newY;
+                }
             }
 
             if (hitCooldown >= 0)
