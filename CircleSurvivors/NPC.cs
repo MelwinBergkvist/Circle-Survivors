@@ -13,17 +13,13 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
-        public float moveX;
-        public float moveY;
-        public float bulletX;
-        public float bulletY;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
         int hitpoints = 100;
-        bool shouldShoot = false;
+        public bool shouldShoot = false;
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
         public NPC(Player player) //constructor
@@ -79,19 +75,6 @@ namespace CircleSurvivors
                 this.y = Config.WindowSizeHeight + radius;
                 this.x = random.Next(0, Config.WindowSizeWidth);
             }
-            if (shouldShoot)
-            {
-                bulletX = this.x;
-                bulletY = this.y;
-
-                float dxBullet = player.x - bulletX;
-                float dyBullet = player.y - bulletY;
-                float distance = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
-
-                moveX = (dxBullet / distance) * Config.bulletSpeed;
-                moveY = (dyBullet / distance) * Config.bulletSpeed;
-            }
-
         }
         public void draw()
         {
@@ -100,9 +83,6 @@ namespace CircleSurvivors
             //2nd radius som en healthmeter typ
             float healthRadius = radius - (radius * hitpoints / 100f);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
-
-            //bullet
-            Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Black);
         }
 
         public bool shouldDespawn()
@@ -128,12 +108,6 @@ namespace CircleSurvivors
 
                 x = newX;
                 y = newY;
-            }
-
-            if (shouldShoot)
-            {
-                bulletX += moveX * deltaTime;
-                bulletY += moveY * deltaTime;
             }
 
             if (hitCooldown >= 0)

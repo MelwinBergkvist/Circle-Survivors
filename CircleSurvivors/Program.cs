@@ -13,13 +13,16 @@ namespace CircleSurvivors
         {
             Player player = Config.player;
             List<BaseAbility> bullets = new List<BaseAbility>();
+            List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
             float deltaTime;
             float gameOverAlpha = 0f;
             float startScreenAlpha = 0f;
             float fadeInSpeed = 50f;
             float fadeInSpeedStart = 100f;
             float bulletCooldown = 1.5f;
-            float bulletCooldownTimer = 0;
+            float bulletCooldownTimer = 0f;
+            float enemyBulletCooldown = 1.5f;
+            float enemyBulletCooldownTimer = 0f;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
             float timeAliveSeconds = 0f;
@@ -233,6 +236,7 @@ namespace CircleSurvivors
 
                     }
                 }
+                //Timer ^^^, mest av koden är centrering
 
                 //resattas till 0 så vi får minuter
                 if (timeAliveSeconds > 60)
@@ -323,6 +327,21 @@ namespace CircleSurvivors
                         drawableList.Add(bullet);
                         bullets.Add(bullet);
                     }
+
+                    enemyBulletCooldownTimer += deltaTime;
+                    if (enemyBulletCooldown <= enemyBulletCooldownTimer)
+                    {
+                        foreach (var enemy in  enemies)
+                        {
+                            if (enemy.shouldShoot)
+                            {
+                                enemyBulletCooldownTimer = 0;
+                                EnemyBullets enemyBullets = new EnemyBullets(player, enemy);
+                                drawableList.Add(enemyBullets);
+                                enemyBullet.Add(enemyBullets);
+                            }
+                        }
+                    }
                 }                
 
                 //Kollar om jag ska despawn itemen annars så draw och update
@@ -352,19 +371,22 @@ namespace CircleSurvivors
                         {
                             player.playerCollision(enemy, deltaTime);
                         }
+                        foreach (var enemyBullets in enemyBullet)
+                        {
+                            enemyBullets.shouldDespawn();
+                        }
                     }
                     item.draw();
                 }
                 
-                //Raylib.DrawText($"{deltaTime}", 0,0, 32, Color.Black);
-                Raylib.DrawText($"Kill count: {killCount}", 0,0,32, Color.Red);
-                Raylib.DrawText($"Wave: {Config.wave}", 0,25,32, Color.Red);
+                Raylib.DrawText($"Kill count: {killCount}", 0,0,28, Color.Red);
+                Raylib.DrawText($"Wave: {Config.wave}", 0,25,28, Color.Red);
                 Raylib.DrawText($"Stat cheet:",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
                 Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
                 Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
                 Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
-                
+
                 //drawing confines
                 Raylib.EndDrawing();
             }
