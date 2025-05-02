@@ -34,7 +34,7 @@ namespace CircleSurvivors
                 movementSpeed -= 30;
                 enemyColor = Color.DarkGreen;
                 enemyHealthColor = Color.Red;
-                Config.enemyCollisionDamage += 10;
+                //Config.enemyCollisionDamage += 10;
             }
             else if (random.Next(0,101) > 80) 
             {
@@ -43,7 +43,7 @@ namespace CircleSurvivors
                 movementSpeed += 60;
                 enemyColor = Color.Purple;
                 enemyHealthColor = Color.Magenta;
-                Config.enemyCollisionDamage -= 4;
+                //Config.enemyCollisionDamage -= 4;
             }
             else if (random.Next(0,101) > 90)
             {

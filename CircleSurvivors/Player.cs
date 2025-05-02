@@ -11,7 +11,6 @@ namespace CircleSurvivors
     {
         public float x;
         public float y;
-        float collisionCooldown = 0f;
         public Player(int x, int y) //constructor
         {
             this.x = x;
@@ -54,22 +53,13 @@ namespace CircleSurvivors
         public void playerCollision(NPC enemies, float deltaTime)
         {
             //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
-            if (collisionCooldown > 0)
-                collisionCooldown -= deltaTime;
-
             float playerEnemyDx = x - enemies.x;
             float playerEnemyDy = y - enemies.y;
             float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
             float radiusSum = Config.playerRadius + Config.npcRadius;
 
             if (distancePlayerEnemy <= radiusSum * radiusSum)
-            {
-                if (collisionCooldown <= 0f)
-                {
                     Config.playerHealthpoints -= Config.enemyCollisionDamage;
-                    collisionCooldown = 15f;
-                }
-            }
         }
     }
 }

@@ -31,11 +31,11 @@ namespace CircleSurvivors
         {
                 "+5 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
                 "10% Faster Cooldown", "-1 Radius", "-10 Bullet Speed",
-                "-10% Enemy Bullet Cooldown", "+20 Hitpoints", "+10 Movement speed" // 0 - 8
+                "-10% Enemy Cooldown", "+20 Hitpoints", "+10 Movement speed" // 0 - 8
         };
 
         public PowerUps() 
-        { 
+        {
             
         }
         public void update()

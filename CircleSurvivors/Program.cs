@@ -28,6 +28,8 @@ namespace CircleSurvivors
             float spawnTime = 1f;
             float timeAliveSeconds = 0f;
             float timeAliveMinutes = 0f;
+            float collisionCooldown = 1.5f;
+            float collisionCooldownTimer = 0f;
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
             int splashText = 0;
@@ -376,7 +378,12 @@ namespace CircleSurvivors
                         }
                         foreach (var enemy in enemies)
                         {
-                            player.playerCollision(enemy, deltaTime);
+                            collisionCooldownTimer += deltaTime;
+                            if (collisionCooldownTimer >= collisionCooldown)
+                            {
+                                collisionCooldownTimer = 0f;
+                                player.playerCollision(enemy, deltaTime);
+                            }
                         }
                         foreach (var enemyBullets in enemyBullet)
                         {
@@ -433,7 +440,7 @@ namespace CircleSurvivors
         public static int bulletRadius = 5;
         public static int bulletDamage = 50;
         public static float bulletSpeed = 300f;
-        public static float bulletCooldown = 1.5f;
+        public static float bulletCooldown = 100.5f;
 
         //power-ups
         public static bool isPicked = false;
