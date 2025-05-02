@@ -38,7 +38,7 @@ namespace CircleSurvivors
         { 
             
         }
-        public void update(Player player)
+        public void update()
         {
             float radiusSum = radius + Config.playerRadius;
 
@@ -47,15 +47,15 @@ namespace CircleSurvivors
                 powerUpStatus1 = random.Next(0, 9);
                 powerUpStatus2 = random.Next(0, 9);
                 powerUpStatus3 = random.Next(0, 9);
+                Config.hasRolledThisRound = true;
             }
-            Config.hasRolledThisRound = true;
             //gör all matta som kollar collision så vi vet vilken som tas,
             //efter någon har tagits så kör vi en return
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
             if (!Config.p1)
             {
-                float powerUpDx1 = posX1 - player.x;
-                float powerUpDy1 = posY1 - player.y;
+                float powerUpDx1 = posX1 - Config.player.x;
+                float powerUpDy1 = posY1 - Config.player.y;
                 float distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
                 if (distancePowerUp1 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
@@ -114,8 +114,8 @@ namespace CircleSurvivors
 
             if (!Config.p2)
             {
-                float powerUpDx2 = posX2 - player.x;
-                float powerUpDy2 = posY2 - player.y;
+                float powerUpDx2 = posX2 - Config.player.x;
+                float powerUpDy2 = posY2 - Config.player.y;
                 float distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
                 if (distancePowerUp2 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
@@ -174,8 +174,8 @@ namespace CircleSurvivors
 
             if (!Config.p3)
             {
-                float powerUpDx3 = posX3 - player.x;
-                float powerUpDy3 = posY3 - player.y;
+                float powerUpDx3 = posX3 - Config.player.x;
+                float powerUpDy3 = posY3 - Config.player.y;
                 float distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
                 if (distancePowerUp3 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {

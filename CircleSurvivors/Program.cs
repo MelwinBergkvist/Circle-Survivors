@@ -1,6 +1,9 @@
 ﻿/* Notes:
  * Kommentarerna kommer vara lite svengelska
  * 
+ * alla raylib.measuretext måste deklareras där de används
+ * och inte i början av main, jag vet inte varför men det fungerade
+ * inte när jag testade det
 */
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 using System.Numerics; 
@@ -254,7 +257,7 @@ namespace CircleSurvivors
                     noMoreTemps = true;
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
-                    powerUps.update(player);
+                    powerUps.update();
 
                     if (Config.isPicked)
                         waveCooldown -= deltaTime;
@@ -300,7 +303,7 @@ namespace CircleSurvivors
                     spawnTime -= deltaTime;
                     if (spawnTime <= 0)
                     {
-                        NPC npc = new NPC(player);
+                        NPC npc = new NPC();
                         enemies.Add(npc);
                         drawableList.Add(npc);
                         if (enemieSpawnCount < 100)
@@ -327,7 +330,7 @@ namespace CircleSurvivors
                     if (Config.bulletCooldown <= bulletCooldownTimer)
                     {
                         bulletCooldownTimer = 0;
-                        BaseAbility bullet = new BaseAbility(player, closestEnemy);
+                        BaseAbility bullet = new BaseAbility(closestEnemy);
                         drawableList.Add(bullet);
                         bullets.Add(bullet);
                     }
@@ -340,7 +343,7 @@ namespace CircleSurvivors
                             if (enemy.shouldShoot)
                             {
                                 enemyBulletCooldownTimer = 0;
-                                EnemyBullets enemyBullets = new EnemyBullets(player, enemy);
+                                EnemyBullets enemyBullets = new EnemyBullets(enemy);
                                 drawableList.Add(enemyBullets);
                                 enemyBullet.Add(enemyBullets);
                             }

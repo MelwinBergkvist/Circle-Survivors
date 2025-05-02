@@ -14,10 +14,10 @@ namespace CircleSurvivors
         public float bulletY;
         float moveX;
         float moveY;
-        public BaseAbility(Player player, NPC closestEnemy) //constructor
+        public BaseAbility(NPC closestEnemy) //constructor
         {
-            bulletX = player.x;
-            bulletY = player.y;
+            bulletX = Config.player.x;
+            bulletY = Config.player.y;
 
             float dx = closestEnemy.x - this.bulletX;
             float dy = closestEnemy.y - this.bulletY;

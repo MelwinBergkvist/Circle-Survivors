@@ -15,13 +15,13 @@ namespace CircleSurvivors
         bool hasDealtDamage = false;
         float moveX;
         float moveY;
-        public EnemyBullets(Player player, NPC enemy)
+        public EnemyBullets(NPC enemy)
         {
             bulletX = enemy.x;
             bulletY = enemy.y;
 
-            float dxBullet = player.x - bulletX;
-            float dyBullet = player.y - bulletY;
+            float dxBullet = Config.player.x - bulletX;
+            float dyBullet = Config.player.y - bulletY;
             float distance = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
 
             moveX = (dxBullet / distance) * Config.enemyBulletSpeed;

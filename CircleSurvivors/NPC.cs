@@ -22,7 +22,7 @@ namespace CircleSurvivors
         public bool shouldShoot = false;
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
-        public NPC(Player player) //constructor
+        public NPC() //constructor
         {
             Random random = new Random();
 
