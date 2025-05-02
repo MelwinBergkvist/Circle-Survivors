@@ -368,6 +368,7 @@ namespace CircleSurvivors
                         continue;
                     }
                     
+                    collisionCooldownTimer += deltaTime;
                     item.update(deltaTime);
                     if (item is NPC npc)
                     {
@@ -378,7 +379,6 @@ namespace CircleSurvivors
                         }
                         foreach (var enemy in enemies)
                         {
-                            collisionCooldownTimer += deltaTime;
                             if (collisionCooldownTimer >= collisionCooldown)
                             {
                                 collisionCooldownTimer = 0f;
