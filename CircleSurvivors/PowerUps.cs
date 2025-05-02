@@ -21,11 +21,34 @@ namespace CircleSurvivors
 
         int radius = 50;
 
-        public PowerUps() { }
+        Random random = new Random();
 
+        int powerUpStatus1;
+        int powerUpStatus2;
+        int powerUpStatus3;
+
+        String[] powerUpsArray = 
+        {
+                "+5 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
+                "10% Faster Cooldown", "-1 Radius", "-10 Bullet Speed",
+                "-10% Enemy Bullet Cooldown", "+20 Hitpoints", "+10 Movement speed" // 0 - 8
+        };
+
+        public PowerUps() 
+        { 
+            
+        }
         public void update(Player player)
         {
             float radiusSum = radius + Config.playerRadius;
+
+            if (!Config.hasRolledThisRound)
+            {
+                powerUpStatus1 = random.Next(0, 9);
+                powerUpStatus2 = random.Next(0, 9);
+                powerUpStatus3 = random.Next(0, 9);
+            }
+            Config.hasRolledThisRound = true;
             //gör all matta som kollar collision så vi vet vilken som tas,
             //efter någon har tagits så kör vi en return
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
@@ -38,7 +61,53 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p1 = true;
-                    Config.bulletDamage += 5;
+                    if (powerUpStatus1 == 0)
+                    {
+                        // +5 Bullet Damage
+                        Config.bulletDamage += 5;
+                    }
+                    else if (powerUpStatus1 == 1)
+                    {
+                        // +2 Bullet Radius
+                        Config.bulletRadius += 2;
+                    }
+                    else if (powerUpStatus1 == 2)
+                    {
+                        // +10 Bullet Speed
+                        Config.bulletSpeed += 10;
+                    }
+                    else if (powerUpStatus1 == 3)
+                    {
+                        // 10% Faster Cooldown
+                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                    }
+                    else if (powerUpStatus1 == 4)
+                    {
+                        // -1 Radius
+                        if (Config.playerRadius >= 2)
+                            Config.playerRadius -= 1;
+                    }
+                    else if (powerUpStatus1 == 5)
+                    {
+                        // -10 Bullet Speed
+                        if (Config.bulletSpeed >= 10)
+                            Config.bulletSpeed -= 10;
+                    }
+                    else if (powerUpStatus1 == 6)
+                    {
+                        // 10% Slower Enemy Bullet Cooldown
+                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                    }
+                    else if (powerUpStatus1 == 7)
+                    {
+                        // +20 Hitpoints
+                        Config.playerHealthpoints += 20;
+                    }
+                    else if (powerUpStatus1 == 8)
+                    {
+                        // +10 Movement speed
+                        Config.tempMovementSpeedHolder += 10;
+                    }
                     return;
                 }
             }
@@ -52,7 +121,53 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p2 = true;
-                    Config.bulletRadius += 2;
+                    if (powerUpStatus2 == 0)
+                    {
+                        // +5 Bullet Damage
+                        Config.bulletDamage += 5;
+                    }
+                    else if (powerUpStatus2 == 1)
+                    {
+                        // +2 Bullet Radius
+                        Config.bulletRadius += 2;
+                    }
+                    else if (powerUpStatus2 == 2)
+                    {
+                        // +10 Bullet Speed
+                        Config.bulletSpeed += 10;
+                    }
+                    else if (powerUpStatus2 == 3)
+                    {
+                        // 10% Faster Cooldown
+                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                    }
+                    else if (powerUpStatus2 == 4)
+                    {
+                        // -1 Radius
+                        if (Config.playerRadius >= 2)
+                            Config.playerRadius -= 1;
+                    }
+                    else if (powerUpStatus2 == 5)
+                    {
+                        // -10 Bullet Speed
+                        if (Config.bulletSpeed >= 10)
+                            Config.bulletSpeed -= 10;
+                    }
+                    else if (powerUpStatus2 == 6)
+                    {
+                        // 10% Slower Enemy Bullet Cooldown
+                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                    }
+                    else if (powerUpStatus2 == 7)
+                    {
+                        // +20 Hitpoints
+                        Config.playerHealthpoints += 20;
+                    }
+                    else if (powerUpStatus2 == 8)
+                    {
+                        // +10 Movement speed
+                        Config.tempMovementSpeedHolder += 10;
+                    }
                     return;
                 }
             }
@@ -66,7 +181,53 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p3 = true;
-                    Config.bulletSpeed += 10;
+                    if (powerUpStatus3 == 0)
+                    {
+                        // +5 Bullet Damage
+                        Config.bulletDamage += 5;
+                    }
+                    else if (powerUpStatus3 == 1)
+                    {
+                        // +2 Bullet Radius
+                        Config.bulletRadius += 2;
+                    }
+                    else if (powerUpStatus3 == 2)
+                    {
+                        // +10 Bullet Speed
+                        Config.bulletSpeed += 10;
+                    }
+                    else if (powerUpStatus3 == 3)
+                    {
+                        // 10% Faster Cooldown
+                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                    }
+                    else if (powerUpStatus3 == 4)
+                    {
+                        // -1 Radius
+                        if (Config.playerRadius >= 2)
+                            Config.playerRadius -= 1;
+                    }
+                    else if (powerUpStatus3 == 5)
+                    {
+                        // -10 Bullet Speed
+                        if (Config.bulletSpeed >= 10)
+                            Config.bulletSpeed -= 10;
+                    }
+                    else if (powerUpStatus3 == 6)
+                    {
+                        // 10% Slower Enemy Bullet Cooldown
+                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                    }
+                    else if (powerUpStatus3 == 7)
+                    {
+                        // +20 Hitpoints
+                        Config.playerHealthpoints += 20;
+                    }
+                    else if (powerUpStatus3 == 8)
+                    {
+                        // +10 Movement speed
+                        Config.tempMovementSpeedHolder += 10;
+                    }
                     return;
                 }
             }
@@ -86,22 +247,22 @@ namespace CircleSurvivors
             //sen en grön rectangle, sen en vit rectangle för att göra det en outline
             //sedan texten efter, repeat på alla andra. alla -15 -100 och sånt är för centrering.
             Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
-            Raylib.DrawRectangle(posX1 - 100,posY1 - 15, 200, 30, Color.DarkGreen); //dark green rektangel
-            Raylib.DrawRectangle(posX1 - 95,posY1 - 13, 190, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
-            int p1Text = Raylib.MeasureText("+5 Bullet Damage", 20); //kollar textens width för centrering
-            Raylib.DrawText("+5 Bullet Damage", posX1 - p1Text/2, posY1-10, 20, Color.Black); //texten som säger vad för powerup det är
+            Raylib.DrawRectangle(posX1 - 120,posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
+            Raylib.DrawRectangle(posX1 - 110,posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
+            int p1Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus1]}", 20); //kollar textens width för centrering
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus1]}", posX1 - p1Text/2, posY1-10, 20, Color.Black); //texten som säger vad för powerup det är
 
             Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
-            Raylib.DrawRectangle(posX2 - 100, posY2 - 15, 200, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX2 - 95, posY2 - 13, 190, 26, Color.White);
-            int p2Text = Raylib.MeasureText("+2 Bullet Radius", 20);
-            Raylib.DrawText("+2 Bullet Radius", posX2 - p2Text/2, posY2-10, 20, Color.Black);
+            Raylib.DrawRectangle(posX2 - 120, posY2 - 15, 240, 30, Color.DarkGreen);
+            Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, Color.White);
+            int p2Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus2]}", 20);
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus2]}", posX2 - p2Text/2, posY2-10, 20, Color.Black);
 
             Raylib.DrawCircleLines(posX3, posY3, radius, Color.DarkGreen);
-            Raylib.DrawRectangle(posX3 - 100, posY3 - 15, 200, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX3 - 95, posY3 - 13, 190, 26, Color.White);
-            int p3Text = Raylib.MeasureText("+10 Bullet Speed", 20);
-            Raylib.DrawText("+10 Bullet Speed", posX3 - p3Text/2, posY3-10, 20, Color.Black);
+            Raylib.DrawRectangle(posX3 - 120, posY3 - 15, 240, 30, Color.DarkGreen);
+            Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, Color.White);
+            int p3Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus3]}", 20);
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus3]}", posX3 - p3Text/2, posY3-10, 20, Color.Black);
 
         }
     }

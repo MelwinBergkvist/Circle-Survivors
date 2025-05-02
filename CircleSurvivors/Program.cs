@@ -19,9 +19,7 @@ namespace CircleSurvivors
             float startScreenAlpha = 0f;
             float fadeInSpeed = 50f;
             float fadeInSpeedStart = 100f;
-            float bulletCooldown = 1.5f;
             float bulletCooldownTimer = 0f;
-            float enemyBulletCooldown = 1.5f;
             float enemyBulletCooldownTimer = 0f;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
@@ -34,6 +32,7 @@ namespace CircleSurvivors
             bool startFadeIn = false;
             bool firstWaveAfterRestart = false;
             bool countTime = true;
+            bool noMoreTemps = false;
             string[] splashTextsArray = 
             {
                 //common
@@ -250,6 +249,9 @@ namespace CircleSurvivors
                 {
                     bullets.Clear();
                     countTime = false;
+                    if (!noMoreTemps)
+                        Config.tempMovementSpeedHolder = Config.movementSpeed;
+                    noMoreTemps = true;
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
                     powerUps.draw(deltaTime);
                     powerUps.update(player);
@@ -283,8 +285,10 @@ namespace CircleSurvivors
                         Config.p1 = false;
                         Config.p2 = false;
                         Config.p3 = false;
+                        Config.hasRolledThisRound = false;
                         Config.despawnTime = 0.5f;
-                        Config.movementSpeed = 100; //tillbaka till segis
+                        Config.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
+                        noMoreTemps = false;
                     }
                 }
 
@@ -320,7 +324,7 @@ namespace CircleSurvivors
                     //sedan skriver över orginella listan med sorterade veriationen
 
                     bulletCooldownTimer += deltaTime;
-                    if (bulletCooldown <= bulletCooldownTimer)
+                    if (Config.bulletCooldown <= bulletCooldownTimer)
                     {
                         bulletCooldownTimer = 0;
                         BaseAbility bullet = new BaseAbility(player, closestEnemy);
@@ -329,7 +333,7 @@ namespace CircleSurvivors
                     }
 
                     enemyBulletCooldownTimer += deltaTime;
-                    if (enemyBulletCooldown <= enemyBulletCooldownTimer)
+                    if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
                     {
                         foreach (var enemy in  enemies)
                         {
@@ -381,10 +385,14 @@ namespace CircleSurvivors
                 
                 Raylib.DrawText($"Kill count: {killCount}", 0,0,28, Color.Red);
                 Raylib.DrawText($"Wave: {Config.wave}", 0,25,28, Color.Red);
-                Raylib.DrawText($"Stat cheet:",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
-                Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
-                Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
-                Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
+                Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
+                Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
+                Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
+                Raylib.DrawText($"bullet cooldown stat: {Config.bulletCooldown}",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
+                Raylib.DrawText($"player radius stat: {Config.playerRadius}",0,Config.WindowSizeHeight-60,12, Color.DarkGray);
+                Raylib.DrawText($"player hitpoints stat: {Config.playerHealthpoints}",0,Config.WindowSizeHeight-70,12, Color.DarkGray);
+                Raylib.DrawText($"player movement speed stat: {Config.movementSpeed}",0,Config.WindowSizeHeight-80,12, Color.DarkGray);
+                Raylib.DrawText($"stat sheet:",0,Config.WindowSizeHeight-90,12, Color.DarkGray);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
                 //drawing confines
@@ -410,22 +418,26 @@ namespace CircleSurvivors
         public static int enemyBulletDamage = 5;
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
+        public static float enemyBulletCooldown = 1.5f;
 
         //player
         public static int movementSpeed = 100;
         public static int playerRadius = 15;
         public static int playerHealthpoints = 100;
+        public static int tempMovementSpeedHolder;
 
         //bullets
         public static int bulletRadius = 5;
         public static int bulletDamage = 50;
         public static float bulletSpeed = 300f;
+        public static float bulletCooldown = 1.5f;
 
         //power-ups
         public static bool isPicked = false;
         public static bool p1 = false;
         public static bool p2 = false;
         public static bool p3 = false;
+        public static bool hasRolledThisRound = false;
         public static float despawnTime = 0.5f;
 
         //wave
