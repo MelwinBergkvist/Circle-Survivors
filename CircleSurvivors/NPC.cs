@@ -15,6 +15,7 @@ namespace CircleSurvivors
         public float y;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
+        public int enemyCollisionDamage = Config.enemyCollisionDamage;
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
@@ -34,7 +35,7 @@ namespace CircleSurvivors
                 movementSpeed -= 30;
                 enemyColor = Color.DarkGreen;
                 enemyHealthColor = Color.Red;
-                //Config.enemyCollisionDamage += 10;
+                enemyCollisionDamage += 10;
             }
             else if (random.Next(0,101) > 80) 
             {
@@ -43,7 +44,7 @@ namespace CircleSurvivors
                 movementSpeed += 60;
                 enemyColor = Color.Purple;
                 enemyHealthColor = Color.Magenta;
-                //Config.enemyCollisionDamage -= 4;
+                enemyCollisionDamage -= 4;
             }
             else if (random.Next(0,101) > 90)
             {
@@ -147,6 +148,17 @@ namespace CircleSurvivors
                     hitCooldown = 0.5f;
                 }
             }
+        }
+        public void playerCollision(NPC enemies, float deltaTime)
+        {
+            //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
+            float playerEnemyDx = Config.player.x - enemies.x;
+            float playerEnemyDy = Config.player.y - enemies.y;
+            float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
+            float radiusSum = Config.playerRadius + Config.npcRadius;
+
+            if (distancePlayerEnemy <= radiusSum * radiusSum)
+                Config.playerHealthpoints -= enemyCollisionDamage;
         }
     }
 }

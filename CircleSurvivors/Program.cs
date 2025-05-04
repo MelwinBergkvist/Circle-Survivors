@@ -382,7 +382,7 @@ namespace CircleSurvivors
                             if (collisionCooldownTimer >= collisionCooldown)
                             {
                                 collisionCooldownTimer = 0f;
-                                player.playerCollision(enemy, deltaTime);
+                                npc.playerCollision(enemy, deltaTime);
                             }
                         }
                         foreach (var enemyBullets in enemyBullet)
