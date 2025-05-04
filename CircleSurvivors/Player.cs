@@ -50,16 +50,5 @@ namespace CircleSurvivors
             if (y - Config.playerRadius <= 0) y = Config.playerRadius;
             if (y + Config.playerRadius >= Config.WindowSizeHeight) y = Config.WindowSizeHeight - Config.playerRadius;
         }
-        //public void playerCollision(NPC enemies, float deltaTime)
-        //{
-        //    //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
-        //    float playerEnemyDx = x - enemies.x;
-        //    float playerEnemyDy = y - enemies.y;
-        //    float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
-        //    float radiusSum = Config.playerRadius + Config.npcRadius;
-
-        //    if (distancePlayerEnemy <= radiusSum * radiusSum)
-        //            Config.playerHealthpoints -= enemyCollisionDamage;
-        //}
     }
 }

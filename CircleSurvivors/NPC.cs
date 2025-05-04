@@ -42,9 +42,6 @@ namespace CircleSurvivors
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
 
-        //Custom färger, (Red, green, blue, alpha/opacitet)
-        Color crimson = new Color(104, 6, 6, 255);
-        Color darkRed = new Color(139, 0, 0, 255);
         public NPC() //constructor
         {
             Random random = new Random();
@@ -64,7 +61,7 @@ namespace CircleSurvivors
             }
 
             //Special enemies
-            if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 9%
+            if (random.Next(0,101) > 1 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 9%
             {
                 hitpoints += 100;
                 radius += 5f;

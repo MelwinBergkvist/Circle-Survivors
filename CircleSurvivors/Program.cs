@@ -367,7 +367,11 @@ namespace CircleSurvivors
                             enemies.Remove(enemyNpc);
                             killCount++;
                         }
-                        drawableList.RemoveAt(i);                        
+                        if (item is BaseAbility bullet)
+                        {
+                            bullets.Remove(bullet);
+                        }
+                        drawableList.RemoveAt(i);
                         continue;
                     }
                     
