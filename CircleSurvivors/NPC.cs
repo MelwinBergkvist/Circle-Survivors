@@ -20,24 +20,25 @@ namespace CircleSurvivors
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
         int hitpoints = 100;
+        int maxHitpoints;
         public bool shouldShoot = false;
         bool isBoss = false;
         bool isBossTurn = false;
         string bossName;
         string[] bossNames =
         {
-            //Tanky - 0,6
+            //Tanky - 0,5
             "The Verdant Juggernaut, Bramblethrone", "Chlorobane, Devourer of Damage", "Photosynthesaur, King of Endurance", "Lord Bulkwood, Unmovable Wall of Doom", "The Great Moss Engine",
             
-            //Speedy - 6,11
+            //Speedy - 5,10
             "Blurmageddon, Scourge of Speed", "Sonic Calamity, Vortexus Prime", "Skittershade, Swift End of Days", "Purple Menace, Prince of Panic", "Wraithflicker, Dancer of Death",
 
-            //Shooter - 11,16
+            //Shooter - 10,15
             "Gunsaint Oblivion, Apostle of Annihilation", "Project Omega: The White Eclipse", "Triggergrin, The Last Whisper", "Obsidian Herald of Lead", "The Hollow Sniper, Voidspike",
 
-            //defaul - 16, 21
+            //default - 15, 19
             "Abyssion the Forgotten", "Malgrath, Uncrowned Tyrant", "Vorharn, Bane of Balance", "Azgalor the Timeless Hunger", "The Crownless Dread"
-        };
+        }; //namnen är från chatgpt
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
 
@@ -47,7 +48,7 @@ namespace CircleSurvivors
         public NPC() //constructor
         {
             Random random = new Random();
-            if (Config.wave % 5 == 0)
+            if (Config.wave % 1 == 0)
             {
                 isBossTurn = true;
             }
@@ -73,7 +74,7 @@ namespace CircleSurvivors
                 enemyCollisionDamage += 10;
                 if (isBoss)
                 {
-                    bossName = bossNames[random.Next(0,6)];
+                    bossName = bossNames[random.Next(0,5)];
                 }
             }
             else if (random.Next(0,101) > 80 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 18%
@@ -86,7 +87,7 @@ namespace CircleSurvivors
                 enemyCollisionDamage -= 4;
                 if (isBoss)
                 {
-                    bossName = bossNames[random.Next(6, 11)];
+                    bossName = bossNames[random.Next(5, 10)];
                 }
             }
             else if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 7.2%
@@ -96,15 +97,16 @@ namespace CircleSurvivors
                 shouldShoot = true;
                 if (isBoss)
                 {
-                    bossName = bossNames[random.Next(11, 16)];
+                    bossName = bossNames[random.Next(10, 15)];
                 }
             }
 
             if (string.IsNullOrEmpty(bossName) && Config.hasBossSpawned)
             {
-                bossName = bossNames[random.Next(16, 20)];
+                bossName = bossNames[random.Next(15, 19)];
             }
 
+            maxHitpoints = hitpoints;
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
             // 1 = vänster, 2 = höger, 3 = up, 4 = nere
             if (side == 1)
@@ -133,7 +135,7 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor); //tar x & y som ints istället för floats
 
             //2nd radius som en healthmeter typ
-            float healthRadius = radius - (radius * hitpoints / 100f);
+            float healthRadius = radius - (radius * hitpoints / maxHitpoints);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
 
             if (isBoss)
@@ -151,6 +153,7 @@ namespace CircleSurvivors
         public void update(float deltaTime)
         {
             sinceSpawn += deltaTime;
+
             //Så de går mot spelaren
             float dx = Config.player.x - x;
             float dy = Config.player.y - y;
