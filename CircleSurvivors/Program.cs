@@ -109,6 +109,7 @@ namespace CircleSurvivors
                         Config.bulletRadius = 5;
                         Config.bulletSpeed = 300f;
                         Config.playerHealthpoints = 100;
+                        Config.hasBossSpawned = false;
                         killCount = 0;
                         enemies.Clear();
                         drawableList.Clear();
@@ -317,11 +318,13 @@ namespace CircleSurvivors
                     }
                 }
 
+                if (enemieSpawnCount == 0)
+                    Config.hasBossSpawned = false;
+
                 //make sure att det faktist finns enemies på skärmen,
                 //så vi inte försöker skjuta mot något som inte finns
                 if (enemies.Count > 0)
                 {
-                    //countTime = true;
                     enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
                     NPC closestEnemy = enemies[0];
                     //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
