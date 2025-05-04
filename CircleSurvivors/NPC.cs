@@ -15,12 +15,12 @@ namespace CircleSurvivors
         public float y;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
-        public int enemyCollisionDamage = Config.enemyCollisionDamage;
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
         int hitpoints = 100;
         int maxHitpoints;
+        public int enemyCollisionDamage = Config.enemyCollisionDamage;
         public bool shouldShoot = false;
         bool isBoss = false;
         bool isBossTurn = false;
@@ -39,8 +39,8 @@ namespace CircleSurvivors
             //default - 15, 19
             "Abyssion the Forgotten", "Malgrath, Uncrowned Tyrant", "Vorharn, Bane of Balance", "Azgalor the Timeless Hunger", "The Crownless Dread"
         }; //namnen är från chatgpt
-        Color enemyColor = Color.Red;
-        Color enemyHealthColor = Color.Orange;
+        Color enemyColor = new Color(156, 6, 6);
+        Color enemyHealthColor = new Color(77, 8, 8);
 
         public NPC() //constructor
         {
@@ -61,13 +61,14 @@ namespace CircleSurvivors
             }
 
             //Special enemies
-            if (random.Next(0,101) > 1 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 9%
+            if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 10%
             {
+                // Tanky
                 hitpoints += 100;
                 radius += 5f;
                 movementSpeed -= 30;
-                enemyColor = Color.DarkGreen;
-                enemyHealthColor = Color.Red;
+                enemyColor = new Color(19, 138, 11);
+                enemyHealthColor = new Color(8, 77, 3);
                 enemyCollisionDamage += 10;
                 if (isBoss)
                 {
@@ -76,11 +77,12 @@ namespace CircleSurvivors
             }
             else if (random.Next(0,101) > 80 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 18%
             {
+                // Speedy                
                 hitpoints -= 50;
                 radius -= 5;
                 movementSpeed += 60;
-                enemyColor = Color.Purple;
-                enemyHealthColor = Color.Magenta;
+                enemyColor = new Color(120, 6, 191);
+                enemyHealthColor = new Color(85, 5, 135);
                 enemyCollisionDamage -= 4;
                 if (isBoss)
                 {
@@ -89,8 +91,9 @@ namespace CircleSurvivors
             }
             else if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 7.2%
             {
-                enemyColor = Color.Black;
-                enemyHealthColor = Color.White;
+                //Shooter
+                enemyColor = new Color(0, 0, 0);
+                enemyHealthColor = new Color(65, 65, 65);
                 shouldShoot = true;
                 if (isBoss)
                 {
