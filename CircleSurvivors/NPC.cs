@@ -21,14 +21,42 @@ namespace CircleSurvivors
         float radius = Config.npcRadius;
         int hitpoints = 100;
         public bool shouldShoot = false;
+        bool isBoss = false;
+        string bossName;
+        string[] bossNames =
+        {
+            //Tanky - 0,6
+            "The Verdant Juggernaut, Bramblethrone", "Chlorobane, Devourer of Damage", "Photosynthesaur, King of Endurance", "Lord Bulkwood, Unmovable Wall of Doom", "The Great Moss Engine",
+            
+            //Speedy - 6,11
+            "Blurmageddon, Scourge of Speed", "Sonic Calamity, Vortexus Prime", "Skittershade, Swift End of Days", "Purple Menace, Prince of Panic", "Wraithflicker, Dancer of Death",
+
+            //Shooter - 11,16
+            "Gunsaint Oblivion, Apostle of Annihilation", "Project Omega: The White Eclipse", "Triggergrin, The Last Whisper", "Obsidian Herald of Lead", "The Hollow Sniper, Voidspike"
+        };
         Color enemyColor = Color.Red;
         Color enemyHealthColor = Color.Orange;
+
+        //Custom färger, (Red, green, blue, alpha/opacitet)
+        Color crimson = new Color(104, 6, 6, 255);
+        Color darkRed = new Color(139, 0, 0, 255);
         public NPC() //constructor
         {
             Random random = new Random();
 
+            //Boss
+            if (!Config.hasBossSpawned)
+            {
+                hitpoints += 500;
+                radius += 50;
+                movementSpeed -= 40;
+                enemyCollisionDamage += 25;
+                isBoss = true;
+                Config.hasBossSpawned = true;
+            }
+
             //Special enemies
-            if (random.Next(0,100) > 90 )
+            if (random.Next(0,100) > 90 && Config.hasBossSpawned) // 9%
             {
                 hitpoints += 100;
                 radius += 5f;
@@ -36,8 +64,12 @@ namespace CircleSurvivors
                 enemyColor = Color.DarkGreen;
                 enemyHealthColor = Color.Red;
                 enemyCollisionDamage += 10;
+                if (isBoss)
+                {
+                    bossName = bossNames[random.Next(0,6)];
+                }
             }
-            else if (random.Next(0,101) > 80) 
+            else if (random.Next(0,101) > 80 && Config.hasBossSpawned) // 18%
             {
                 hitpoints -= 50;
                 radius -= 5;
@@ -45,14 +77,21 @@ namespace CircleSurvivors
                 enemyColor = Color.Purple;
                 enemyHealthColor = Color.Magenta;
                 enemyCollisionDamage -= 4;
+                if (isBoss)
+                {
+                    bossName = bossNames[random.Next(6, 11)];
+                }
             }
-            else if (random.Next(0,101) > 90)
+            else if (random.Next(0,101) > 90 && Config.hasBossSpawned) // 7.2%
             {
                 enemyColor = Color.Black;
                 enemyHealthColor = Color.White;
                 shouldShoot = true;
+                if (isBoss)
+                {
+                    bossName = bossNames[random.Next(11, 16)];
+                }
             }
-
 
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
             // 1 = vänster, 2 = höger, 3 = up, 4 = nere
@@ -84,6 +123,12 @@ namespace CircleSurvivors
             //2nd radius som en healthmeter typ
             float healthRadius = radius - (radius * hitpoints / 100f);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
+
+            if (isBoss)
+            {
+                int measureBossName = Raylib.MeasureText(bossName, 16);
+                Raylib.DrawText($"{bossName}", (int)x - measureBossName / 2, (int)y+100, 16, enemyColor);
+            }
         }
 
         public bool shouldDespawn()
@@ -155,7 +200,7 @@ namespace CircleSurvivors
             float playerEnemyDx = Config.player.x - enemies.x;
             float playerEnemyDy = Config.player.y - enemies.y;
             float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
-            float radiusSum = Config.playerRadius + Config.npcRadius;
+            float radiusSum = Config.playerRadius + radius;
 
             if (distancePlayerEnemy <= radiusSum * radiusSum)
                 Config.playerHealthpoints -= enemyCollisionDamage;

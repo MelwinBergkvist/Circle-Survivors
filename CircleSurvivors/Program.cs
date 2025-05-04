@@ -429,6 +429,7 @@ namespace CircleSurvivors
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
+        public static bool hasBossSpawned = false;
 
         //player
         public static int movementSpeed = 100;
@@ -440,7 +441,7 @@ namespace CircleSurvivors
         public static int bulletRadius = 5;
         public static int bulletDamage = 50;
         public static float bulletSpeed = 300f;
-        public static float bulletCooldown = 100.5f;
+        public static float bulletCooldown = 1.5f;
 
         //power-ups
         public static bool isPicked = false;
