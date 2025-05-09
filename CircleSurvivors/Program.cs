@@ -1,7 +1,7 @@
 ﻿/* Notes:
  * Kommentarerna kommer vara lite svengelska
  * 
- * alla raylib.measuretext måste deklareras där de används
+ * alla raylib.measuretext måste deklareras där de används, jag kunde ha deklararet det som tex "int Text;" och sedan ändrat värdet men jag ansåg att det ser fult och klunky ut
  * och inte i början av main, jag vet inte varför men det fungerade
  * inte när jag testade det
  * 
@@ -21,8 +21,11 @@ namespace CircleSurvivors
         static void Main(string[] args) //Allt som ska ritas as raylibs måste vara inom Begin och End drawing
         {
             Player player = Config.player;
+
             List<BaseAbility> bullets = new List<BaseAbility>();
             List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
+
+            //floats
             float deltaTime;
             float gameOverAlpha = 0f;
             float startScreenAlpha = 0f;
@@ -36,16 +39,33 @@ namespace CircleSurvivors
             float timeAliveMinutes = 0f;
             float collisionCooldown = 1.5f;
             float collisionCooldownTimer = 0f;
+
+            //ints
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
             int splashText = 0;
+
+            //bools
             bool isPaused = false;
             bool startScreen = false;
             bool startFadeIn = false;
             bool firstWaveAfterRestart = false;
             bool countTime = true;
-            bool noMoreTemps = false;
+            bool noMoreTempSpeed = false;
+
+            bool hoveredStart;
+            bool clickedStart;
+            bool isTutorialHovered;
+
+            //Colors
             Color pauseOverlay = new Color(150, 150, 150, 200);
+            Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
+            Color fadeRed;
+            Color fadeGray;
+            Color fadeSkyBlue;
+
+            Random randomSplashText = new Random();
+
             string[] splashTextsArray = 
             {
                 //common
@@ -59,7 +79,7 @@ namespace CircleSurvivors
                 "Insert better pun here.", "This text does nothing.", "in circles since 1997",
                 "Tested on humans, not responsibly.", "This splash text is {Shadow Slave chapter 360}"
             }; //16st, rare 5st
-            Random randomSplashText = new Random();
+
             if (randomSplashText.Next(0,101) < 90)
             {
                 splashText = randomSplashText.Next(0,16);
@@ -89,9 +109,9 @@ namespace CircleSurvivors
                         gameOverAlpha += fadeInSpeed * deltaTime;
                         if (gameOverAlpha > 255) gameOverAlpha = 255;
                     }                    
-                    Color fadeRed = Raylib.Fade(Color.Red, gameOverAlpha / 255f);
-                    Color fadeGray = Raylib.Fade(Color.DarkGray, gameOverAlpha / 255f);
-                    Color fadeSkyBlue = Raylib.Fade(Color.SkyBlue, gameOverAlpha / 255f);
+                    fadeRed = Raylib.Fade(Color.Red, gameOverAlpha / 255f);
+                    fadeGray = Raylib.Fade(Color.DarkGray, gameOverAlpha / 255f);
+                    fadeSkyBlue = Raylib.Fade(Color.SkyBlue, gameOverAlpha / 255f);
                     //raylib vill ha mellan 0-1 medan vi kör mellan 0-255 så vi kör /255 för att göra raylibs glad
                     //raylibs inbyggda fade in
 
@@ -155,7 +175,8 @@ namespace CircleSurvivors
                     Rectangle tutorialButton = new Rectangle(0,Config.WindowSizeHeight/2, 120, 50);
                     Raylib.DrawRectangle(0, Config.WindowSizeHeight/2, 120, 50, Color.DarkGray);
                     Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight/2+14, 16, Color.Black);
-                    bool isTutorialHovered = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), tutorialButton);
+
+                    isTutorialHovered = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), tutorialButton);
                     if (isTutorialHovered)
                     {
                         //ritar om rectangeln i annan färg så man ser att den är hovered
@@ -175,10 +196,9 @@ namespace CircleSurvivors
 
                     //checkcollisionpointrec kollar om vektoren getmouseposition är inom rektangel startButton vilken är en kopia av drawrectangle vi gjorde innan
                     //om den är sann och left click är också nedklickad samtidigt så körs inte denna if satsen nåmer, om den inte är sann så skippar allt annat för "continue;"
-                    bool hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
-                    bool clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
+                    hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
+                    clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
 
-                    //måste inte ha if satsen nestad men det ser finare ut tycker jag själv, fungerar exakt likadant att ha två ifs separate
                     if (hoveredStart) //så man ser att den är hovered
                     {
                         Raylib.DrawRectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100, Color.Blue);
@@ -208,6 +228,8 @@ namespace CircleSurvivors
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
+
+                //Pause meny, WIP
                 if (isPaused)
                 {
                     Raylib.DrawRectangle(0,0,Config.WindowSizeWidth, Config.WindowSizeHeight, pauseOverlay);
@@ -218,6 +240,7 @@ namespace CircleSurvivors
                         Raylib.EndDrawing();
                         continue;
                 }
+
                 int timeMeasureType1 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
                 int timeMeasureType2 = Raylib.MeasureText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
                 int timeMeasureType3 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
@@ -273,37 +296,41 @@ namespace CircleSurvivors
                 if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
                 {
                     bullets.Clear();
+
+                    //stoppar timern mellan waves
                     countTime = false;
-                    if (!noMoreTemps)
+
+                    if (!noMoreTempSpeed)
                         Config.tempMovementSpeedHolder = Config.movementSpeed;
-                    noMoreTemps = true;
+                    noMoreTempSpeed = true;
+
                     Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
+
                     powerUps.draw(deltaTime);
                     powerUps.update();
 
                     if (Config.isPicked)
                         waveCooldown -= deltaTime;
 
-                    //Ser lite dumt ut att köra om dessa varje frame men det fungerar inte att ha alla measureText i början utanför game lopp
-                    int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40);
-                    int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
-                    int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
 
                     if (!Config.isPicked)
                     {
+                        int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
                         Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
-                        Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
-                        Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressig E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
+
+                        int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
+                        Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
                     }
                     else
                     {
+                        int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40); //5 och inte {waveCooldown} för smoother centrering
                         Raylib.DrawText($"Next wave in: {(int)waveCooldown}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
                     }
 
                     if (waveCooldown < 1)
                     {
-                        enemieSpawnCount = 10 + (Config.wave * Config.wave);
-                        waveCooldown = 3.99f;
+                        enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
+                        waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
                         Config.wave++;
                         //resettar alla states, annars så får vi inte välja om powerups waven efter
                         Config.isPicked = false;
@@ -313,21 +340,29 @@ namespace CircleSurvivors
                         Config.hasRolledThisRound = false;
                         Config.despawnTime = 0.5f;
                         Config.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
-                        noMoreTemps = false;
+                        noMoreTempSpeed = false;
                     }
                 }
 
+                //Om man dör och respawnar så ser denna till att ingen powerup spawnas första rundan
                 firstWaveAfterRestart = false;
 
                 if (enemieSpawnCount > 0)
                 {
+                    //börjar den pausade timern
                     countTime = true;
+                    
+                    //ser till att inta alla enemies spawnar direkt och samtidigt
                     spawnTime -= deltaTime;
                     if (spawnTime <= 0)
                     {
+                        //eftersom NPCn är mer än en så deklrareras den mer än en gång
                         NPC npc = new NPC();
                         enemies.Add(npc);
                         drawableList.Add(npc);
+                        
+                        //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
+                        //också ser till att det aldrig blir instant
                         if (enemieSpawnCount < 100)
                         {
                             spawnTime = 1f - (enemieSpawnCount/100f);
@@ -350,6 +385,8 @@ namespace CircleSurvivors
                     //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
                     //sedan skriver över orginella listan med sorterade veriationen
 
+                    //plussar på deltatime tills cooldown timern är större en cooldownen
+                    //när det händer ressettar vi timern och skapar en bullet i drawablelist och bullets
                     bulletCooldownTimer += deltaTime;
                     if (Config.bulletCooldown <= bulletCooldownTimer)
                     {
@@ -359,6 +396,9 @@ namespace CircleSurvivors
                         bullets.Add(bullet);
                     }
 
+                    //exact samma logik som bullet cooldownen innan men för enemies
+                    //här har vi mer än en enemy so vi loopar igen hela enemies listan
+                    //så alla enemies individiuelt har sin egen cooldown
                     enemyBulletCooldownTimer += deltaTime;
                     if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
                     {
@@ -379,6 +419,8 @@ namespace CircleSurvivors
                 for (int i = drawableList.Count-1; i >= 0; i--)
                 {
                     var item = drawableList[i];
+                    //Drawable interfacet har en shouldDespawn function,
+                    //så alla .cs som implementerar interfacet har en shouldDespawn med sina egna requierments
                     if (item.shouldDespawn())
                     {
                         if (item is NPC enemyNpc)
@@ -391,26 +433,31 @@ namespace CircleSurvivors
                             bullets.Remove(bullet);
                         }
                         drawableList.RemoveAt(i);
+
+                        //om det ska despawna behövs det inte draw eller update så vi skippar till nästa
                         continue;
                     }
                     
                     collisionCooldownTimer += deltaTime;
                     item.update(deltaTime);
+                    //om itemet i listan är från NPC körs if satsen
                     if (item is NPC npc)
                     {
-                        //kollar igenom alla bullets och enemies för collision
+                        //för varje bullet i bullets, kolla för collision med npc
                         foreach (var bullet in bullets)
                         {
                             npc.bulletCollision(bullet, deltaTime);
                         }
+                        //för varje enemy i listan, kolla om collision cooldown är över, isåfall skada spelaren och resetta timern
                         foreach (var enemy in enemies)
                         {
                             if (collisionCooldownTimer >= collisionCooldown)
                             {
-                                collisionCooldownTimer = 0f;
+                                collisionCooldownTimer = 0;
                                 npc.playerCollision(enemy, deltaTime);
                             }
                         }
+                        //för varje enemybullet i listan, kolla om despawn requierments har mötts
                         foreach (var enemyBullets in enemyBullet)
                         {
                             enemyBullets.shouldDespawn();
@@ -419,8 +466,11 @@ namespace CircleSurvivors
                     item.draw();
                 }
                 
+                //corner info
                 Raylib.DrawText($"Kill count: {killCount}", 0,0,28, Color.Red);
                 Raylib.DrawText($"Wave: {Config.wave}", 0,25,28, Color.Red);
+
+                //Stat sheet
                 Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
                 Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
                 Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
@@ -429,6 +479,7 @@ namespace CircleSurvivors
                 Raylib.DrawText($"player hitpoints stat: {Config.playerHealthpoints}",0,Config.WindowSizeHeight-70,12, Color.DarkGray);
                 Raylib.DrawText($"player movement speed stat: {Config.movementSpeed}",0,Config.WindowSizeHeight-80,12, Color.DarkGray);
                 Raylib.DrawText($"stat sheet:",0,Config.WindowSizeHeight-90,12, Color.DarkGray);
+
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
                 if (Raylib.IsKeyDown(KeyboardKey.P))
@@ -440,6 +491,7 @@ namespace CircleSurvivors
         }
         static float enemyDistance(Player player, NPC npc)
         {
+            //Hur jag definerar i vilken ordning enemies ska vara sorted
             float dx = npc.x - player.x;
             float dy = npc.y - player.y;
             return dx * dx + dy * dy;
@@ -474,10 +526,8 @@ namespace CircleSurvivors
         public static float bulletCooldown = 1.5f;
 
         //power-ups
+        public static bool p1, p2, p3 = false;
         public static bool isPicked = false;
-        public static bool p1 = false;
-        public static bool p2 = false;
-        public static bool p3 = false;
         public static bool hasRolledThisRound = false;
         public static float despawnTime = 0.5f;
 

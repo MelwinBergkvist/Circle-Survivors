@@ -21,11 +21,22 @@ namespace CircleSurvivors
 
         int radius = 50;
 
+        float radiusSum;
+        float powerUpDx1;
+        float powerUpDy1;
+        float distancePowerUp1;
+
+        float powerUpDx2;
+        float powerUpDy2;
+        float distancePowerUp2;
+
+        float powerUpDx3;
+        float powerUpDy3;
+        float distancePowerUp3;
+
         Random random = new Random();
 
-        int powerUpStatus1;
-        int powerUpStatus2;
-        int powerUpStatus3;
+        int powerUpStatus1, powerUpStatus2, powerUpStatus3;
 
         String[] powerUpsArray = 
         {
@@ -34,14 +45,12 @@ namespace CircleSurvivors
                 "-10% Enemy Cooldown", "+20 Hitpoints", "+10 Movement speed" // 0 - 8
         };
 
-        public PowerUps() 
-        {
-            
-        }
+        public PowerUps() { }
         public void update()
         {
-            float radiusSum = radius + Config.playerRadius;
+            radiusSum = radius + Config.playerRadius;
 
+            //ser till att den inte rullar en ny powerup varje wave
             if (!Config.hasRolledThisRound)
             {
                 powerUpStatus1 = random.Next(0, 9);
@@ -49,14 +58,15 @@ namespace CircleSurvivors
                 powerUpStatus3 = random.Next(0, 9);
                 Config.hasRolledThisRound = true;
             }
+
             //gör all matta som kollar collision så vi vet vilken som tas,
             //efter någon har tagits så kör vi en return
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
             if (!Config.p1)
             {
-                float powerUpDx1 = posX1 - Config.player.x;
-                float powerUpDy1 = posY1 - Config.player.y;
-                float distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
+                powerUpDx1 = posX1 - Config.player.x;
+                powerUpDy1 = posY1 - Config.player.y;
+                distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
                 if (distancePowerUp1 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;
@@ -101,9 +111,9 @@ namespace CircleSurvivors
 
             if (!Config.p2)
             {
-                float powerUpDx2 = posX2 - Config.player.x;
-                float powerUpDy2 = posY2 - Config.player.y;
-                float distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
+                powerUpDx2 = posX2 - Config.player.x;
+                powerUpDy2 = posY2 - Config.player.y;
+                distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
                 if (distancePowerUp2 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;
@@ -147,9 +157,9 @@ namespace CircleSurvivors
 
             if (!Config.p3)
             {
-                float powerUpDx3 = posX3 - Config.player.x;
-                float powerUpDy3 = posY3 - Config.player.y;
-                float distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
+                powerUpDx3 = posX3 - Config.player.x;
+                powerUpDy3 = posY3 - Config.player.y;
+                distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
                 if (distancePowerUp3 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;
@@ -197,7 +207,7 @@ namespace CircleSurvivors
             {
                 if (Config.despawnTime <= 0)
                 {
-                    return; //vi kör denna så den slutar rita powerupsen efter någon har tagits
+                    return; //vi kör denna så den slutar rita powerupsen efter någon har tagits, med en cooldown
                 }
                 Config.despawnTime -= deltaTime;
             }

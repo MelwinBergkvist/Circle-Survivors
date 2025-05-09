@@ -11,19 +11,20 @@ namespace CircleSurvivors
 {
     public class NPC : Drawable
     {
-        public float x;
-        public float y;
+        public float x, y;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
+
         int hitpoints = 100;
         int maxHitpoints;
         public int enemyCollisionDamage = Config.enemyCollisionDamage;
+
         public bool shouldShoot = false;
-        bool isBoss = false;
-        bool isBossTurn = false;
+        bool isBoss, isBossTurn = false;
+
         string bossName;
         string[] bossNames =
         {
@@ -47,7 +48,7 @@ namespace CircleSurvivors
             Random random = new Random();
             if (Config.wave % 1 == 0)
             {
-                isBossTurn = true;
+                isBossTurn = false;
             }
             //Boss
             if (!Config.hasBossSpawned && isBossTurn)

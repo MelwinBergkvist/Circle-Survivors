@@ -9,10 +9,10 @@ namespace CircleSurvivors
 {
     public class Player : Drawable
     {
-        public float x;
-        public float y;
+        public float x, y;
         public Player(int x, int y) //constructor
         {
+            //specificerar att det är x och y från parametrarna
             this.x = x;
             this.y = y;
         }

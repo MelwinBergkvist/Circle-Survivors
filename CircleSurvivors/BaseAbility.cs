@@ -14,14 +14,18 @@ namespace CircleSurvivors
         public float bulletY;
         float moveX;
         float moveY;
+
+        float dx;
+        float dy;
+        float distance;
         public BaseAbility(NPC closestEnemy) //constructor
         {
             bulletX = Config.player.x;
             bulletY = Config.player.y;
 
-            float dx = closestEnemy.x - this.bulletX;
-            float dy = closestEnemy.y - this.bulletY;
-            float distance = MathF.Sqrt(dx * dx + dy * dy);
+            dx = closestEnemy.x - this.bulletX;
+            dy = closestEnemy.y - this.bulletY;
+            distance = MathF.Sqrt(dx * dx + dy * dy);
 
             moveX = (dx / distance) * Config.bulletSpeed;
             moveY = (dy / distance) * Config.bulletSpeed;
@@ -39,6 +43,7 @@ namespace CircleSurvivors
         }
         public bool shouldDespawn()
         {
+            //returnar true eller false beroände på dess position
             return (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight);
         }
     }
