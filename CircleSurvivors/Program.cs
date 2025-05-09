@@ -6,9 +6,8 @@
  * inte när jag testade det
  * 
  * Min standard:
- * alla functions små bokstäver förutom Main den ska alltid vara kapitaliserad (den e special)
- * alla datatyper camelCase med första alltid små bokstav
- * alla klasser med stor bokstäv i början
+ * Alla functioner Stor bokstav
+ * Alla datatyper camelCase, första bokstaven liten
 */
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 using System;
@@ -197,7 +196,7 @@ namespace CircleSurvivors
                     item.Draw();
                 }
 
-                Dashboard.draw();
+                Dashboard.Draw();
 
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 

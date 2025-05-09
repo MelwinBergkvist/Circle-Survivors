@@ -28,6 +28,7 @@ namespace CircleSurvivors
             moveY = (dy / distance) * Config.bulletSpeed;
             //vi gör calculations i constructorn så den inte blir en homing bullet
             //nästan like som NPC movements bara på lite olika platser
+            //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
         }
         public void Draw()
         {

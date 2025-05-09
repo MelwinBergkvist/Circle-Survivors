@@ -21,19 +21,6 @@ namespace CircleSurvivors
 
         int radius = 50;
 
-        float radiusSum;
-        float powerUpDx1;
-        float powerUpDy1;
-        float distancePowerUp1;
-
-        float powerUpDx2;
-        float powerUpDy2;
-        float distancePowerUp2;
-
-        float powerUpDx3;
-        float powerUpDy3;
-        float distancePowerUp3;
-
         Random random = new Random();
 
         Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
@@ -50,7 +37,7 @@ namespace CircleSurvivors
         public PowerUps() { }
         public void Update(float deltaTime)
         {
-            radiusSum = radius + Config.player.radius;
+            float radiusSum = radius + Config.player.radius;
 
             if (Config.isPicked)
                 Config.waveCooldown -= deltaTime;
@@ -69,9 +56,9 @@ namespace CircleSurvivors
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
             if (!Config.p1)
             {
-                powerUpDx1 = posX1 - Config.player.x;
-                powerUpDy1 = posY1 - Config.player.y;
-                distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
+                float powerUpDx1 = posX1 - Config.player.x;
+                float powerUpDy1 = posY1 - Config.player.y;
+                float distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
                 if (distancePowerUp1 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;
@@ -116,9 +103,9 @@ namespace CircleSurvivors
 
             if (!Config.p2)
             {
-                powerUpDx2 = posX2 - Config.player.x;
-                powerUpDy2 = posY2 - Config.player.y;
-                distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
+                float powerUpDx2 = posX2 - Config.player.x;
+                float powerUpDy2 = posY2 - Config.player.y;
+                float distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
                 if (distancePowerUp2 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;
@@ -162,9 +149,9 @@ namespace CircleSurvivors
 
             if (!Config.p3)
             {
-                powerUpDx3 = posX3 - Config.player.x;
-                powerUpDy3 = posY3 - Config.player.y;
-                distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
+                float powerUpDx3 = posX3 - Config.player.x;
+                float powerUpDy3 = posY3 - Config.player.y;
+                float distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
                 if (distancePowerUp3 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.isPicked = true;

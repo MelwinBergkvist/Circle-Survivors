@@ -28,7 +28,7 @@ namespace CircleSurvivors
         {
             //spelaren
             Raylib.DrawCircle((int)x, (int)y, Config.player.radius, Color.Green);
-
+            
             //health bar
             Raylib.DrawRectangle((int)x-15, (int)y+25, 30,8, Color.Green);
             float healthWidth = 30 - (30 * healthpoints / maxHealthpoints);

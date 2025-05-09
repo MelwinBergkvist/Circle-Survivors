@@ -12,7 +12,7 @@ namespace CircleSurvivors
         /// <summary>
         /// Shows stats
         /// </summary>
-        public static void draw()
+        public static void Draw()
         {
             //corner info
             Raylib.DrawText($"Kill count: {Config.killCount}", 0, 0, 28, Color.Red);
