@@ -24,7 +24,6 @@ namespace CircleSurvivors
 
         public bool shouldShoot = false;
 
-        //custom Color (Röd, Grön, Blå, Alpha)
         Color enemyColor = new Color(156, 6, 6);
         Color enemyHealthColor = new Color(77, 8, 8);
 
@@ -32,8 +31,38 @@ namespace CircleSurvivors
         {
             Random random = new Random();
             
+            //Special enemies
+            if (random.Next(0,101) > 90) // 10%
+            {
+                // Tanky
+                hitpoints += 100;
+                radius += 5f;
+                movementSpeed -= 30;
+                enemyColor = new Color(19, 138, 11);
+                enemyHealthColor = new Color(8, 77, 3);
+                enemyCollisionDamage += 10;
+            }
+            else if (random.Next(0,101) > 80) // 18%
+            {
+                // Speedy                
+                hitpoints -= 50;
+                radius -= 5;
+                movementSpeed += 60;
+                enemyColor = new Color(120, 6, 191);
+                enemyHealthColor = new Color(85, 5, 135);
+                enemyCollisionDamage -= 4;
+            }
+            else if (random.Next(0,101) > 90) // 7.2%
+            {
+                //Shooter
+                enemyColor = new Color(0, 0, 0);
+                enemyHealthColor = new Color(65, 65, 65);
+                shouldShoot = true;
+            }
+
             maxHitpoints = hitpoints;
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
+            // 1 = vänster, 2 = höger, 3 = up, 4 = nere
             if (side == 1)
             {
                 //vänster
@@ -54,7 +83,7 @@ namespace CircleSurvivors
             }
             else
             {
-                //ner
+                //nere
                 y = Config.WindowSizeHeight + radius;
                 x = random.Next(0, Config.WindowSizeWidth);
             }
