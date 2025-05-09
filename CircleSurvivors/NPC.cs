@@ -17,6 +17,7 @@ namespace CircleSurvivors
         float movementSpeed = 80;
         float hitCooldown = 0f;
         float radius = Config.npcRadius;
+        float enemyBulletCooldownTimer = 0f;
 
         int hitpoints = 100;
         int maxHitpoints;
@@ -52,7 +53,7 @@ namespace CircleSurvivors
                 enemyHealthColor = new Color(85, 5, 135);
                 enemyCollisionDamage -= 4;
             }
-            else if (random.Next(0,101) > 90) // 7.2%
+            else if (random.Next(0,101) > 10) // 7.2%
             {
                 //Shooter
                 enemyColor = new Color(0, 0, 0);
@@ -61,31 +62,29 @@ namespace CircleSurvivors
             }
 
             maxHitpoints = hitpoints;
-            int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
-            // 1 = vänster, 2 = höger, 3 = up, 4 = nere
-            if (side == 1)
+            int side = random.Next(0, 4);
+            switch (side)
             {
-                //vänster
-                x = -radius;
-                y = random.Next(0, Config.WindowSizeHeight);
-            }
-            else if (side == 2)
-            {
-                //höger
-                x = Config.WindowSizeWidth + radius;
-                y = random.Next(0, Config.WindowSizeHeight);
-            }
-            else if (side == 3)
-            {
-                //up
-                y = -radius;
-                x = random.Next(0, Config.WindowSizeWidth);
-            }
-            else
-            {
-                //nere
-                y = Config.WindowSizeHeight + radius;
-                x = random.Next(0, Config.WindowSizeWidth);
+                case 0:
+                    //vänster
+                    x = -radius;
+                    y = random.Next(0, Config.WindowSizeHeight);
+                    break;
+                case 1:
+                    //höger
+                    x = Config.WindowSizeWidth + radius;
+                    y = random.Next(0, Config.WindowSizeHeight);
+                    break;
+                case 2:
+                    //up
+                    y = -radius;
+                    x = random.Next(0, Config.WindowSizeWidth);
+                    break;
+                case 3:
+                    //nere
+                    y = Config.WindowSizeHeight + radius;
+                    x = random.Next(0, Config.WindowSizeWidth);
+                    break;
             }
         }
         /// <summary>
@@ -93,7 +92,7 @@ namespace CircleSurvivors
         /// </summary>
         public void Draw()
         {
-            Raylib.DrawCircle((int)x, (int)y, radius, enemyColor); //tar x & y som ints istället för floats
+            Raylib.DrawCircle((int)x, (int)y, radius, enemyColor);
 
             //2nd radius som en healthmeter typ
             float healthRadius = radius - (radius * hitpoints / maxHitpoints);
@@ -113,6 +112,15 @@ namespace CircleSurvivors
             float dx = Config.player.x - x;
             float dy = Config.player.y - y;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
+
+            enemyBulletCooldownTimer += deltaTime;
+            if (Config.enemies.Count > 0)
+            {
+                if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
+                {
+                    ShootEnemyBullet(this);
+                }
+            }
 
             if (!shouldShoot)
             {
@@ -143,10 +151,11 @@ namespace CircleSurvivors
                 }
             }
 
+
             if (hitCooldown >= 0)
                 hitCooldown -= deltaTime;
         }
-        public void bulletCollision(BaseAbility bullets, float deltaTime)
+        public void BulletCollision(BaseAbility bullets, float deltaTime)
         {
             if (sinceSpawn < spawnImmunity) return;
             
@@ -164,7 +173,7 @@ namespace CircleSurvivors
                 }
             }
         }
-        public void playerCollision(NPC enemies, float deltaTime)
+        public void PlayerCollision(NPC enemies, float deltaTime)
         {
             //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
             float playerEnemyDx = Config.player.x - enemies.x;
@@ -174,6 +183,19 @@ namespace CircleSurvivors
 
             if (distancePlayerEnemy <= radiusSum * radiusSum)
                 Config.player.healthpoints -= enemyCollisionDamage;
+        }
+        public void ShootEnemyBullet(NPC enemy)
+        {
+            //exact samma logik som bullet cooldownen innan men för enemies
+            //här har vi mer än en enemy so vi loopar igen hela enemies listan
+            //så alla enemies individiuelt har sin egen cooldown
+            if (shouldShoot)
+            {
+                enemyBulletCooldownTimer = 0;
+                EnemyBullets enemyBullets = new EnemyBullets(enemy);
+                Config.drawableList.Add(enemyBullets);
+                Config.enemyBullet.Add(enemyBullets);
+            }
         }
     }
 }

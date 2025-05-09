@@ -24,7 +24,7 @@ namespace CircleSurvivors
             SplashTexts splashText = new SplashTexts();
 
             List<BaseAbility> bullets = Config.bullets;
-            List<EnemyBullets> enemyBullet = Config.EnemyBullet;
+            List<EnemyBullets> enemyBullet = Config.enemyBullet;
             List<Drawable> drawableList = Config.drawableList;
             List<NPC> enemies = Config.enemies;
 
@@ -32,8 +32,6 @@ namespace CircleSurvivors
             float deltaTime;
             float startScreenAlpha = 0f;
             float fadeInSpeedStart = 100f;
-            float bulletCooldownTimer = 0f;
-            float enemyBulletCooldownTimer = 0f;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
             float collisionCooldown = 1.5f;
@@ -243,48 +241,26 @@ namespace CircleSurvivors
 
                 //make sure att det faktist finns enemies på skärmen,
                 //så vi inte försöker skjuta mot något som inte finns
-                if (enemies.Count > 0)
-                {
-                    //enemies = enemies.OrderBy(enemy => EnemyDistance(Config.player, enemy)).ToList();
-                    enemies.Sort((a, b) => (int)(EnemyDistance(Config.player, a) - EnemyDistance(Config.player, b))); 
-                    //brorsan hjälpa mig att skriva den och förklara att min tidigare .ToList tappade bort referensen
-                    //därför fungerade inte enemies.Clear();,
-                    //den nya listan fungerar genom att modifiera existerande listan utan att skriva över den originella
-                    
-                    NPC closestEnemy = enemies[0];
-                    //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
-                    //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
-                    //sedan skriver över orginella listan med sorterade veriationen
-
-                    //plussar på deltatime tills cooldown timern är större en cooldownen
-                    //när det händer ressettar vi timern och skapar en bullet i drawablelist och bullets
-                    bulletCooldownTimer += deltaTime;
-                    if (Config.bulletCooldown <= bulletCooldownTimer)
-                    {
-                        bulletCooldownTimer = 0;
-                        BaseAbility bullet = new BaseAbility(closestEnemy);
-                        drawableList.Add(bullet);
-                        bullets.Add(bullet);
-                    }
-
-                    //exact samma logik som bullet cooldownen innan men för enemies
-                    //här har vi mer än en enemy so vi loopar igen hela enemies listan
-                    //så alla enemies individiuelt har sin egen cooldown
-                    enemyBulletCooldownTimer += deltaTime;
-                    if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
-                    {
-                        foreach (var enemy in  enemies)
-                        {
-                            if (enemy.shouldShoot)
-                            {
-                                enemyBulletCooldownTimer = 0;
-                                EnemyBullets enemyBullets = new EnemyBullets(enemy);
-                                drawableList.Add(enemyBullets);
-                                enemyBullet.Add(enemyBullets);
-                            }
-                        }
-                    }
-                }                
+                //if (enemies.Count > 0)
+                //{
+                //    //exact samma logik som bullet cooldownen innan men för enemies
+                //    //här har vi mer än en enemy so vi loopar igen hela enemies listan
+                //    //så alla enemies individiuelt har sin egen cooldown
+                //    enemyBulletCooldownTimer += deltaTime;
+                //    if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
+                //    {
+                //        foreach (var enemy in  enemies)
+                //        {
+                //            if (enemy.shouldShoot)
+                //            {
+                //                enemyBulletCooldownTimer = 0;
+                //                EnemyBullets enemyBullets = new EnemyBullets(enemy);
+                //                drawableList.Add(enemyBullets);
+                //                enemyBullet.Add(enemyBullets);
+                //            }
+                //        }
+                //    }
+                //}                
 
                 //Kollar om jag ska despawn itemen annars så draw och update
                 for (int i = drawableList.Count-1; i >= 0; i--)
@@ -317,7 +293,7 @@ namespace CircleSurvivors
                         //för varje bullet i bullets, kolla för collision med npc
                         foreach (var bullet in bullets)
                         {
-                            npc.bulletCollision(bullet, deltaTime);
+                            npc.BulletCollision(bullet, deltaTime);
                         }
                         //för varje enemy i listan, kolla om collision cooldown är över, isåfall skada spelaren och resetta timern
                         foreach (var enemy in enemies)
@@ -325,7 +301,7 @@ namespace CircleSurvivors
                             if (collisionCooldownTimer >= collisionCooldown)
                             {
                                 collisionCooldownTimer = 0;
-                                npc.playerCollision(enemy, deltaTime);
+                                npc.PlayerCollision(enemy, deltaTime);
                             }
                         }
                         //för varje enemybullet i listan, kolla om despawn requierments har mötts
@@ -348,13 +324,13 @@ namespace CircleSurvivors
                 Raylib.EndDrawing();
             }
         }
-        static float EnemyDistance(Player player, NPC npc)
-        {
-            //Hur jag definerar i vilken ordning enemies ska vara sorted
-            float dx = npc.x - player.x;
-            float dy = npc.y - player.y;
-            return dx * dx + dy * dy;
-        }
+        //static float EnemyDistance(Player player, NPC npc)
+        //{
+        //    //Hur jag definerar i vilken ordning enemies ska vara sorted
+        //    float dx = npc.x - player.x;
+        //    float dy = npc.y - player.y;
+        //    return dx * dx + dy * dy;
+        //}
         
     }
     public static class Config
@@ -398,7 +374,7 @@ namespace CircleSurvivors
         public static List<Drawable> drawableList = new List<Drawable>();
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
-        public static List<EnemyBullets> EnemyBullet = new List<EnemyBullets>();
+        public static List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
 
         public static void ResetGameState()
         {
