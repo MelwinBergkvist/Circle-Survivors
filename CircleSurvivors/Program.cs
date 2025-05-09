@@ -11,6 +11,7 @@
  * alla klasser med stor bokstäv i början
 */
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
+using System;
 using System.Numerics; 
 
 namespace CircleSurvivors
