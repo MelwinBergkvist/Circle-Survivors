@@ -4,6 +4,11 @@
  * alla raylib.measuretext måste deklareras där de används
  * och inte i början av main, jag vet inte varför men det fungerade
  * inte när jag testade det
+ * 
+ * Min standard:
+ * alla functions små bokstäver förutom Main den ska alltid vara kapitaliserad (den e special)
+ * alla datatyper camelCase med första alltid små bokstav
+ * alla klasser med stor bokstäv i början
 */
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 using System.Numerics; 
@@ -33,11 +38,13 @@ namespace CircleSurvivors
             int enemieSpawnCount = 10 + (Config.wave * Config.wave);
             int killCount = 0;
             int splashText = 0;
+            bool isPaused = false;
             bool startScreen = false;
             bool startFadeIn = false;
             bool firstWaveAfterRestart = false;
             bool countTime = true;
             bool noMoreTemps = false;
+            Color pauseOverlay = new Color(150, 150, 150, 200);
             string[] splashTextsArray = 
             {
                 //common
@@ -109,6 +116,7 @@ namespace CircleSurvivors
                         Config.bulletRadius = 5;
                         Config.bulletSpeed = 300f;
                         Config.playerHealthpoints = 100;
+                        Config.maxPlayerHealthpoints = 100;
                         Config.hasBossSpawned = false;
                         killCount = 0;
                         enemies.Clear();
@@ -199,6 +207,16 @@ namespace CircleSurvivors
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing();
                 //drawing confines;
+                if (isPaused)
+                {
+                    Raylib.DrawRectangle(0,0,Config.WindowSizeWidth, Config.WindowSizeHeight, pauseOverlay);
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.G))
+                        isPaused = false;
+                    else
+                        Raylib.EndDrawing();
+                        continue;
+                }
                 int timeMeasureType1 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
                 int timeMeasureType2 = Raylib.MeasureText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
                 int timeMeasureType3 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
@@ -412,6 +430,9 @@ namespace CircleSurvivors
                 Raylib.DrawText($"stat sheet:",0,Config.WindowSizeHeight-90,12, Color.DarkGray);
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
+                if (Raylib.IsKeyDown(KeyboardKey.P))
+                    isPaused = true;
+
                 //drawing confines
                 Raylib.EndDrawing();
             }
@@ -442,6 +463,7 @@ namespace CircleSurvivors
         public static int movementSpeed = 100;
         public static int playerRadius = 15;
         public static int playerHealthpoints = 100;
+        public static int maxPlayerHealthpoints = 100;
         public static int tempMovementSpeedHolder;
 
         //bullets

@@ -61,52 +61,39 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p1 = true;
-                    if (powerUpStatus1 == 0)
+
+                    switch (powerUpStatus1)
                     {
-                        // +5 Bullet Damage
-                        Config.bulletDamage += 5;
-                    }
-                    else if (powerUpStatus1 == 1)
-                    {
-                        // +2 Bullet Radius
-                        Config.bulletRadius += 2;
-                    }
-                    else if (powerUpStatus1 == 2)
-                    {
-                        // +10 Bullet Speed
-                        Config.bulletSpeed += 10;
-                    }
-                    else if (powerUpStatus1 == 3)
-                    {
-                        // 10% Faster Cooldown
-                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
-                    }
-                    else if (powerUpStatus1 == 4)
-                    {
-                        // -1 Radius
-                        if (Config.playerRadius >= 2)
-                            Config.playerRadius -= 1;
-                    }
-                    else if (powerUpStatus1 == 5)
-                    {
-                        // -10 Bullet Speed
-                        if (Config.bulletSpeed >= 10)
-                            Config.bulletSpeed -= 10;
-                    }
-                    else if (powerUpStatus1 == 6)
-                    {
-                        // 10% Slower Enemy Bullet Cooldown
-                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
-                    }
-                    else if (powerUpStatus1 == 7)
-                    {
-                        // +20 Hitpoints
-                        Config.playerHealthpoints += 20;
-                    }
-                    else if (powerUpStatus1 == 8)
-                    {
-                        // +10 Movement speed
-                        Config.tempMovementSpeedHolder += 10;
+                        case 0:
+                            Config.bulletDamage += 5;
+                            break;
+                        case 1:
+                            Config.bulletRadius += 2;
+                            break;
+                        case 2:
+                            Config.bulletSpeed += 10;
+                            break;
+                        case 3:
+                            Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                            break;
+                        case 4:
+                            if (Config.playerRadius >= 2)
+                                Config.playerRadius -= 1;
+                            break;
+                        case 5:
+                            if (Config.bulletSpeed >= 10)
+                                Config.bulletSpeed -= 10;
+                            break;
+                        case 6:
+                            Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                            break;
+                        case 7:
+                            Config.playerHealthpoints += 20;
+                            Config.maxPlayerHealthpoints += 20;
+                            break;
+                        case 8:
+                            Config.tempMovementSpeedHolder += 10;
+                            break;
                     }
                     return;
                 }
@@ -121,52 +108,38 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p2 = true;
-                    if (powerUpStatus2 == 0)
+                    switch (powerUpStatus2)
                     {
-                        // +5 Bullet Damage
-                        Config.bulletDamage += 5;
-                    }
-                    else if (powerUpStatus2 == 1)
-                    {
-                        // +2 Bullet Radius
-                        Config.bulletRadius += 2;
-                    }
-                    else if (powerUpStatus2 == 2)
-                    {
-                        // +10 Bullet Speed
-                        Config.bulletSpeed += 10;
-                    }
-                    else if (powerUpStatus2 == 3)
-                    {
-                        // 10% Faster Cooldown
-                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
-                    }
-                    else if (powerUpStatus2 == 4)
-                    {
-                        // -1 Radius
-                        if (Config.playerRadius >= 2)
-                            Config.playerRadius -= 1;
-                    }
-                    else if (powerUpStatus2 == 5)
-                    {
-                        // -10 Bullet Speed
-                        if (Config.bulletSpeed >= 10)
-                            Config.bulletSpeed -= 10;
-                    }
-                    else if (powerUpStatus2 == 6)
-                    {
-                        // 10% Slower Enemy Bullet Cooldown
-                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
-                    }
-                    else if (powerUpStatus2 == 7)
-                    {
-                        // +20 Hitpoints
-                        Config.playerHealthpoints += 20;
-                    }
-                    else if (powerUpStatus2 == 8)
-                    {
-                        // +10 Movement speed
-                        Config.tempMovementSpeedHolder += 10;
+                        case 0:
+                            Config.bulletDamage += 5;
+                            break;
+                        case 1:
+                            Config.bulletRadius += 2;
+                            break;
+                        case 2:
+                            Config.bulletSpeed += 10;
+                            break;
+                        case 3:
+                            Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                            break;
+                        case 4:
+                            if (Config.playerRadius >= 2)
+                                Config.playerRadius -= 1;
+                            break;
+                        case 5:
+                            if (Config.bulletSpeed >= 10)
+                                Config.bulletSpeed -= 10;
+                            break;
+                        case 6:
+                            Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                            break;
+                        case 7:
+                            Config.playerHealthpoints += 20;
+                            Config.maxPlayerHealthpoints += 20;
+                            break;
+                        case 8:
+                            Config.tempMovementSpeedHolder += 10;
+                            break;
                     }
                     return;
                 }
@@ -181,52 +154,38 @@ namespace CircleSurvivors
                 {
                     Config.isPicked = true;
                     Config.p3 = true;
-                    if (powerUpStatus3 == 0)
+                    switch (powerUpStatus3)
                     {
-                        // +5 Bullet Damage
-                        Config.bulletDamage += 5;
-                    }
-                    else if (powerUpStatus3 == 1)
-                    {
-                        // +2 Bullet Radius
-                        Config.bulletRadius += 2;
-                    }
-                    else if (powerUpStatus3 == 2)
-                    {
-                        // +10 Bullet Speed
-                        Config.bulletSpeed += 10;
-                    }
-                    else if (powerUpStatus3 == 3)
-                    {
-                        // 10% Faster Cooldown
-                        Config.bulletCooldown = Config.bulletCooldown * 0.9f;
-                    }
-                    else if (powerUpStatus3 == 4)
-                    {
-                        // -1 Radius
-                        if (Config.playerRadius >= 2)
-                            Config.playerRadius -= 1;
-                    }
-                    else if (powerUpStatus3 == 5)
-                    {
-                        // -10 Bullet Speed
-                        if (Config.bulletSpeed >= 10)
-                            Config.bulletSpeed -= 10;
-                    }
-                    else if (powerUpStatus3 == 6)
-                    {
-                        // 10% Slower Enemy Bullet Cooldown
-                        Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
-                    }
-                    else if (powerUpStatus3 == 7)
-                    {
-                        // +20 Hitpoints
-                        Config.playerHealthpoints += 20;
-                    }
-                    else if (powerUpStatus3 == 8)
-                    {
-                        // +10 Movement speed
-                        Config.tempMovementSpeedHolder += 10;
+                        case 0:
+                            Config.bulletDamage += 5;
+                            break;
+                        case 1:
+                            Config.bulletRadius += 2;
+                            break;
+                        case 2:
+                            Config.bulletSpeed += 10;
+                            break;
+                        case 3:
+                            Config.bulletCooldown = Config.bulletCooldown * 0.9f;
+                            break;
+                        case 4:
+                            if (Config.playerRadius >= 2)
+                                Config.playerRadius -= 1;
+                            break;
+                        case 5:
+                            if (Config.bulletSpeed >= 10)
+                                Config.bulletSpeed -= 10;
+                            break;
+                        case 6:
+                            Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
+                            break;
+                        case 7:
+                            Config.playerHealthpoints += 20;
+                            Config.maxPlayerHealthpoints += 20;
+                            break;
+                        case 8:
+                            Config.tempMovementSpeedHolder += 10;
+                            break;
                     }
                     return;
                 }

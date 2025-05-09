@@ -19,6 +19,9 @@ namespace CircleSurvivors
      * 
      * gör allt mer generelt,
      * de gör de incompatible datatyperna compatible
+     * 
+     * jag glömde att lägga till men jag fick mycket hjälp
+     * av min broder med att skapa detta interface
      */
     public interface Drawable
     {
