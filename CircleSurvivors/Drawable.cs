@@ -25,8 +25,8 @@ namespace CircleSurvivors
      */
     public interface Drawable
     {
-        public void update(float deltaTime);
-        public void draw();
-        public bool shouldDespawn();
+        public void Update(float deltaTime);
+        public void Draw();
+        public bool ShouldDespawn();
     }
 }

@@ -13,17 +13,8 @@ namespace CircleSurvivors
         public float bulletX;
         public float bulletY;
         bool hasDealtDamage = false;
-        float moveX;
-        float moveY;
-
-        float dx;
-        float dy;
-        float despawnDistance;
-        float radiusSum;
-
-        float dxBullet;
-        float dyBullet;
-        float distanceBullets;
+        readonly float moveX;
+        readonly float moveY;
 
         public EnemyBullets(NPC enemy)
         {
@@ -31,39 +22,39 @@ namespace CircleSurvivors
             bulletX = enemy.x;
             bulletY = enemy.y;
 
-            dxBullet = Config.player.x - bulletX;
-            dyBullet = Config.player.y - bulletY;
-            distanceBullets = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
+            float dxBullet = Config.player.x - bulletX;
+            float dyBullet = Config.player.y - bulletY;
+            float distanceBullets = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
 
             moveX = (dxBullet / distanceBullets) * Config.enemyBulletSpeed;
             moveY = (dyBullet / distanceBullets) * Config.enemyBulletSpeed;
         }
-        public void draw()
+        public void Draw()
         {
             Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.enemyBulletRadius, Color.Black);
         }
-        public void update(float deltaTime)
+        public void Update(float deltaTime)
         {
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
-        public bool shouldDespawn()
+        public bool ShouldDespawn()
         {
             //om bullet går utanför canvas, despawna
             if (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight)
                 return true;
 
             //om den colliderar med spelare tar bort, behövs ingen piercing
-            dx = bulletX - Config.player.x;
-            dy = bulletY - Config.player.y;
-            despawnDistance = MathF.Sqrt(dx * dx + dy * dy);
-            radiusSum = Config.bulletRadius + Config.playerRadius;
+            float dx = bulletX - Config.player.x;
+            float dy = bulletY - Config.player.y;
+            float despawnDistance = MathF.Sqrt(dx * dx + dy * dy);
+            float radiusSum = Config.bulletRadius + Config.player.radius;
             if (despawnDistance < radiusSum)
             {
                 if (!hasDealtDamage)
                 {
                     hasDealtDamage = true; //Check så bullet bara skadar en gång
-                    Config.playerHealthpoints -= Config.enemyBulletDamage;
+                    Config.player.healthpoints -= Config.enemyBulletDamage;
                 }
                 return true;
             }

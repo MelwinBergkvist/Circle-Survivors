@@ -88,7 +88,10 @@ namespace CircleSurvivors
                 x = random.Next(0, Config.WindowSizeWidth);
             }
         }
-        public void draw()
+        /// <summary>
+        /// Draws enemy object
+        /// </summary>
+        public void Draw()
         {
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor); //tar x & y som ints istället för floats
 
@@ -97,12 +100,12 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
         }
 
-        public bool shouldDespawn()
+        public bool ShouldDespawn()
         {
             return hitpoints <= 0;
         }
 
-        public void update(float deltaTime)
+        public void Update(float deltaTime)
         {
             sinceSpawn += deltaTime;
 
@@ -167,10 +170,10 @@ namespace CircleSurvivors
             float playerEnemyDx = Config.player.x - enemies.x;
             float playerEnemyDy = Config.player.y - enemies.y;
             float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
-            float radiusSum = Config.playerRadius + enemies.radius;
+            float radiusSum = Config.player.radius + enemies.radius;
 
             if (distancePlayerEnemy <= radiusSum * radiusSum)
-                Config.playerHealthpoints -= enemyCollisionDamage;
+                Config.player.healthpoints -= enemyCollisionDamage;
         }
     }
 }

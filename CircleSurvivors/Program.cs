@@ -18,143 +18,59 @@ namespace CircleSurvivors
 {
     internal class Program
     {
+
         static void Main(string[] args) //Allt som ska ritas as raylibs måste vara inom Begin och End drawing
         {
-            Player player = Config.player;
+            SplashTexts splashText = new SplashTexts();
 
-            List<BaseAbility> bullets = new List<BaseAbility>();
-            List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
+            List<BaseAbility> bullets = Config.bullets;
+            List<EnemyBullets> enemyBullet = Config.EnemyBullet;
+            List<Drawable> drawableList = Config.drawableList;
+            List<NPC> enemies = Config.enemies;
 
             //floats
             float deltaTime;
-            float gameOverAlpha = 0f;
             float startScreenAlpha = 0f;
-            float fadeInSpeed = 50f;
             float fadeInSpeedStart = 100f;
             float bulletCooldownTimer = 0f;
             float enemyBulletCooldownTimer = 0f;
             float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
-            float timeAliveSeconds = 0f;
-            float timeAliveMinutes = 0f;
             float collisionCooldown = 1.5f;
             float collisionCooldownTimer = 0f;
 
             //ints
-            int enemieSpawnCount = 10 + (Config.wave * Config.wave);
-            int killCount = 0;
-            int splashText = 0;
+            //int enemieSpawnCount = 10 + (Config.wave * Config.wave);
 
             //bools
             bool isPaused = false;
             bool startScreen = false;
             bool startFadeIn = false;
-            bool firstWaveAfterRestart = false;
-            bool countTime = true;
             bool noMoreTempSpeed = false;
 
             bool hoveredStart;
             bool clickedStart;
             bool isTutorialHovered;
 
+
             //Colors
             Color pauseOverlay = new Color(150, 150, 150, 200);
             Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
-            Color fadeRed;
-            Color fadeGray;
-            Color fadeSkyBlue;
-
-            Random randomSplashText = new Random();
-
-            string[] splashTextsArray = 
-            {
-                //common
-                "Bravo 6, going circles.", "Circle of life... and death, probably.", "Circle up buddy", "This isn't a drill! (it's a spiral)",
-                "I'm in love with the shape of you - by circle sheeran", "On edge? We don't have edges here.", "Pop a wheelie", "I'm going aRound in circles",
-                "alternative title: Geometry wars", "Also try Circle Diers", "360 degrees of dangers", "Axis of evil", "No corners to hide behind",
-                "Roundabout rage", "Wheel of misfortune", "esnälla ge mig ett A", "Rotating regrets", "Circle one: fight!... i mean round",
-                "I need to count how many splashes made after this", "Rolling until further notice", "You're on a roll!... or not",
-
-                //rare
-                "Insert better pun here.", "This text does nothing.", "in circles since 1997",
-                "Tested on humans, not responsibly.", "This splash text is {Shadow Slave chapter 360}"
-            }; //16st, rare 5st
-
-            if (randomSplashText.Next(0,101) < 90)
-            {
-                splashText = randomSplashText.Next(0,16);
-            }
-            else
-            {
-                splashText = randomSplashText.Next(16,21);
-            }
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
-            List<Drawable> drawableList = new List<Drawable>();
-            List<NPC> enemies = new List<NPC>();
-            drawableList.Add(player);
+            drawableList.Add(Config.player);
             PowerUps powerUps = new PowerUps();
+            GUI gui = new GUI();
 
 
-            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + splashTextsArray[splashText]);
+            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + SplashTexts.GetSplashText());
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
-                //om spelaren är död, sluta köra och bara visa en you lose text
-                if(player.shouldDespawn())
+                if (Config.player.ShouldDespawn())
                 {
-                    //fade in effect för you lose screen
-                    if (gameOverAlpha < 255)
-                    {
-                        gameOverAlpha += fadeInSpeed * deltaTime;
-                        if (gameOverAlpha > 255) gameOverAlpha = 255;
-                    }                    
-                    fadeRed = Raylib.Fade(Color.Red, gameOverAlpha / 255f);
-                    fadeGray = Raylib.Fade(Color.DarkGray, gameOverAlpha / 255f);
-                    fadeSkyBlue = Raylib.Fade(Color.SkyBlue, gameOverAlpha / 255f);
-                    //raylib vill ha mellan 0-1 medan vi kör mellan 0-255 så vi kör /255 för att göra raylibs glad
-                    //raylibs inbyggda fade in
-
-                    Raylib.ClearBackground(Color.Gray);
-                    int endTextWidth = Raylib.MeasureText("Game over, You lost!", 64);
-                    //x post räknas från början av texten, så vi kör en measureText så vi kan centrera texten
-                    Raylib.DrawText("Game over, You lost!", Config.WindowSizeWidth / 2 - endTextWidth/2, Config.WindowSizeHeight / 4, 64, fadeRed);
-
-                    int timeAliveText = Raylib.MeasureText($"You stayed alive for {(int)timeAliveMinutes} minutes and {(int)timeAliveSeconds} seconds!",16);
-                    Raylib.DrawText($"You stayed alive for {(int)timeAliveMinutes} minutes and {(int)timeAliveSeconds} seconds!", Config.WindowSizeWidth / 2 - timeAliveText / 2, Config.WindowSizeHeight/ 4 + 100, 16, fadeSkyBlue);
-                    int killCountText = Raylib.MeasureText($"You killed {killCount} enemies during your run!", 16);
-                    Raylib.DrawText($"You killed {killCount} enemies during your run!", Config.WindowSizeWidth / 2 - killCountText / 2, Config.WindowSizeHeight / 4 + 120, 16, fadeSkyBlue);
-                    int waveText = Raylib.MeasureText($"You survived for {Config.wave-1} waves!", 16);
-                    Raylib.DrawText($"You survived for {Config.wave-1} waves!", Config.WindowSizeWidth / 2 - waveText / 2, Config.WindowSizeHeight / 4 + 140, 16, fadeSkyBlue);
-
-
-                    int restartTextWidth = Raylib.MeasureText("Press R to restart", 24);
-                    Raylib.DrawText("Press R to restart", Config.WindowSizeWidth / 2 - restartTextWidth/2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight/4, 24, fadeGray);
-                    if (Raylib.IsKeyPressed(KeyboardKey.R)) // resettar allting
-                    {
-                        Config.wave = 1;
-                        Config.bulletDamage = 50;
-                        Config.bulletRadius = 5;
-                        Config.bulletSpeed = 300f;
-                        Config.playerHealthpoints = 100;
-                        Config.maxPlayerHealthpoints = 100;
-                        killCount = 0;
-                        enemies.Clear();
-                        drawableList.Clear();
-                        bullets.Clear();
-                        drawableList.Add(player);
-                        firstWaveAfterRestart = true;
-                        enemieSpawnCount = 11;
-                        timeAliveSeconds = 0;
-                        timeAliveMinutes = 0;
-                        player.x = Config.WindowSizeWidth / 2;
-                        player.y = Config.WindowSizeHeight / 2;
-                    }
-                    else
-                    {
-                        Raylib.EndDrawing();
-                        continue;
-                    }
+                    gui.DeathScreen(deltaTime);
+                    continue;
                 }
 
                 if (!startScreen)
@@ -228,6 +144,9 @@ namespace CircleSurvivors
                 Raylib.BeginDrawing();
                 //drawing confines;
 
+                if (Raylib.IsKeyPressed(KeyboardKey.K))
+                    Config.player.healthpoints -= 25;
+
                 //Pause meny, WIP
                 if (isPaused)
                 {
@@ -240,70 +159,21 @@ namespace CircleSurvivors
                         continue;
                 }
 
-                int timeMeasureType1 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
-                int timeMeasureType2 = Raylib.MeasureText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
-                int timeMeasureType3 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
-                int timeMeasureType4 = Raylib.MeasureText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
-                if (countTime)
-                    timeAliveSeconds += deltaTime;
-                else
-                {
-                    if (timeAliveSeconds < 10)
-                    {
-                        if (timeAliveMinutes < 10)
-                            Raylib.DrawText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType1/2, 20, 24, Color.Red);
-                        else
-                            Raylib.DrawText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType2/2, 20, 24, Color.Red);
-                    }
-                    else
-                    {
-                        if (timeAliveMinutes < 10)
-                            Raylib.DrawText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType3/2, 20, 24, Color.Red);
-                        else
-                            Raylib.DrawText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType4/2, 20, 24, Color.Red);
-                    }
-                }
-
-                if (countTime)
-                {
-                    if (timeAliveSeconds < 10)
-                    {
-                        if (timeAliveMinutes < 10)
-                            Raylib.DrawText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType1/2, 20, 24, Color.Black);
-                        else
-                            Raylib.DrawText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType2/2, 20, 24, Color.Black);
-                    }
-                    else
-                    {
-                        if (timeAliveMinutes < 10)
-                            Raylib.DrawText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType3/2, 20, 24, Color.Black);
-                        else
-                            Raylib.DrawText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType4/2, 20, 24, Color.Black);
-
-                    }
-                }
-                //Timer ^^^, mest av koden är centrering
-
-                //resattas till 0 så vi får minuter
-                if (timeAliveSeconds > 60)
-                {
-                    timeAliveSeconds = 0; 
-                    timeAliveMinutes += 1;
-                }
+                gui.Timer(deltaTime);
 
                 //när alla enemies är döda, ny wave och +1 wave count
-                if (enemies.Count <= 0 && enemieSpawnCount <= 0 && firstWaveAfterRestart != true)
+                if (enemies.Count <= 0 && Config.enemieSpawnCount <= 0 && Config.firstWaveAfterRestart != true)
                 {
                     bullets.Clear();
 
                     //stoppar timern mellan waves
-                    countTime = false;
+                    Config.countTime = false;
 
                     if (!noMoreTempSpeed)
-                        Config.tempMovementSpeedHolder = Config.movementSpeed;
+                        Config.tempMovementSpeedHolder = Config.player.movementSpeed;
                     noMoreTempSpeed = true;
 
-                    Config.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
+                    Config.player.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
 
                     powerUps.draw(deltaTime);
                     powerUps.update();
@@ -328,7 +198,7 @@ namespace CircleSurvivors
 
                     if (waveCooldown < 1)
                     {
-                        enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
+                        Config.enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
                         waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
                         Config.wave++;
                         //resettar alla states, annars så får vi inte välja om powerups waven efter
@@ -338,18 +208,18 @@ namespace CircleSurvivors
                         Config.p3 = false;
                         Config.hasRolledThisRound = false;
                         Config.despawnTime = 0.5f;
-                        Config.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
+                        Config.player.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
                         noMoreTempSpeed = false;
                     }
                 }
 
                 //Om man dör och respawnar så ser denna till att ingen powerup spawnas första rundan
-                firstWaveAfterRestart = false;
+                Config.firstWaveAfterRestart = false;
 
-                if (enemieSpawnCount > 0)
+                if (Config.enemieSpawnCount > 0)
                 {
                     //börjar den pausade timern
-                    countTime = true;
+                    Config.countTime = true;
                     
                     //ser till att inta alla enemies spawnar direkt och samtidigt
                     spawnTime -= deltaTime;
@@ -362,12 +232,12 @@ namespace CircleSurvivors
                         
                         //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
                         //också ser till att det aldrig blir instant
-                        if (enemieSpawnCount < 100)
+                        if (Config.enemieSpawnCount < 100)
                         {
-                            spawnTime = 1f - (enemieSpawnCount/100f);
+                            spawnTime = 1f - (Config.enemieSpawnCount /100f);
                         }
                         else spawnTime = 0.1f;
-                        enemieSpawnCount--;
+                        Config.enemieSpawnCount--;
                     }
                 }
 
@@ -375,7 +245,12 @@ namespace CircleSurvivors
                 //så vi inte försöker skjuta mot något som inte finns
                 if (enemies.Count > 0)
                 {
-                    enemies = enemies.OrderBy(enemy => enemyDistance(player, enemy)).ToList();
+                    //enemies = enemies.OrderBy(enemy => EnemyDistance(Config.player, enemy)).ToList();
+                    enemies.Sort((a, b) => (int)(EnemyDistance(Config.player, a) - EnemyDistance(Config.player, b))); 
+                    //brorsan hjälpa mig att skriva den och förklara att min tidigare .ToList tappade bort referensen
+                    //därför fungerade inte enemies.Clear();,
+                    //den nya listan fungerar genom att modifiera existerande listan utan att skriva över den originella
+                    
                     NPC closestEnemy = enemies[0];
                     //note to self: kommer behöva ta bort från flera listor i framtiden, både drawables och enemies
                     //^^sorterar alla enemies i listan baserat på dess distans till spelaren i ascending order
@@ -417,12 +292,12 @@ namespace CircleSurvivors
                     var item = drawableList[i];
                     //Drawable interfacet har en shouldDespawn function,
                     //så alla .cs som implementerar interfacet har en shouldDespawn med sina egna requierments
-                    if (item.shouldDespawn())
+                    if (item.ShouldDespawn())
                     {
                         if (item is NPC enemyNpc)
                         {
                             enemies.Remove(enemyNpc);
-                            killCount++;
+                            Config.killCount++;
                         }
                         if (item is BaseAbility bullet)
                         {
@@ -435,7 +310,7 @@ namespace CircleSurvivors
                     }
                     
                     collisionCooldownTimer += deltaTime;
-                    item.update(deltaTime);
+                    item.Update(deltaTime);
                     //om itemet i listan är från NPC körs if satsen
                     if (item is NPC npc)
                     {
@@ -456,25 +331,13 @@ namespace CircleSurvivors
                         //för varje enemybullet i listan, kolla om despawn requierments har mötts
                         foreach (var enemyBullets in enemyBullet)
                         {
-                            enemyBullets.shouldDespawn();
+                            enemyBullets.ShouldDespawn();
                         }
                     }
-                    item.draw();
+                    item.Draw();
                 }
-                
-                //corner info
-                Raylib.DrawText($"Kill count: {killCount}", 0,0,28, Color.Red);
-                Raylib.DrawText($"Wave: {Config.wave}", 0,25,28, Color.Red);
 
-                //Stat sheet
-                Raylib.DrawText($"bullet damage stat: {Config.bulletDamage}",0,Config.WindowSizeHeight-20,12, Color.DarkGray);
-                Raylib.DrawText($"bullet radius stat: {Config.bulletRadius}",0,Config.WindowSizeHeight-30,12, Color.DarkGray);
-                Raylib.DrawText($"bullet speed stat: {Config.bulletSpeed}",0,Config.WindowSizeHeight-40,12, Color.DarkGray);
-                Raylib.DrawText($"bullet cooldown stat: {Config.bulletCooldown}",0,Config.WindowSizeHeight-50,12, Color.DarkGray);
-                Raylib.DrawText($"player radius stat: {Config.playerRadius}",0,Config.WindowSizeHeight-60,12, Color.DarkGray);
-                Raylib.DrawText($"player hitpoints stat: {Config.playerHealthpoints}",0,Config.WindowSizeHeight-70,12, Color.DarkGray);
-                Raylib.DrawText($"player movement speed stat: {Config.movementSpeed}",0,Config.WindowSizeHeight-80,12, Color.DarkGray);
-                Raylib.DrawText($"stat sheet:",0,Config.WindowSizeHeight-90,12, Color.DarkGray);
+                Dashboard.draw();
 
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
@@ -485,19 +348,23 @@ namespace CircleSurvivors
                 Raylib.EndDrawing();
             }
         }
-        static float enemyDistance(Player player, NPC npc)
+        static float EnemyDistance(Player player, NPC npc)
         {
             //Hur jag definerar i vilken ordning enemies ska vara sorted
             float dx = npc.x - player.x;
             float dy = npc.y - player.y;
             return dx * dx + dy * dy;
         }
+        
     }
     public static class Config
     {
         //program
         public static int WindowSizeWidth = 1600;
         public static int WindowSizeHeight = 800;
+        public static int killCount = 0;
+        public static bool countTime = true;
+        public static bool firstWaveAfterRestart = false;
 
         //npc,enemy
         public static int npcRadius = 10;
@@ -506,12 +373,9 @@ namespace CircleSurvivors
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
+        public static int enemieSpawnCount = 10 + (wave * wave);
 
         //player
-        public static int movementSpeed = 100;
-        public static int playerRadius = 15;
-        public static int playerHealthpoints = 100;
-        public static int maxPlayerHealthpoints = 100;
         public static int tempMovementSpeedHolder;
 
         //bullets
@@ -531,5 +395,28 @@ namespace CircleSurvivors
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
+        public static List<Drawable> drawableList = new List<Drawable>();
+        public static List<BaseAbility> bullets = new List<BaseAbility>();
+        public static List<NPC> enemies = new List<NPC>();
+        public static List<EnemyBullets> EnemyBullet = new List<EnemyBullets>();
+
+        public static void ResetGameState()
+        {
+            wave = 1;
+            bulletDamage = 50;
+            bulletRadius = 5;
+            bulletSpeed = 300f;
+            player.healthpoints = 100;
+            player.maxHealthpoints = 100;
+            killCount = 0;
+            enemies.Clear();
+            drawableList.Clear();
+            bullets.Clear();
+            drawableList.Add(player);
+            firstWaveAfterRestart = true;
+            enemieSpawnCount = 10 + wave * wave;
+            player.x = Config.WindowSizeWidth / 2;
+            player.y = Config.WindowSizeHeight / 2;
+        }
     }
 }

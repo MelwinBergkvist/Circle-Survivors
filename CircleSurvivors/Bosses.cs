@@ -11,12 +11,33 @@ namespace CircleSurvivors
     {
         public float x, y;
         float radius;
-
         int hitpoints;
+        int movementSpeed;
+        int bossCollisionDamage;
+        public bool shouldShoot;
+
 
         public Bosses() 
         {
             Random random = new Random();
+            int bossType = random.Next(0,4);
+            switch(bossType)
+            {
+                case 0: //Normal
+                    hitpoints += 500;
+                    radius += 50;
+                    movementSpeed += 40;
+                    break;
+                case 1: //Tanky
+
+                    break;
+                case 2: //Speedy
+
+                    break;
+                case 3: //Shooter
+
+                    break;
+            }
 
             //lika spawn mechanics som i NPC.cs
             int side = random.Next(1, 5);
@@ -45,15 +66,15 @@ namespace CircleSurvivors
                 x = random.Next(0, Config.WindowSizeWidth);
             }
         }
-        public void draw()
+        public void Draw()
         {
 
         }
-        public void update(float deltaTime)
+        public void Update(float deltaTime)
         {
 
         }
-        public bool shouldDespawn()
+        public bool ShouldDespawn()
         {
             return hitpoints <= 0;
         }

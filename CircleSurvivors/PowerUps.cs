@@ -48,7 +48,7 @@ namespace CircleSurvivors
         public PowerUps() { }
         public void update()
         {
-            radiusSum = radius + Config.playerRadius;
+            radiusSum = radius + Config.player.radius;
 
             //ser till att den inte rullar en ny powerup varje wave
             if (!Config.hasRolledThisRound)
@@ -87,8 +87,8 @@ namespace CircleSurvivors
                             Config.bulletCooldown = Config.bulletCooldown * 0.9f;
                             break;
                         case 4:
-                            if (Config.playerRadius >= 2)
-                                Config.playerRadius -= 1;
+                            if (Config.player.radius >= 2)
+                                Config.player.radius -= 1;
                             break;
                         case 5:
                             if (Config.bulletSpeed >= 10)
@@ -98,8 +98,8 @@ namespace CircleSurvivors
                             Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
                             break;
                         case 7:
-                            Config.playerHealthpoints += 20;
-                            Config.maxPlayerHealthpoints += 20;
+                            Config.player.healthpoints += 20;
+                            Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
                             Config.tempMovementSpeedHolder += 10;
@@ -133,8 +133,8 @@ namespace CircleSurvivors
                             Config.bulletCooldown = Config.bulletCooldown * 0.9f;
                             break;
                         case 4:
-                            if (Config.playerRadius >= 2)
-                                Config.playerRadius -= 1;
+                            if (Config.player.radius >= 2)
+                                Config.player.radius -= 1;
                             break;
                         case 5:
                             if (Config.bulletSpeed >= 10)
@@ -144,8 +144,8 @@ namespace CircleSurvivors
                             Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
                             break;
                         case 7:
-                            Config.playerHealthpoints += 20;
-                            Config.maxPlayerHealthpoints += 20;
+                            Config.player.healthpoints += 20;
+                            Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
                             Config.tempMovementSpeedHolder += 10;
@@ -179,8 +179,8 @@ namespace CircleSurvivors
                             Config.bulletCooldown = Config.bulletCooldown * 0.9f;
                             break;
                         case 4:
-                            if (Config.playerRadius >= 2)
-                                Config.playerRadius -= 1;
+                            if (Config.player.radius >= 2)
+                                Config.player.radius -= 1;
                             break;
                         case 5:
                             if (Config.bulletSpeed >= 10)
@@ -190,8 +190,8 @@ namespace CircleSurvivors
                             Config.enemyBulletCooldown = Config.enemyBulletCooldown * 1.1f;
                             break;
                         case 7:
-                            Config.playerHealthpoints += 20;
-                            Config.maxPlayerHealthpoints += 20;
+                            Config.player.healthpoints += 20;
+                            Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
                             Config.tempMovementSpeedHolder += 10;
