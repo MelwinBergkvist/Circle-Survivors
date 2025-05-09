@@ -36,6 +36,8 @@ namespace CircleSurvivors
 
         Random random = new Random();
 
+        Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
+
         int powerUpStatus1, powerUpStatus2, powerUpStatus3;
 
         String[] powerUpsArray = 
@@ -46,9 +48,12 @@ namespace CircleSurvivors
         };
 
         public PowerUps() { }
-        public void update()
+        public void Update(float deltaTime)
         {
             radiusSum = radius + Config.player.radius;
+
+            if (Config.isPicked)
+                Config.waveCooldown -= deltaTime;
 
             //ser till att den inte rullar en ny powerup varje wave
             if (!Config.hasRolledThisRound)
@@ -201,8 +206,22 @@ namespace CircleSurvivors
                 }
             }
         }
-        public void draw(float deltaTime)
+        public void Draw(float deltaTime)
         {
+            if (!Config.isPicked)
+            {
+                int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
+                Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+
+                int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
+                Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
+            }
+            else
+            {
+                int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40); //5 och inte {waveCooldown} för smoother centrering
+                Raylib.DrawText($"Next wave in: {(int)Config.waveCooldown}", Config.WindowSizeWidth / 2 - waveTextWidth / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+            }
+
             if (Config.isPicked)
             {
                 if (Config.despawnTime <= 0)
@@ -211,6 +230,7 @@ namespace CircleSurvivors
                 }
                 Config.despawnTime -= deltaTime;
             }
+
 
             //väldigt confusing för allt ser så fult ut, den de skapar först cirkeln,
             //sen en grön rectangle, sen en vit rectangle för att göra det en outline

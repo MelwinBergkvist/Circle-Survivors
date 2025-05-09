@@ -53,7 +53,7 @@ namespace CircleSurvivors
                 enemyHealthColor = new Color(85, 5, 135);
                 enemyCollisionDamage -= 4;
             }
-            else if (random.Next(0,101) > 10) // 7.2%
+            else if (random.Next(0,101) > 90) // 7.2%
             {
                 //Shooter
                 enemyColor = new Color(0, 0, 0);
@@ -113,6 +113,8 @@ namespace CircleSurvivors
             float dy = Config.player.y - y;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
 
+            //make sure att det faktist finns enemies på skärmen,
+            //så vi inte försöker skjuta mot något som inte finns
             enemyBulletCooldownTimer += deltaTime;
             if (Config.enemies.Count > 0)
             {

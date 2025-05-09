@@ -30,7 +30,6 @@ namespace CircleSurvivors
 
             //floats
             float deltaTime;
-            float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
             float spawnTime = 1f;
             float collisionCooldown = 1.5f;
             float collisionCooldownTimer = 0f;
@@ -39,12 +38,8 @@ namespace CircleSurvivors
             bool isPaused = false;
             bool noMoreTempSpeed = false;
 
-            
-
-
             //Colors
             Color pauseOverlay = new Color(150, 150, 150, 200);
-            Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             drawableList.Add(Config.player);
@@ -103,31 +98,13 @@ namespace CircleSurvivors
 
                     Config.player.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
 
-                    powerUps.draw(deltaTime);
-                    powerUps.update();
+                    powerUps.Draw(deltaTime);
+                    powerUps.Update(deltaTime);
 
-                    if (Config.isPicked)
-                        waveCooldown -= deltaTime;
-
-
-                    if (!Config.isPicked)
-                    {
-                        int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
-                        Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
-
-                        int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
-                        Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
-                    }
-                    else
-                    {
-                        int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40); //5 och inte {waveCooldown} för smoother centrering
-                        Raylib.DrawText($"Next wave in: {(int)waveCooldown}", Config.WindowSizeWidth/2 - waveTextWidth/2, Config.WindowSizeHeight/8,40,Color.DarkPurple);
-                    }
-
-                    if (waveCooldown < 1)
+                    if (Config.waveCooldown < 1)
                     {
                         Config.enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
-                        waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
+                        Config.waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
                         Config.wave++;
                         //resettar alla states, annars så får vi inte välja om powerups waven efter
                         Config.isPicked = false;
@@ -167,30 +144,7 @@ namespace CircleSurvivors
                         else spawnTime = 0.1f;
                         Config.enemieSpawnCount--;
                     }
-                }
-
-                //make sure att det faktist finns enemies på skärmen,
-                //så vi inte försöker skjuta mot något som inte finns
-                //if (enemies.Count > 0)
-                //{
-                //    //exact samma logik som bullet cooldownen innan men för enemies
-                //    //här har vi mer än en enemy so vi loopar igen hela enemies listan
-                //    //så alla enemies individiuelt har sin egen cooldown
-                //    enemyBulletCooldownTimer += deltaTime;
-                //    if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
-                //    {
-                //        foreach (var enemy in  enemies)
-                //        {
-                //            if (enemy.shouldShoot)
-                //            {
-                //                enemyBulletCooldownTimer = 0;
-                //                EnemyBullets enemyBullets = new EnemyBullets(enemy);
-                //                drawableList.Add(enemyBullets);
-                //                enemyBullet.Add(enemyBullets);
-                //            }
-                //        }
-                //    }
-                //}                
+                }             
 
                 //Kollar om jag ska despawn itemen annars så draw och update
                 for (int i = drawableList.Count-1; i >= 0; i--)
@@ -254,14 +208,6 @@ namespace CircleSurvivors
                 Raylib.EndDrawing();
             }
         }
-        //static float EnemyDistance(Player player, NPC npc)
-        //{
-        //    //Hur jag definerar i vilken ordning enemies ska vara sorted
-        //    float dx = npc.x - player.x;
-        //    float dy = npc.y - player.y;
-        //    return dx * dx + dy * dy;
-        //}
-        
     }
     public static class Config
     {
@@ -272,6 +218,7 @@ namespace CircleSurvivors
         public static bool countTime = true;
         public static bool firstWaveAfterRestart = false;
         public static bool startScreen = false;
+        public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
         //npc,enemy
         public static int npcRadius = 10;
