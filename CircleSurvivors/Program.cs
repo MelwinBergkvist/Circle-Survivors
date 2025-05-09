@@ -138,7 +138,6 @@ namespace CircleSurvivors
                         Config.bulletSpeed = 300f;
                         Config.playerHealthpoints = 100;
                         Config.maxPlayerHealthpoints = 100;
-                        Config.hasBossSpawned = false;
                         killCount = 0;
                         enemies.Clear();
                         drawableList.Clear();
@@ -372,9 +371,6 @@ namespace CircleSurvivors
                     }
                 }
 
-                if (enemieSpawnCount == 0)
-                    Config.hasBossSpawned = false;
-
                 //make sure att det faktist finns enemies på skärmen,
                 //så vi inte försöker skjuta mot något som inte finns
                 if (enemies.Count > 0)
@@ -510,7 +506,6 @@ namespace CircleSurvivors
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
-        public static bool hasBossSpawned = false;
 
         //player
         public static int movementSpeed = 100;

@@ -23,112 +23,40 @@ namespace CircleSurvivors
         public int enemyCollisionDamage = Config.enemyCollisionDamage;
 
         public bool shouldShoot = false;
-        bool isBoss, isBossTurn = false;
 
-        string bossName;
-        string[] bossNames =
-        {
-            //Tanky - 0,5
-            "The Verdant Juggernaut, Bramblethrone", "Chlorobane, Devourer of Damage", "Photosynthesaur, King of Endurance", "Lord Bulkwood, Unmovable Wall of Doom", "The Great Moss Engine",
-            
-            //Speedy - 5,10
-            "Blurmageddon, Scourge of Speed", "Sonic Calamity, Vortexus Prime", "Skittershade, Swift End of Days", "Purple Menace, Prince of Panic", "Wraithflicker, Dancer of Death",
-
-            //Shooter - 10,15
-            "Gunsaint Oblivion, Apostle of Annihilation", "Project Omega: The White Eclipse", "Triggergrin, The Last Whisper", "Obsidian Herald of Lead", "The Hollow Sniper, Voidspike",
-
-            //default - 15, 19
-            "Abyssion the Forgotten", "Malgrath, Uncrowned Tyrant", "Vorharn, Bane of Balance", "Azgalor the Timeless Hunger", "The Crownless Dread"
-        }; //namnen är från chatgpt
+        //custom Color (Röd, Grön, Blå, Alpha)
         Color enemyColor = new Color(156, 6, 6);
         Color enemyHealthColor = new Color(77, 8, 8);
 
         public NPC() //constructor
         {
             Random random = new Random();
-            if (Config.wave % 1 == 0)
-            {
-                isBossTurn = false;
-            }
-            //Boss
-            if (!Config.hasBossSpawned && isBossTurn)
-            {
-                hitpoints += 500;
-                radius += 50;
-                movementSpeed -= 40;
-                enemyCollisionDamage += 25;
-                isBoss = true;
-                Config.hasBossSpawned = true;
-            }
-
-            //Special enemies
-            if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 10%
-            {
-                // Tanky
-                hitpoints += 100;
-                radius += 5f;
-                movementSpeed -= 30;
-                enemyColor = new Color(19, 138, 11);
-                enemyHealthColor = new Color(8, 77, 3);
-                enemyCollisionDamage += 10;
-                if (isBoss)
-                {
-                    bossName = bossNames[random.Next(0,5)];
-                }
-            }
-            else if (random.Next(0,101) > 80 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 18%
-            {
-                // Speedy                
-                hitpoints -= 50;
-                radius -= 5;
-                movementSpeed += 60;
-                enemyColor = new Color(120, 6, 191);
-                enemyHealthColor = new Color(85, 5, 135);
-                enemyCollisionDamage -= 4;
-                if (isBoss)
-                {
-                    bossName = bossNames[random.Next(5, 10)];
-                }
-            }
-            else if (random.Next(0,101) > 90 && ((Config.hasBossSpawned && isBossTurn) || (!Config.hasBossSpawned && !isBossTurn))) // 7.2%
-            {
-                //Shooter
-                enemyColor = new Color(0, 0, 0);
-                enemyHealthColor = new Color(65, 65, 65);
-                shouldShoot = true;
-                if (isBoss)
-                {
-                    bossName = bossNames[random.Next(10, 15)];
-                }
-            }
-
-            if (string.IsNullOrEmpty(bossName) && Config.hasBossSpawned)
-            {
-                bossName = bossNames[random.Next(15, 19)];
-            }
-
+            
             maxHitpoints = hitpoints;
             int side = random.Next(1, 5); //1 till 5 för att få mellan 1 och 4, random shenanegins
-            // 1 = vänster, 2 = höger, 3 = up, 4 = nere
             if (side == 1)
             {
-                this.x = -radius;
-                this.y = random.Next(0, Config.WindowSizeHeight);
+                //vänster
+                x = -radius;
+                y = random.Next(0, Config.WindowSizeHeight);
             }
             else if (side == 2)
             {
-                this.x = Config.WindowSizeWidth + radius;
-                this.y = random.Next(0, Config.WindowSizeHeight);
+                //höger
+                x = Config.WindowSizeWidth + radius;
+                y = random.Next(0, Config.WindowSizeHeight);
             }
             else if (side == 3)
             {
-                this.y = -radius;
-                this.x = random.Next(0, Config.WindowSizeWidth);
+                //up
+                y = -radius;
+                x = random.Next(0, Config.WindowSizeWidth);
             }
             else
             {
-                this.y = Config.WindowSizeHeight + radius;
-                this.x = random.Next(0, Config.WindowSizeWidth);
+                //ner
+                y = Config.WindowSizeHeight + radius;
+                x = random.Next(0, Config.WindowSizeWidth);
             }
         }
         public void draw()
@@ -138,12 +66,6 @@ namespace CircleSurvivors
             //2nd radius som en healthmeter typ
             float healthRadius = radius - (radius * hitpoints / maxHitpoints);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
-
-            if (isBoss)
-            {
-                int measureBossName = Raylib.MeasureText(bossName, 16);
-                Raylib.DrawText($"{bossName}", (int)x - measureBossName / 2, (int)y+100, 16, enemyColor);
-            }
         }
 
         public bool shouldDespawn()

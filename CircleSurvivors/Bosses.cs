@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors
 {
-    public class Bosses
+    public class Bosses : Drawable
     {
         public float x, y;
         public Bosses() { }
@@ -15,9 +15,13 @@ namespace CircleSurvivors
         {
 
         }
-        public void update()
+        public void update(float deltaTime)
         {
 
+        }
+        public bool shouldDespawn()
+        {
+            return false;
         }
     }
 }
