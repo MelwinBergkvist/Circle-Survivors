@@ -26,12 +26,13 @@ namespace CircleSurvivors
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            float deltaTime;
+            Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
+
             SplashTexts splashText = new SplashTexts();
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
             GUI gui = new GUI();
-
-            float deltaTime;
 
             Config.ResetGameState();
 
@@ -42,31 +43,25 @@ namespace CircleSurvivors
 
                 if (Config.player.ShouldDespawn())
                 {
-                    gui.DeathScreen(deltaTime);
+                    gui.DeathScreen(deltaTime); //visar death screen
                     continue;
                 }
 
                 if (!Config.startScreen)
                 {
-                    gui.StartScreen(deltaTime);
+                    gui.StartScreen(deltaTime); //visar start screen
                     continue;
                 }
 
                 Raylib.ClearBackground(Color.White);
-                Raylib.BeginDrawing();
-                //drawing confines;
+                Raylib.BeginDrawing(); // <- drawing confines beginning
 
-                spawnMechs.Spawn(deltaTime);
+                spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
+                objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
+                gui.StatSheet(); //displayar alla player stats
+                gui.Timer(deltaTime); //displayar timern
 
-                objectHandler.CheckDespawnAndCollision(deltaTime);
-
-                gui.StatSheet();
-                gui.Timer(deltaTime);
-
-                Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
-
-                //drawing confines
-                Raylib.EndDrawing();
+                Raylib.EndDrawing(); // <- drawing confines ending
             }
         }
     }
