@@ -39,12 +39,12 @@ namespace CircleSurvivors
                     Config.waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
                     Config.wave++;
                     //resettar alla states, annars så får vi inte välja om powerups waven efter
-                    Config.isPicked = false;
-                    Config.p1 = false;
-                    Config.p2 = false;
-                    Config.p3 = false;
-                    Config.hasRolledThisRound = false;
-                    Config.despawnTime = 0.5f;
+                    Config.powerUps.isPicked = false;
+                    Config.powerUps.p1 = false;
+                    Config.powerUps.p2 = false;
+                    Config.powerUps.p3 = false;
+                    Config.powerUps.hasRolledThisRound = false;
+                    Config.powerUps.despawnTime = 0.5f;
                     Config.player.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
                     noMoreTempSpeed = false;
                 }

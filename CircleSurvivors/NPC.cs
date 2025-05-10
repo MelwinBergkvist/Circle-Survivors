@@ -16,7 +16,7 @@ namespace CircleSurvivors
         public float sinceSpawn = 0;
         float movementSpeed = 80;
         float hitCooldown = 0f;
-        float radius = Config.npcRadius;
+        float radius = 10;
         float enemyBulletCooldownTimer = 0f;
 
         int hitpoints = 100;

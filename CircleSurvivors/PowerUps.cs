@@ -19,6 +19,11 @@ namespace CircleSurvivors
         int posX3 = Config.WindowSizeWidth / 2 + (Config.WindowSizeWidth / 6);
         int posY3 = Config.WindowSizeHeight / 4;
 
+        public bool p1, p2, p3 = false;
+        public bool isPicked = false;
+        public bool hasRolledThisRound = false;
+        public float despawnTime = 0.5f;
+
         int radius = 50;
 
         Random random = new Random();
@@ -43,30 +48,30 @@ namespace CircleSurvivors
         {
             float radiusSum = radius + Config.player.radius;
 
-            if (Config.isPicked)
+            if (Config.powerUps.isPicked)
                 Config.waveCooldown -= deltaTime;
 
             //ser till att den inte rullar en ny powerup varje wave
-            if (!Config.hasRolledThisRound)
+            if (!Config.powerUps.hasRolledThisRound)
             {
                 powerUpStatus1 = random.Next(0, 9);
                 powerUpStatus2 = random.Next(0, 9);
                 powerUpStatus3 = random.Next(0, 9);
-                Config.hasRolledThisRound = true;
+                Config.powerUps.hasRolledThisRound = true;
             }
 
             //gör all matta som kollar collision så vi vet vilken som tas,
             //efter någon har tagits så kör vi en return
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
-            if (!Config.p1)
+            if (!Config.powerUps.p1)
             {
                 float powerUpDx1 = posX1 - Config.player.x;
                 float powerUpDy1 = posY1 - Config.player.y;
                 float distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
                 if (distancePowerUp1 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
-                    Config.isPicked = true;
-                    Config.p1 = true;
+                    Config.powerUps.isPicked = true;
+                    Config.powerUps.p1 = true;
 
                     switch (powerUpStatus1)
                     {
@@ -105,15 +110,15 @@ namespace CircleSurvivors
                 }
             }
 
-            if (!Config.p2)
+            if (!Config.powerUps.p2)
             {
                 float powerUpDx2 = posX2 - Config.player.x;
                 float powerUpDy2 = posY2 - Config.player.y;
                 float distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
                 if (distancePowerUp2 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
-                    Config.isPicked = true;
-                    Config.p2 = true;
+                    Config.powerUps.isPicked = true;
+                    Config.powerUps.p2 = true;
                     switch (powerUpStatus2)
                     {
                         case 0:
@@ -151,15 +156,15 @@ namespace CircleSurvivors
                 }
             }
 
-            if (!Config.p3)
+            if (!Config.powerUps.p3)
             {
                 float powerUpDx3 = posX3 - Config.player.x;
                 float powerUpDy3 = posY3 - Config.player.y;
                 float distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
                 if (distancePowerUp3 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
-                    Config.isPicked = true;
-                    Config.p3 = true;
+                    Config.powerUps.isPicked = true;
+                    Config.powerUps.p3 = true;
                     switch (powerUpStatus3)
                     {
                         case 0:
@@ -203,7 +208,7 @@ namespace CircleSurvivors
         /// <param name="deltaTime">tid</param>
         public void Draw(float deltaTime)
         {
-            if (!Config.isPicked)
+            if (!Config.powerUps.isPicked)
             {
                 int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
                 Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
@@ -217,13 +222,13 @@ namespace CircleSurvivors
                 Raylib.DrawText($"Next wave in: {(int)Config.waveCooldown}", Config.WindowSizeWidth / 2 - waveTextWidth / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
             }
 
-            if (Config.isPicked)
+            if (Config.powerUps.isPicked)
             {
-                if (Config.despawnTime <= 0)
+                if (Config.powerUps.despawnTime <= 0)
                 {
                     return; //vi kör denna så den slutar rita powerupsen efter någon har tagits, med en cooldown
                 }
-                Config.despawnTime -= deltaTime;
+                Config.powerUps.despawnTime -= deltaTime;
             }
 
 

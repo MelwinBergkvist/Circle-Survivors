@@ -60,7 +60,6 @@ namespace CircleSurvivors
                 objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
                 gui.StatSheet(); //displayar alla player stats
                 gui.Timer(deltaTime); //displayar timern
-
                 Raylib.EndDrawing(); // <- drawing confines ending
             }
         }
@@ -77,7 +76,6 @@ namespace CircleSurvivors
         public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
         //npc,enemy
-        public static int npcRadius = 10;
         public static int enemyCollisionDamage = 5;
         public static int enemyBulletDamage = 5;
         public static int enemyBulletRadius = 5;
@@ -93,12 +91,6 @@ namespace CircleSurvivors
         public static int bulletDamage = 50;
         public static float bulletSpeed = 300f;
         public static float bulletCooldown = 1.5f;
-
-        //power-ups
-        public static bool p1, p2, p3 = false;
-        public static bool isPicked = false;
-        public static bool hasRolledThisRound = false;
-        public static float despawnTime = 0.5f;
 
         //wave
         public static int wave = 1;
