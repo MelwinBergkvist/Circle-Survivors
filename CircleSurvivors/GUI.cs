@@ -10,8 +10,8 @@ namespace CircleSurvivors
 {
     public class GUI
     {
-        public float gameOverAlpha;
-        public float fadeInSpeed;
+        public float gameOverAlpha = 0f;
+        public float fadeInSpeed = 50f;
         Color fadeRed, fadeGray, fadeSkyBlue;
         float timeAliveSeconds = 0f;
         float timeAliveMinutes = 0f;
@@ -23,11 +23,12 @@ namespace CircleSurvivors
         bool clickedStart;
         bool isTutorialHovered;
 
-        public GUI() 
-        {
-            gameOverAlpha = 0f;
-            fadeInSpeed = 50f;
-        }
+        public GUI() { }
+        /// <summary>
+        /// displayar death screenen vid spelarens död
+        /// ger också resart option
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public void DeathScreen(float deltaTime)
         {
             //fade in effect för you lose screen
@@ -68,6 +69,10 @@ namespace CircleSurvivors
                 Raylib.EndDrawing();
             }
         }
+        /// <summary>
+        /// displayar timern som visas vid toppen av skärmen
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Timer(float deltaTime)
         {
             int timeMeasureType1 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
@@ -117,6 +122,10 @@ namespace CircleSurvivors
                 timeAliveMinutes += 1;
             }
         }
+        /// <summary>
+        /// displayar start screenen vid börjar av spelet
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void StartScreen(float deltaTime)
         {
             if (!Config.startScreen)
@@ -185,6 +194,9 @@ namespace CircleSurvivors
                 Raylib.EndDrawing();
             }
         }
+        /// <summary>
+        /// displayar alla onscreen stats, inkluderar killcount och wave count
+        /// </summary>
         public void StatSheet()
         {
             //corner info

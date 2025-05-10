@@ -35,6 +35,10 @@ namespace CircleSurvivors
         };
 
         public PowerUps() { }
+        /// <summary>
+        /// rullar en random powerUp och kollar om spelaren har plockat upp den
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
             float radiusSum = radius + Config.player.radius;
@@ -193,6 +197,10 @@ namespace CircleSurvivors
                 }
             }
         }
+        /// <summary>
+        /// ritar powerUpsen
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Draw(float deltaTime)
         {
             if (!Config.isPicked)

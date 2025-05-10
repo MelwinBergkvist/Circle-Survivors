@@ -10,6 +10,10 @@ namespace CircleSurvivors
     {
         float collisionCooldown = 1.5f;
         float collisionCooldownTimer = 0f;
+        /// <summary>
+        /// Kollar Collision och Despawn reqs för alla object som interfacet hanterar inom drawableList
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void CheckDespawnAndCollision(float deltaTime)
         {
             //Kollar om jag ska despawn itemen annars så draw och update

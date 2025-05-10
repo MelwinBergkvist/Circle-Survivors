@@ -15,6 +15,10 @@ namespace CircleSurvivors
         float moveX;
         float moveY;
 
+        /// <summary>
+        /// skapar graf-linjen som bullet ska gå längst
+        /// </summary>
+        /// <param name="closestEnemy"></param>
         public BaseAbility(NPC closestEnemy) //constructor
         {
             bulletX = Config.player.x;
@@ -30,18 +34,28 @@ namespace CircleSurvivors
             //nästan like som NPC movements bara på lite olika platser
             //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
         }
+        /// <summary>
+        /// ritar bullets
+        /// </summary>
         public void Draw()
         {
             Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Blue);
         }
+        /// <summary>
+        /// updaterar bullets position längst graf linjen
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {           
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
+        /// <summary>
+        /// despawnar bullet om den är utanför canvas
+        /// </summary>
+        /// <returns>returnar true eller false beroände på dess position</returns>
         public bool ShouldDespawn()
         {
-            //returnar true eller false beroände på dess position
             return (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight);
         }
     }

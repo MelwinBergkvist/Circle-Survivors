@@ -19,7 +19,9 @@ namespace CircleSurvivors
         Color bossColor;
         Color bossHealthColor;
 
-
+        /// <summary>
+        /// initializerar Bossar och bestämmer vilken typ det är
+        /// </summary>
         public Bosses() 
         {
             Random random = new Random();
@@ -91,6 +93,9 @@ namespace CircleSurvivors
                     break;
             }
         }
+        /// <summary>
+        /// ritar bossarna
+        /// </summary>
         public void Draw()
         {
             Raylib.DrawCircle((int)x, (int)y, radius, bossColor);
@@ -99,6 +104,10 @@ namespace CircleSurvivors
             float healthRadius = radius - (radius * hitpoints / maxHitpoints);
             Raylib.DrawCircle((int)x, (int)y, healthRadius, bossHealthColor);
         }
+        /// <summary>
+        /// updaterar bossarnas position
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
             //Direkt kopia från NPC.cs, eauclidean distance, shooters går inte nära
@@ -135,6 +144,10 @@ namespace CircleSurvivors
                 }
             }
         }
+        /// <summary>
+        /// returnar om det ska despawna
+        /// </summary>
+        /// <returns>true om den ska despawna, annars false</returns>
         public bool ShouldDespawn()
         {
             return hitpoints <= 0;

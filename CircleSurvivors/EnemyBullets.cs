@@ -16,6 +16,10 @@ namespace CircleSurvivors
         readonly float moveX;
         readonly float moveY;
 
+        /// <summary>
+        /// bestämmer individuella graf linjen som enemy bullet ska skjutas vid
+        /// </summary>
+        /// <param name="enemy">enemies(som ska skjuta)</param>
         public EnemyBullets(NPC enemy)
         {
             //Likadan som BaseAbility.cs fast reversed, kollar euclidean distance och updaterar inte det, håller samma linje
@@ -29,15 +33,26 @@ namespace CircleSurvivors
             moveX = (dxBullet / distanceBullets) * Config.enemyBulletSpeed;
             moveY = (dyBullet / distanceBullets) * Config.enemyBulletSpeed;
         }
+        /// <summary>
+        /// ritar bullets
+        /// </summary>
         public void Draw()
         {
             Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.enemyBulletRadius, Color.Black);
         }
+        /// <summary>
+        /// updaterar bullets position
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
+        /// <summary>
+        /// kollar om bullet möter reqs för att despawna (utanför canvas/collide med spelare)
+        /// </summary>
+        /// <returns>returnarn true/false beroände på bullets position</returns>
         public bool ShouldDespawn()
         {
             //om bullet går utanför canvas, despawna

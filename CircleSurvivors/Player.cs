@@ -23,7 +23,9 @@ namespace CircleSurvivors
             this.x = x;
             this.y = y;
         }
-
+        /// <summary>
+        /// Ritar spelaren och Health Baren
+        /// </summary>
         public void Draw()
         {
             //spelaren
@@ -34,12 +36,18 @@ namespace CircleSurvivors
             float healthWidth = 30 - (30 * healthpoints / maxHealthpoints);
             Raylib.DrawRectangle((int)x-15, (int)y+25, (int)healthWidth,8, Color.Red);
         }
-
+        /// <summary>
+        /// Kollar om spelaren ska despawna
+        /// </summary>
+        /// <returns>player alive status</returns>
         public bool ShouldDespawn()
         {
             return healthpoints <= 0;
         }
-
+        /// <summary>
+        /// hanterar movement, canvas restrictions, och bullet shootin mechanics.
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime) //kallar över deltatime som ett argument
         {
             //plussar på deltatime tills cooldown timern är större en cooldownen
@@ -74,6 +82,12 @@ namespace CircleSurvivors
             if (y - radius <= 0) y = radius;
             if (y + radius >= Config.WindowSizeHeight) y = Config.WindowSizeHeight - radius;
         }
+        /// <summary>
+        /// kollar distancen mellan alla enemies och spelaren, används för enemies listan sortering
+        /// </summary>
+        /// <param name="player">spelaren</param>
+        /// <param name="npc">enemies</param>
+        /// <returns>distancen mellan enemies och spelaren</returns>
         public float EnemyDistance(Player player, NPC npc)
         {
             //Hur jag definerar i vilken ordning enemies ska vara sorted, räknar delta x och y
@@ -81,6 +95,11 @@ namespace CircleSurvivors
             float dy = npc.y - player.y;
             return dx * dx + dy * dy;
         }
+        /// <summary>
+        /// sorterar alla enemies som är spawnade från närmaste till längst bort
+        /// </summary>
+        /// <param name="enemies">enemies</param>
+        /// <returns>närmaste enemy</returns>
         public NPC ClosestEnemy(List<NPC> enemies)
         {
             //enemies = enemies.OrderBy(enemy => EnemyDistance(Config.player, enemy)).ToList();    <- min originella sortering

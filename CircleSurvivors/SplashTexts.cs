@@ -19,6 +19,10 @@ namespace CircleSurvivors
             "Insert better pun here.", "This text does nothing.", "in circles since 2007",
             "Tested on humans, not responsibly.", "This splash text is {Shadow Slave chapter 360}"
         }; //21st
+        /// <summary>
+        /// hämtar en random Splash Text från en Array av strings
+        /// </summary>
+        /// <returns>en string som vi använder som Splash Text</returns>
         public static string GetSplashText()
         {
             Random randomSplashText = new Random();

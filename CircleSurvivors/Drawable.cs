@@ -25,8 +25,19 @@ namespace CircleSurvivors
      */
     public interface Drawable
     {
+        /// <summary>
+        /// grupp Update metod för alla classes som implementerar Drawable interfacet, updaterar objektet
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime);
+        /// <summary>
+        /// grupp Draw metod för alla classes som implementerar Drawable interfacet, ritar objektet
+        /// </summary>
         public void Draw();
+        /// <summary>
+        /// grupp ShouldDespawn metod för alla classes som implementerar Drawable interfacet, kollar om objektet ska despawna
+        /// </summary>
+        /// <returns>om objektet ska despawna</returns>
         public bool ShouldDespawn();
     }
 }

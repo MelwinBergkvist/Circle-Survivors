@@ -28,6 +28,9 @@ namespace CircleSurvivors
         Color enemyColor = new Color(156, 6, 6);
         Color enemyHealthColor = new Color(77, 8, 8);
 
+        /// <summary>
+        /// initializerar enemiesarna och gör dem till special enemies om random rollen är success
+        /// </summary>
         public NPC() //constructor
         {
             Random random = new Random();
@@ -88,7 +91,7 @@ namespace CircleSurvivors
             }
         }
         /// <summary>
-        /// Draws enemy object
+        /// ritar enemies
         /// </summary>
         public void Draw()
         {
@@ -99,11 +102,19 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
         }
 
+        /// <summary>
+        /// Despawn mechanics för enemies, om hp < 0, despawna
+        /// </summary>
+        /// <returns></returns>
         public bool ShouldDespawn()
         {
             return hitpoints <= 0;
         }
 
+        /// <summary>
+        /// Hanterar enemies pathing och bullet skjutning för enemies som ska skjuta
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
             sinceSpawn += deltaTime;
@@ -157,6 +168,11 @@ namespace CircleSurvivors
             if (hitCooldown >= 0)
                 hitCooldown -= deltaTime;
         }
+        /// <summary>
+        /// Kollar om spelarens bullet collidar med enemy
+        /// </summary>
+        /// <param name="bullets">spelarens bullet</param>
+        /// <param name="deltaTime">tid</param>
         public void BulletCollision(BaseAbility bullets, float deltaTime)
         {
             if (sinceSpawn < spawnImmunity) return;
@@ -175,6 +191,11 @@ namespace CircleSurvivors
                 }
             }
         }
+        /// <summary>
+        /// kollar collision mellan spelare och enemies, bara physical contact.
+        /// </summary>
+        /// <param name="enemies">enemies</param>
+        /// <param name="deltaTime">tid</param>
         public void PlayerCollision(NPC enemies, float deltaTime)
         {
             //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
@@ -186,6 +207,10 @@ namespace CircleSurvivors
             if (distancePlayerEnemy <= radiusSum * radiusSum)
                 Config.player.healthpoints -= enemyCollisionDamage;
         }
+        /// <summary>
+        /// hanterar om enemies ska skjuta, om det gör så spawnas en bullet och läggs i drawableList och enemyBullet
+        /// </summary>
+        /// <param name="enemy">enemies(detta relaterar bara det som ska skjuta)</param>
         public void ShootEnemyBullet(NPC enemy)
         {
             //exact samma logik som bullet cooldownen innan men för enemies

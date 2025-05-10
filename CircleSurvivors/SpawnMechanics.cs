@@ -10,7 +10,10 @@ namespace CircleSurvivors
     {
         bool noMoreTempSpeed = false;
         float spawnTime = 1f;
-
+        /// <summary>
+        /// köter alla spawn mechanics, för waves och powerups
+        /// </summary>
+        /// <param name="deltaTime">tiden</param>
         public void Spawn(float deltaTime)
         {
             //när alla enemies är döda, ny wave och +1 wave count

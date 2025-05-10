@@ -1,6 +1,8 @@
 ﻿/* Notes:
  * Kommentarerna kommer vara lite svengelska
  * 
+ * Allt som ska ritas as raylibs måste vara inom Begin och End drawing
+ * 
  * alla raylib.measuretext måste deklareras där de används, jag kunde ha deklararet det som tex "int Text;" och sedan ändrat värdet men jag ansåg att det ser fult och klunky ut
  * och inte i början av main, jag vet inte varför men det fungerade
  * inte när jag testade det
@@ -18,7 +20,11 @@ namespace CircleSurvivors
     internal class Program
     {
 
-        static void Main(string[] args) //Allt som ska ritas as raylibs måste vara inom Begin och End drawing
+        /// <summary>
+        /// initialiserar spelet och kör allt som behövs för det
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
         {
             SplashTexts splashText = new SplashTexts();
 
