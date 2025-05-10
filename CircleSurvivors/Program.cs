@@ -29,20 +29,16 @@ namespace CircleSurvivors
 
             //floats
             float deltaTime;
-            float spawnTime = 1f;
             float collisionCooldown = 1.5f;
             float collisionCooldownTimer = 0f;
-
-            //bools
-            bool isPaused = false;
-            bool noMoreTempSpeed = false;
 
             //Colors
             Color pauseOverlay = new Color(150, 150, 150, 200);
 
             //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             drawableList.Add(Config.player);
-            PowerUps powerUps = new PowerUps();
+            PowerUps powerUps = Config.powerUps;
+            SpawnMechanics spawnMechs = new SpawnMechanics();
             GUI gui = new GUI();
 
 
@@ -66,82 +62,7 @@ namespace CircleSurvivors
                 Raylib.BeginDrawing();
                 //drawing confines;
 
-                if (Raylib.IsKeyPressed(KeyboardKey.K))
-                    Config.player.healthpoints -= 25;
-
-                //Pause meny, WIP
-                if (isPaused)
-                {
-                    Raylib.DrawRectangle(0,0,Config.WindowSizeWidth, Config.WindowSizeHeight, pauseOverlay);
-
-                    if (Raylib.IsKeyPressed(KeyboardKey.G))
-                        isPaused = false;
-                    else
-                        Raylib.EndDrawing();
-                        continue;
-                }
-
-                //när alla enemies är döda, ny wave och +1 wave count
-                if (enemies.Count <= 0 && Config.enemieSpawnCount <= 0 && Config.firstWaveAfterRestart != true)
-                {
-                    bullets.Clear();
-
-                    //stoppar timern mellan waves
-                    Config.countTime = false;
-
-                    if (!noMoreTempSpeed)
-                        Config.tempMovementSpeedHolder = Config.player.movementSpeed;
-                    noMoreTempSpeed = true;
-
-                    Config.player.movementSpeed = 300; //temporärt gör movementspeed högre, simple qol
-
-                    powerUps.Draw(deltaTime);
-                    powerUps.Update(deltaTime);
-
-                    if (Config.waveCooldown < 1)
-                    {
-                        Config.enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
-                        Config.waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
-                        Config.wave++;
-                        //resettar alla states, annars så får vi inte välja om powerups waven efter
-                        Config.isPicked = false;
-                        Config.p1 = false;
-                        Config.p2 = false;
-                        Config.p3 = false;
-                        Config.hasRolledThisRound = false;
-                        Config.despawnTime = 0.5f;
-                        Config.player.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
-                        noMoreTempSpeed = false;
-                    }
-                }
-
-                //Om man dör och respawnar så ser denna till att ingen powerup spawnas första rundan
-                Config.firstWaveAfterRestart = false;
-
-                if (Config.enemieSpawnCount > 0)
-                {
-                    //börjar den pausade timern
-                    Config.countTime = true;
-                    
-                    //ser till att inta alla enemies spawnar direkt och samtidigt
-                    spawnTime -= deltaTime;
-                    if (spawnTime <= 0)
-                    {
-                        //eftersom NPCn är mer än en så deklrareras den mer än en gång
-                        NPC npc = new NPC();
-                        enemies.Add(npc);
-                        drawableList.Add(npc);
-                        
-                        //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
-                        //också ser till att det aldrig blir instant
-                        if (Config.enemieSpawnCount < 100)
-                        {
-                            spawnTime = 1f - (Config.enemieSpawnCount /100f);
-                        }
-                        else spawnTime = 0.1f;
-                        Config.enemieSpawnCount--;
-                    }
-                }             
+                spawnMechs.Spawn(deltaTime);
 
                 //Kollar om jag ska despawn itemen annars så draw och update
                 for (int i = drawableList.Count-1; i >= 0; i--)
@@ -199,9 +120,6 @@ namespace CircleSurvivors
 
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
-                if (Raylib.IsKeyDown(KeyboardKey.P))
-                    isPaused = true;
-
                 //drawing confines
                 Raylib.EndDrawing();
             }
@@ -247,6 +165,7 @@ namespace CircleSurvivors
 
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
+        public static PowerUps powerUps = new PowerUps();
         public static List<Drawable> drawableList = new List<Drawable>();
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
