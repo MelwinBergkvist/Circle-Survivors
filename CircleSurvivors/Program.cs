@@ -81,8 +81,6 @@ namespace CircleSurvivors
                         continue;
                 }
 
-                gui.Timer(deltaTime);
-
                 //när alla enemies är döda, ny wave och +1 wave count
                 if (enemies.Count <= 0 && Config.enemieSpawnCount <= 0 && Config.firstWaveAfterRestart != true)
                 {
@@ -196,7 +194,8 @@ namespace CircleSurvivors
                     item.Draw();
                 }
 
-                Dashboard.Draw();
+                gui.StatSheet();
+                gui.Timer(deltaTime);
 
                 Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
