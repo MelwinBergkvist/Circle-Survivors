@@ -5,11 +5,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Graphics
 {
     public class SplashTexts
     {
-        static string[] splashTextsArray  = 
+        static string[] splashTextsArray =
         {
             "Bravo 6, going circles.", "Circle of life... and death, probably.", "Circle up buddy", "This isn't a drill! (it's a spiral)",
             "I'm in love with the shape of you - by circle sheeran", "On edge? We don't have edges here.", "Pop a wheelie", "I'm going aRound in circles",

@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Mechanics
 {
     public class PowerUps
     {
         //alla positioner som powerupsen ska ligga på
-        int posX1 = Config.WindowSizeWidth / 2 - (Config.WindowSizeWidth / 6);
+        int posX1 = Config.WindowSizeWidth / 2 - Config.WindowSizeWidth / 6;
         int posY1 = Config.WindowSizeHeight / 4;
 
         int posX2 = Config.WindowSizeWidth / 2;
         int posY2 = Config.WindowSizeHeight / 3;
 
-        int posX3 = Config.WindowSizeWidth / 2 + (Config.WindowSizeWidth / 6);
+        int posX3 = Config.WindowSizeWidth / 2 + Config.WindowSizeWidth / 6;
         int posY3 = Config.WindowSizeHeight / 4;
 
         public bool p1, p2, p3 = false;
@@ -32,7 +32,7 @@ namespace CircleSurvivors
 
         int powerUpStatus1, powerUpStatus2, powerUpStatus3;
 
-        String[] powerUpsArray = 
+        string[] powerUpsArray =
         {
                 "+5 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
                 "10% Faster Cooldown", "-1 Radius", "-10 Bullet Speed",
@@ -214,7 +214,7 @@ namespace CircleSurvivors
                 Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
 
                 int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
-                Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + (Config.WindowSizeHeight / 4), 18, Instruction);
+                Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 18, Instruction);
             }
             else
             {
@@ -236,22 +236,22 @@ namespace CircleSurvivors
             //sen en grön rectangle, sen en vit rectangle för att göra det en outline
             //sedan texten efter, repeat på alla andra. alla -15 -100 och sånt är för centrering.
             Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
-            Raylib.DrawRectangle(posX1 - 120,posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
-            Raylib.DrawRectangle(posX1 - 110,posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
+            Raylib.DrawRectangle(posX1 - 120, posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
+            Raylib.DrawRectangle(posX1 - 110, posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
             int p1Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus1]}", 20); //kollar textens width för centrering
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus1]}", posX1 - p1Text/2, posY1-10, 20, Color.Black); //texten som säger vad för powerup det är
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus1]}", posX1 - p1Text / 2, posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
 
             Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 120, posY2 - 15, 240, 30, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, Color.White);
             int p2Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus2]}", 20);
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus2]}", posX2 - p2Text/2, posY2-10, 20, Color.Black);
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus2]}", posX2 - p2Text / 2, posY2 - 10, 20, Color.Black);
 
             Raylib.DrawCircleLines(posX3, posY3, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX3 - 120, posY3 - 15, 240, 30, Color.DarkGreen);
             Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, Color.White);
             int p3Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus3]}", 20);
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus3]}", posX3 - p3Text/2, posY3-10, 20, Color.Black);
+            Raylib.DrawText($"{powerUpsArray[powerUpStatus3]}", posX3 - p3Text / 2, posY3 - 10, 20, Color.Black);
 
         }
     }

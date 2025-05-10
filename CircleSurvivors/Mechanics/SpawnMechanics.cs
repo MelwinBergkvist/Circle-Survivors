@@ -1,15 +1,17 @@
-﻿using System;
+﻿using CircleSurvivors.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Mechanics
 {
     public class SpawnMechanics
     {
         bool noMoreTempSpeed = false;
         float spawnTime = 1f;
+        int bossSpawnCheck = Config.enemieSpawnCount;
         /// <summary>
         /// köter alla spawn mechanics, för waves och powerups
         /// </summary>
@@ -35,7 +37,7 @@ namespace CircleSurvivors
 
                 if (Config.waveCooldown < 1)
                 {
-                    Config.enemieSpawnCount = 10 + (Config.wave * Config.wave); //scaling
+                    Config.enemieSpawnCount = 10 + Config.wave * Config.wave; //scaling
                     Config.waveCooldown = 3.99f; //nära 4 men inte 4, annars flashar en 4 pförsta framen
                     Config.wave++;
                     //resettar alla states, annars så får vi inte välja om powerups waven efter
@@ -62,25 +64,31 @@ namespace CircleSurvivors
                 spawnTime -= deltaTime;
                 if (spawnTime <= 0)
                 {
-                    //eftersom NPCn är mer än en så deklrareras den mer än en gång
-                    NPC npc = new NPC();
-                    Config.enemies.Add(npc);
-                    Config.drawableList.Add(npc);
+                    if (bossSpawnCheck != Config.enemieSpawnCount) //om det inte är den första enemy
+                    {
+                        //eftersom NPCn är mer än en så deklrareras den mer än en gång
+                        NPC npc = new NPC();
+                        Config.enemies.Add(npc);
+                        Config.drawableList.Add(npc);
+                    }
+                    else
+                        SpawnBoss();
 
                     //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
                     //också ser till att det aldrig blir instant
                     if (Config.enemieSpawnCount < 100)
                     {
-                        spawnTime = 1f - (Config.enemieSpawnCount / 100f);
+                        spawnTime = 1f - Config.enemieSpawnCount / 100f;
                     }
                     else spawnTime = 0.1f;
                     Config.enemieSpawnCount--;
                 }
             }
         }
-        public void spawnBoss()
+        public void SpawnBoss()
         {
-
+            Bosses boss = Config.bosses;
+            Config.drawableList.Add(boss);
         }
     }
 }

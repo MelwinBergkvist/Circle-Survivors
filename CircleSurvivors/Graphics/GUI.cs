@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Graphics
 {
     public class GUI
     {
@@ -136,8 +137,8 @@ namespace CircleSurvivors
                 int startScreenText = Raylib.MeasureText("Welcome to Circle survivors!", 64);
                 Raylib.DrawText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2 - startScreenText / 2, Config.WindowSizeHeight / 8, 64, Color.White);
 
-                Raylib.DrawRectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100, Color.SkyBlue);
-                Rectangle startButton = new Rectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100);
+                Raylib.DrawRectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100, Color.SkyBlue);
+                Rectangle startButton = new Rectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100);
 
                 int startScreenBeginText = Raylib.MeasureText("Click here to begin!", 24);
                 Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
@@ -171,7 +172,7 @@ namespace CircleSurvivors
 
                 if (hoveredStart) //så man ser att den är hovered
                 {
-                    Raylib.DrawRectangle((Config.WindowSizeWidth / 2) - 150, (Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4) - 38, 300, 100, Color.Blue);
+                    Raylib.DrawRectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100, Color.Blue);
                     Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.Black);
                     if (clickedStart)
                     {

@@ -1,11 +1,12 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Entities
 {
     public class Player : Drawable
     {
@@ -30,11 +31,11 @@ namespace CircleSurvivors
         {
             //spelaren
             Raylib.DrawCircle((int)x, (int)y, Config.player.radius, Color.Green);
-            
+
             //health bar
-            Raylib.DrawRectangle((int)x-15, (int)y+25, 30,8, Color.Green);
-            float healthWidth = 30 - (30 * healthpoints / maxHealthpoints);
-            Raylib.DrawRectangle((int)x-15, (int)y+25, (int)healthWidth,8, Color.Red);
+            Raylib.DrawRectangle((int)x - 15, (int)y + 25, 30, 8, Color.Green);
+            float healthWidth = 30 - 30 * healthpoints / maxHealthpoints;
+            Raylib.DrawRectangle((int)x - 15, (int)y + 25, (int)healthWidth, 8, Color.Red);
         }
         /// <summary>
         /// Kollar om spelaren ska despawna
@@ -67,12 +68,12 @@ namespace CircleSurvivors
                 }
             }
             //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
-            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up)) 
-                y -= movementSpeed * deltaTime;            
-            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left)) 
+            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
+                y -= movementSpeed * deltaTime;
+            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
                 x -= movementSpeed * deltaTime;
             if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
-                y += movementSpeed * deltaTime;            
+                y += movementSpeed * deltaTime;
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
                 x += movementSpeed * deltaTime;
 

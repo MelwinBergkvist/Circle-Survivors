@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Entities
 {
     public class EnemyBullets : Drawable
     {
@@ -30,8 +31,8 @@ namespace CircleSurvivors
             float dyBullet = Config.player.y - bulletY;
             float distanceBullets = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
 
-            moveX = (dxBullet / distanceBullets) * Config.enemyBulletSpeed;
-            moveY = (dyBullet / distanceBullets) * Config.enemyBulletSpeed;
+            moveX = dxBullet / distanceBullets * Config.enemyBulletSpeed;
+            moveY = dyBullet / distanceBullets * Config.enemyBulletSpeed;
         }
         /// <summary>
         /// ritar bullets

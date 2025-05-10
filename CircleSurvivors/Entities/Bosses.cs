@@ -1,11 +1,12 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Entities
 {
     public class Bosses : Drawable
     {
@@ -15,6 +16,9 @@ namespace CircleSurvivors
         int maxHitpoints;
         int movementSpeed;
         int bossCollisionDamage;
+        float hitCooldown = 0f;
+        public float spawnImmunity = 0.5f;
+        public float sinceSpawn = 0;
         public bool shouldShoot;
         Color bossColor;
         Color bossHealthColor;
@@ -22,11 +26,11 @@ namespace CircleSurvivors
         /// <summary>
         /// initializerar Bossar och bestämmer vilken typ det är
         /// </summary>
-        public Bosses() 
+        public Bosses()
         {
             Random random = new Random();
-            int bossType = random.Next(0,4);
-            switch(bossType)
+            int bossType = random.Next(0, 4);
+            switch (bossType)
             {
                 case 0: //Normal
                     hitpoints += 500;
@@ -101,7 +105,7 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)x, (int)y, radius, bossColor);
 
             //2nd radius som en healthmeter typ
-            float healthRadius = radius - (radius * hitpoints / maxHitpoints);
+            float healthRadius = radius - radius * hitpoints / maxHitpoints;
             Raylib.DrawCircle((int)x, (int)y, healthRadius, bossHealthColor);
         }
         /// <summary>
@@ -119,8 +123,8 @@ namespace CircleSurvivors
             {
                 if (distance > 0)
                 {
-                    float moveX = (dx / distance) * movementSpeed * deltaTime;
-                    float moveY = (dy / distance) * movementSpeed * deltaTime;
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
 
                     float newX = x + moveX;
                     float newY = y + moveY;
@@ -133,8 +137,8 @@ namespace CircleSurvivors
             {
                 if (distance > 400) //numret 400 var mest trail and error, inget specielt.
                 {
-                    float moveX = (dx / distance) * movementSpeed * deltaTime;
-                    float moveY = (dy / distance) * movementSpeed * deltaTime;
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
 
                     float newX = x + moveX;
                     float newY = y + moveY;

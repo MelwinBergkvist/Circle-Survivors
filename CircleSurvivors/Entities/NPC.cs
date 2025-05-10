@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Entities
 {
     public class NPC : Drawable
     {
@@ -16,7 +17,7 @@ namespace CircleSurvivors
         public float sinceSpawn = 0;
         float movementSpeed = 80;
         float hitCooldown = 0f;
-        float radius = 10;
+        public float radius = 10;
         float enemyBulletCooldownTimer = 0f;
 
         int hitpoints = 100;
@@ -34,9 +35,9 @@ namespace CircleSurvivors
         public NPC() //constructor
         {
             Random random = new Random();
-            
+
             //Special enemies
-            if (random.Next(0,101) > 90) // 10%
+            if (random.Next(0, 101) > 90) // 10%
             {
                 // Tanky
                 hitpoints += 100;
@@ -46,7 +47,7 @@ namespace CircleSurvivors
                 enemyHealthColor = new Color(8, 77, 3);
                 enemyCollisionDamage += 10;
             }
-            else if (random.Next(0,101) > 80) // 18%
+            else if (random.Next(0, 101) > 80) // 18%
             {
                 // Speedy                
                 hitpoints -= 50;
@@ -56,7 +57,7 @@ namespace CircleSurvivors
                 enemyHealthColor = new Color(85, 5, 135);
                 enemyCollisionDamage -= 4;
             }
-            else if (random.Next(0,101) > 90) // 7.2%
+            else if (random.Next(0, 101) > 90) // 7.2%
             {
                 //Shooter
                 enemyColor = new Color(0, 0, 0);
@@ -98,7 +99,7 @@ namespace CircleSurvivors
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor);
 
             //2nd radius som en healthmeter typ
-            float healthRadius = radius - (radius * hitpoints / maxHitpoints);
+            float healthRadius = radius - radius * hitpoints / maxHitpoints;
             Raylib.DrawCircle((int)x, (int)y, healthRadius, enemyHealthColor);
         }
 
@@ -139,8 +140,8 @@ namespace CircleSurvivors
             {
                 if (distance > 0)
                 {
-                    float moveX = (dx / distance) * movementSpeed * deltaTime;
-                    float moveY = (dy / distance) * movementSpeed * deltaTime;
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
 
                     float newX = x + moveX;
                     float newY = y + moveY;
@@ -153,8 +154,8 @@ namespace CircleSurvivors
             {
                 if (distance > 400) //numret 400 var mest trail and error, inget specielt.
                 {
-                    float moveX = (dx / distance) * movementSpeed * deltaTime;
-                    float moveY = (dy / distance) * movementSpeed * deltaTime;
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
 
                     float newX = x + moveX;
                     float newY = y + moveY;
@@ -176,7 +177,7 @@ namespace CircleSurvivors
         public void BulletCollision(BaseAbility bullets, float deltaTime)
         {
             if (sinceSpawn < spawnImmunity) return;
-            
+
             //Kollar om bullet och enemies overlappar
             float bulletEnemyDx = bullets.bulletX - x;
             float bulletEnemyDy = bullets.bulletY - y;

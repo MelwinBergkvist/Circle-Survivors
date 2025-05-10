@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using CircleSurvivors.Mechanics;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Entities
 {
     public class BaseAbility : Drawable
     {
@@ -24,12 +25,12 @@ namespace CircleSurvivors
             bulletX = Config.player.x;
             bulletY = Config.player.y;
 
-            float dx = closestEnemy.x - this.bulletX;
-            float dy = closestEnemy.y - this.bulletY;
+            float dx = closestEnemy.x - bulletX;
+            float dy = closestEnemy.y - bulletY;
             float distance = MathF.Sqrt(dx * dx + dy * dy);
 
-            moveX = (dx / distance) * Config.bulletSpeed;
-            moveY = (dy / distance) * Config.bulletSpeed;
+            moveX = dx / distance * Config.bulletSpeed;
+            moveY = dy / distance * Config.bulletSpeed;
             //vi gör calculations i constructorn så den inte blir en homing bullet
             //nästan like som NPC movements bara på lite olika platser
             //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
@@ -46,7 +47,7 @@ namespace CircleSurvivors
         /// </summary>
         /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
-        {           
+        {
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
@@ -56,7 +57,7 @@ namespace CircleSurvivors
         /// <returns>returnar true eller false beroände på dess position</returns>
         public bool ShouldDespawn()
         {
-            return (bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight);
+            return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
         }
     }
 }

@@ -11,11 +11,13 @@
  * Alla functioner Stor bokstav
  * Alla datatyper camelCase, första bokstaven liten
 */
+using CircleSurvivors.Entities;
+using CircleSurvivors.Graphics;
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 using System;
-using System.Numerics; 
+using System.Numerics;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Mechanics
 {
     internal class Program
     {
@@ -81,7 +83,7 @@ namespace CircleSurvivors
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
-        public static int enemieSpawnCount = 10 + (wave * wave);
+        public static int enemieSpawnCount = 10 + wave * wave;
 
         //player
         public static int tempMovementSpeedHolder;
@@ -96,9 +98,10 @@ namespace CircleSurvivors
         public static int wave = 1;
 
         //global för alla, det får bara finnas en instans
-        public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
+        public static Player player = new Player(WindowSizeWidth / 2, WindowSizeHeight / 2);
         public static PowerUps powerUps = new PowerUps();
         public static ObjectHandler objectHandler = new ObjectHandler();
+        public static Bosses bosses = new Bosses();
         public static List<Drawable> drawableList = new List<Drawable>();  //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
@@ -119,8 +122,8 @@ namespace CircleSurvivors
             drawableList.Add(player);
             firstWaveAfterRestart = true;
             enemieSpawnCount = 10 + wave * wave;
-            player.x = Config.WindowSizeWidth / 2;
-            player.y = Config.WindowSizeHeight / 2;
+            player.x = WindowSizeWidth / 2;
+            player.y = WindowSizeHeight / 2;
         }
     }
 }
