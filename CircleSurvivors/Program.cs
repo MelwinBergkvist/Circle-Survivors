@@ -24,28 +24,23 @@ namespace CircleSurvivors
 
             List<BaseAbility> bullets = Config.bullets;
             List<EnemyBullets> enemyBullet = Config.enemyBullet;
-            List<Drawable> drawableList = Config.drawableList;
+            List<Drawable> drawableList = Config.drawableList; //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
             List<NPC> enemies = Config.enemies;
 
-            //floats
-            float deltaTime;
-            float collisionCooldown = 1.5f;
-            float collisionCooldownTimer = 0f;
-
-            //Colors
-            Color pauseOverlay = new Color(150, 150, 150, 200);
-
-            //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
-            drawableList.Add(Config.player);
             PowerUps powerUps = Config.powerUps;
             SpawnMechanics spawnMechs = new SpawnMechanics();
+            ObjectHandler objectHandler = Config.objectHandler;
             GUI gui = new GUI();
 
+            float deltaTime;
+
+            Config.ResetGameState();
 
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + SplashTexts.GetSplashText());
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
+
                 if (Config.player.ShouldDespawn())
                 {
                     gui.DeathScreen(deltaTime);
@@ -64,56 +59,7 @@ namespace CircleSurvivors
 
                 spawnMechs.Spawn(deltaTime);
 
-                //Kollar om jag ska despawn itemen annars så draw och update
-                for (int i = drawableList.Count-1; i >= 0; i--)
-                {
-                    var item = drawableList[i];
-                    //Drawable interfacet har en shouldDespawn function,
-                    //så alla .cs som implementerar interfacet har en shouldDespawn med sina egna requierments
-                    if (item.ShouldDespawn())
-                    {
-                        if (item is NPC enemyNpc)
-                        {
-                            enemies.Remove(enemyNpc);
-                            Config.killCount++;
-                        }
-                        if (item is BaseAbility bullet)
-                        {
-                            bullets.Remove(bullet);
-                        }
-                        drawableList.RemoveAt(i);
-
-                        //om det ska despawna behövs det inte draw eller update så vi skippar till nästa
-                        continue;
-                    }
-                    
-                    collisionCooldownTimer += deltaTime;
-                    item.Update(deltaTime);
-                    //om itemet i listan är från NPC körs if satsen
-                    if (item is NPC npc)
-                    {
-                        //för varje bullet i bullets, kolla för collision med npc
-                        foreach (var bullet in bullets)
-                        {
-                            npc.BulletCollision(bullet, deltaTime);
-                        }
-                        //för varje enemy i listan, kolla om collision cooldown är över, isåfall skada spelaren och resetta timern
-                        foreach (var enemy in enemies)
-                        {
-                            if (collisionCooldownTimer >= collisionCooldown)
-                            {
-                                collisionCooldownTimer = 0;
-                                npc.PlayerCollision(enemy, deltaTime);
-                            }
-                        }
-                        //för varje enemybullet i listan, kolla om despawn requierments har mötts
-                        foreach (var enemyBullets in enemyBullet)
-                        {
-                            enemyBullets.ShouldDespawn();
-                        }
-                    }
-                    item.Draw();
-                }
+                objectHandler.CheckDespawnAndCollision(deltaTime);
 
                 gui.StatSheet();
                 gui.Timer(deltaTime);
@@ -166,6 +112,7 @@ namespace CircleSurvivors
         //global för alla, det får bara finnas en instans
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
         public static PowerUps powerUps = new PowerUps();
+        public static ObjectHandler objectHandler = new ObjectHandler();
         public static List<Drawable> drawableList = new List<Drawable>();
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
