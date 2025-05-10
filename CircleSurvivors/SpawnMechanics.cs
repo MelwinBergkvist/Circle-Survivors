@@ -78,5 +78,9 @@ namespace CircleSurvivors
                 }
             }
         }
+        public void spawnBoss()
+        {
+
+        }
     }
 }

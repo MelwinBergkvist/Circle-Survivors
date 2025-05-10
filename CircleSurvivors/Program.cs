@@ -27,13 +27,6 @@ namespace CircleSurvivors
         static void Main(string[] args)
         {
             SplashTexts splashText = new SplashTexts();
-
-            List<BaseAbility> bullets = Config.bullets;
-            List<EnemyBullets> enemyBullet = Config.enemyBullet;
-            List<Drawable> drawableList = Config.drawableList; //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
-            List<NPC> enemies = Config.enemies;
-
-            PowerUps powerUps = Config.powerUps;
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
             GUI gui = new GUI();
@@ -119,7 +112,7 @@ namespace CircleSurvivors
         public static Player player = new Player(Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2);
         public static PowerUps powerUps = new PowerUps();
         public static ObjectHandler objectHandler = new ObjectHandler();
-        public static List<Drawable> drawableList = new List<Drawable>();
+        public static List<Drawable> drawableList = new List<Drawable>();  //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
         public static List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
