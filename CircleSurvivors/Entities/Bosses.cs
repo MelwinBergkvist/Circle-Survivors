@@ -12,7 +12,7 @@ namespace CircleSurvivors.Entities
     {
         public float x, y;
         float radius;
-        int hitpoints;
+        int hitpoints = 500;
         int maxHitpoints;
         int movementSpeed;
         int bossCollisionDamage;
@@ -33,38 +33,38 @@ namespace CircleSurvivors.Entities
             switch (bossType)
             {
                 case 0: //Normal
-                    hitpoints += 500;
-                    maxHitpoints += 500;
-                    radius += 50;
-                    movementSpeed += 40;
-                    bossCollisionDamage += 30;
+                    hitpoints = 500;
+                    maxHitpoints = 500;
+                    radius = 50;
+                    movementSpeed = 40;
+                    bossCollisionDamage = 30;
                     bossColor = new Color(156, 6, 6);
                     bossHealthColor = new Color(77, 8, 8);
                     break;
                 case 1: //Tanky
-                    hitpoints += 750;
-                    maxHitpoints += 750;
-                    radius += 55;
-                    movementSpeed += 30;
-                    bossCollisionDamage += 45;
+                    hitpoints = 750;
+                    maxHitpoints = 750;
+                    radius = 55;
+                    movementSpeed = 30;
+                    bossCollisionDamage = 45;
                     bossColor = new Color(19, 138, 11);
                     bossHealthColor = new Color(8, 77, 3);
                     break;
                 case 2: //Speedy
-                    hitpoints += 250;
-                    maxHitpoints += 250;
-                    radius += 35;
-                    movementSpeed += 70;
-                    bossCollisionDamage += 20;
+                    hitpoints = 250;
+                    maxHitpoints = 250;
+                    radius = 35;
+                    movementSpeed = 70;
+                    bossCollisionDamage = 20;
                     bossColor = new Color(120, 6, 191);
                     bossHealthColor = new Color(85, 5, 135);
                     break;
                 case 3: //Shooter
-                    hitpoints += 400;
-                    maxHitpoints += 500;
-                    radius += 50;
-                    movementSpeed += 40;
-                    bossCollisionDamage += 30;
+                    hitpoints = 400;
+                    maxHitpoints = 400;
+                    radius = 50;
+                    movementSpeed = 40;
+                    bossCollisionDamage = 30;
                     shouldShoot = true;
                     bossColor = new Color(0, 0, 0);
                     bossHealthColor = new Color(65, 65, 65);
@@ -72,7 +72,7 @@ namespace CircleSurvivors.Entities
             }
 
             //lika spawn mechanics som i NPC.cs
-            int side = random.Next(1, 5);
+            int side = random.Next(0, 4);
             switch (side)
             {
                 case 0:
@@ -114,6 +114,8 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
+            sinceSpawn += deltaTime;
+
             //Direkt kopia från NPC.cs, eauclidean distance, shooters går inte nära
             float dx = Config.player.x - x;
             float dy = Config.player.y - y;
@@ -147,6 +149,10 @@ namespace CircleSurvivors.Entities
                     y = newY;
                 }
             }
+            if (Raylib.IsKeyPressed(KeyboardKey.K))
+                hitpoints -= 100;
+            if (hitCooldown >= 0)
+                hitCooldown -= deltaTime;
         }
         /// <summary>
         /// returnar om det ska despawna
@@ -155,6 +161,44 @@ namespace CircleSurvivors.Entities
         public bool ShouldDespawn()
         {
             return hitpoints <= 0;
+        }
+        /// <summary>
+        /// kollar collision mellan spelare och boss
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
+        public void BossCollision(float deltaTime)
+        {
+            //kollar collision mellan spelare och bossen
+            float playerEnemyDx = Config.player.x - x;
+            float playerEnemyDy = Config.player.y - y;
+            float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
+            float radiusSum = Config.player.radius + radius;
+
+            if (distancePlayerEnemy <= radiusSum * radiusSum)
+                Config.player.healthpoints -= bossCollisionDamage;
+        }
+        /// <summary>
+        /// Kollar för spelarens bullet collision med bossar
+        /// </summary>
+        /// <param name="bullets">player bullets</param>
+        /// <param name="deltaTime">tid</param>
+        public void BulletCollisionBoss(BaseAbility bullets, float deltaTime)
+        {
+            if (sinceSpawn < spawnImmunity) return;
+
+            //Kollar om bullet och enemies overlappar
+            float bulletBossDx = bullets.bulletX - x;
+            float bulletBossDy = bullets.bulletY - y;
+            float distanceBulletBoss = bulletBossDx * bulletBossDx + bulletBossDy * bulletBossDy;
+            float radiusSum = Config.bulletRadius + radius;
+            if (distanceBulletBoss <= radiusSum * radiusSum)
+            {
+                if (hitCooldown <= 0)
+                {
+                    hitpoints -= Config.bulletDamage;
+                    hitCooldown = 0.5f;
+                }
+            }
         }
     }
 }

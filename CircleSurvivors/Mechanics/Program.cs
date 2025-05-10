@@ -62,6 +62,7 @@ namespace CircleSurvivors.Mechanics
                 objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
                 gui.StatSheet(); //displayar alla player stats
                 gui.Timer(deltaTime); //displayar timern
+
                 Raylib.EndDrawing(); // <- drawing confines ending
             }
         }
@@ -84,6 +85,9 @@ namespace CircleSurvivors.Mechanics
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
         public static int enemieSpawnCount = 10 + wave * wave;
+        
+        //boss
+        public static bool shouldBossSpawn = true;
 
         //player
         public static int tempMovementSpeedHolder;
@@ -124,6 +128,7 @@ namespace CircleSurvivors.Mechanics
             enemieSpawnCount = 10 + wave * wave;
             player.x = WindowSizeWidth / 2;
             player.y = WindowSizeHeight / 2;
+            shouldBossSpawn = true;
         }
     }
 }

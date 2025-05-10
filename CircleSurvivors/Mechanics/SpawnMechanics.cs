@@ -11,7 +11,6 @@ namespace CircleSurvivors.Mechanics
     {
         bool noMoreTempSpeed = false;
         float spawnTime = 1f;
-        int bossSpawnCheck = Config.enemieSpawnCount;
         /// <summary>
         /// köter alla spawn mechanics, för waves och powerups
         /// </summary>
@@ -45,6 +44,7 @@ namespace CircleSurvivors.Mechanics
                     Config.powerUps.p1 = false;
                     Config.powerUps.p2 = false;
                     Config.powerUps.p3 = false;
+                    Config.shouldBossSpawn = true;
                     Config.powerUps.hasRolledThisRound = false;
                     Config.powerUps.despawnTime = 0.5f;
                     Config.player.movementSpeed = Config.tempMovementSpeedHolder; //tillbaka till segis
@@ -64,15 +64,18 @@ namespace CircleSurvivors.Mechanics
                 spawnTime -= deltaTime;
                 if (spawnTime <= 0)
                 {
-                    if (bossSpawnCheck != Config.enemieSpawnCount) //om det inte är den första enemy
+                    if (Config.shouldBossSpawn) //om det inte är den första enemy
+                    {
+                        SpawnBoss();
+                        Config.shouldBossSpawn = false;
+                    }
+                    else
                     {
                         //eftersom NPCn är mer än en så deklrareras den mer än en gång
                         NPC npc = new NPC();
                         Config.enemies.Add(npc);
                         Config.drawableList.Add(npc);
                     }
-                    else
-                        SpawnBoss();
 
                     //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
                     //också ser till att det aldrig blir instant
@@ -85,9 +88,12 @@ namespace CircleSurvivors.Mechanics
                 }
             }
         }
+        /// <summary>
+        /// Spawnar en boss
+        /// </summary>
         public void SpawnBoss()
         {
-            Bosses boss = Config.bosses;
+            Bosses boss = new Bosses();
             Config.drawableList.Add(boss);
         }
     }
