@@ -59,5 +59,14 @@ namespace CircleSurvivors.Entities
         {
             return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
         }
+        public void shootAtBoss(Bosses bosses)
+        {
+            float dxB = bosses.x - bulletX;
+            float dyB = bosses.y - bulletY;
+            float distanceBoss = MathF.Sqrt(dxB * dxB + dyB * dyB);
+
+            moveX = dxB / distanceBoss * Config.bulletSpeed;
+            moveY = dyB / distanceBoss * Config.bulletSpeed;
+        }
     }
 }

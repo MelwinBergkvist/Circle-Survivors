@@ -64,18 +64,11 @@ namespace CircleSurvivors.Mechanics
                 spawnTime -= deltaTime;
                 if (spawnTime <= 0)
                 {
-                    if (Config.shouldBossSpawn) //om det inte är den första enemy
-                    {
-                        SpawnBoss();
-                        Config.shouldBossSpawn = false;
-                    }
-                    else
-                    {
-                        //eftersom NPCn är mer än en så deklrareras den mer än en gång
-                        NPC npc = new NPC();
-                        Config.enemies.Add(npc);
-                        Config.drawableList.Add(npc);
-                    }
+                    //eftersom NPCn är mer än en så deklrareras den mer än en gång
+                    NPC npc = new NPC();
+                    Config.enemies.Add(npc);
+                    Config.drawableList.Add(npc);
+                    Config.shouldBossSpawn = false;
 
                     //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
                     //också ser till att det aldrig blir instant
@@ -87,14 +80,6 @@ namespace CircleSurvivors.Mechanics
                     Config.enemieSpawnCount--;
                 }
             }
-        }
-        /// <summary>
-        /// Spawnar en boss
-        /// </summary>
-        public void SpawnBoss()
-        {
-            Bosses boss = new Bosses();
-            Config.drawableList.Add(boss);
         }
     }
 }

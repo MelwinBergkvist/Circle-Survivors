@@ -25,6 +25,7 @@ namespace CircleSurvivors.Entities
         public int enemyCollisionDamage = Config.enemyCollisionDamage;
 
         public bool shouldShoot = false;
+        Random random = new Random();
 
         Color enemyColor = new Color(156, 6, 6);
         Color enemyHealthColor = new Color(77, 8, 8);
@@ -34,62 +35,12 @@ namespace CircleSurvivors.Entities
         /// </summary>
         public NPC() //constructor
         {
-            Random random = new Random();
-
-            //Special enemies
-            if (random.Next(0, 101) > 90) // 10%
-            {
-                // Tanky
-                hitpoints += 100;
-                radius += 5f;
-                movementSpeed -= 30;
-                enemyColor = new Color(19, 138, 11);
-                enemyHealthColor = new Color(8, 77, 3);
-                enemyCollisionDamage += 10;
-            }
-            else if (random.Next(0, 101) > 80) // 18%
-            {
-                // Speedy                
-                hitpoints -= 50;
-                radius -= 5;
-                movementSpeed += 60;
-                enemyColor = new Color(120, 6, 191);
-                enemyHealthColor = new Color(85, 5, 135);
-                enemyCollisionDamage -= 4;
-            }
-            else if (random.Next(0, 101) > 90) // 7.2%
-            {
-                //Shooter
-                enemyColor = new Color(0, 0, 0);
-                enemyHealthColor = new Color(65, 65, 65);
-                shouldShoot = true;
-            }
-
-            maxHitpoints = hitpoints;
-            int side = random.Next(0, 4);
-            switch (side)
-            {
-                case 0:
-                    //vänster
-                    x = -radius;
-                    y = random.Next(0, Config.WindowSizeHeight);
-                    break;
-                case 1:
-                    //höger
-                    x = Config.WindowSizeWidth + radius;
-                    y = random.Next(0, Config.WindowSizeHeight);
-                    break;
-                case 2:
-                    //up
-                    y = -radius;
-                    x = random.Next(0, Config.WindowSizeWidth);
-                    break;
-                case 3:
-                    //nere
-                    y = Config.WindowSizeHeight + radius;
-                    x = random.Next(0, Config.WindowSizeWidth);
-                    break;
-            }
+            if (Config.shouldBossSpawn)
+                CreateBoss();
+            else
+                CreateEnemy();
+            SpawnPosition();
+            
         }
         /// <summary>
         /// ritar enemies
@@ -165,7 +116,6 @@ namespace CircleSurvivors.Entities
                 }
             }
 
-
             if (hitCooldown >= 0)
                 hitCooldown -= deltaTime;
         }
@@ -223,6 +173,118 @@ namespace CircleSurvivors.Entities
                 EnemyBullets enemyBullets = new EnemyBullets(enemy);
                 Config.drawableList.Add(enemyBullets);
                 Config.enemyBullet.Add(enemyBullets);
+            }
+        }
+        /// <summary>
+        /// skapar en boss
+        /// </summary>
+        public void CreateBoss()
+        {
+            int bossType = random.Next(0, 4);
+            switch (bossType)
+            {
+                case 0: //Normal
+                    hitpoints = 500;
+                    maxHitpoints = 500;
+                    radius = 50;
+                    movementSpeed = 40;
+                    enemyCollisionDamage = 30;
+                    enemyColor = new Color(156, 6, 6);
+                    enemyHealthColor = new Color(77, 8, 8);
+                    break;
+                case 1: //Tanky
+                    hitpoints = 750;
+                    maxHitpoints = 750;
+                    radius = 55;
+                    movementSpeed = 30;
+                    enemyCollisionDamage = 45;
+                    enemyColor = new Color(19, 138, 11);
+                    enemyHealthColor = new Color(8, 77, 3);
+                    break;
+                case 2: //Speedy
+                    hitpoints = 250;
+                    maxHitpoints = 250;
+                    radius = 35;
+                    movementSpeed = 70;
+                    enemyCollisionDamage = 20;
+                    enemyColor = new Color(120, 6, 191);
+                    enemyHealthColor = new Color(85, 5, 135);
+                    break;
+                case 3: //Shooter
+                    hitpoints = 400;
+                    maxHitpoints = 400;
+                    radius = 50;
+                    movementSpeed = 40;
+                    shouldShoot = true;
+                    enemyCollisionDamage = 30;
+                    enemyColor = new Color(0, 0, 0);
+                    enemyHealthColor = new Color(65, 65, 65);
+                    break;
+            }
+        }
+        /// <summary>
+        /// Skapar en enemy
+        /// </summary>
+        public void CreateEnemy()
+        {
+            //Special enemies
+            if (random.Next(0, 101) > 90) // 10%
+            {
+                // Tanky
+                hitpoints += 100;
+                radius += 5f;
+                movementSpeed -= 30;
+                enemyColor = new Color(19, 138, 11);
+                enemyHealthColor = new Color(8, 77, 3);
+                enemyCollisionDamage += 10;
+            }
+            else if (random.Next(0, 101) > 80) // 18%
+            {
+                // Speedy                
+                hitpoints -= 50;
+                radius -= 5;
+                movementSpeed += 60;
+                enemyColor = new Color(120, 6, 191);
+                enemyHealthColor = new Color(85, 5, 135);
+                enemyCollisionDamage -= 4;
+            }
+            else if (random.Next(0, 101) > 90) // 7.2%
+            {
+                //Shooter
+                enemyColor = new Color(0, 0, 0);
+                enemyHealthColor = new Color(65, 65, 65);
+                shouldShoot = true;
+            }
+            maxHitpoints = hitpoints;
+        }
+        /// <summary>
+        /// Väljer vart enemy/boss ska spawnas
+        /// </summary>
+        public void SpawnPosition()
+        {
+            int side = random.Next(0, 4);
+            switch (side)
+            {
+                case 0:
+                    //vänster
+                    x = -radius;
+                    y = random.Next(0, Config.WindowSizeHeight);
+                    break;
+                case 1:
+                    //höger
+                    x = Config.WindowSizeWidth + radius;
+                    y = random.Next(0, Config.WindowSizeHeight);
+                    break;
+                case 2:
+                    //up
+                    y = -radius;
+                    x = random.Next(0, Config.WindowSizeWidth);
+                    break;
+                case 3:
+                    //nere
+                    y = Config.WindowSizeHeight + radius;
+                    x = random.Next(0, Config.WindowSizeWidth);
+                    break;
             }
         }
     }
