@@ -267,7 +267,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 30;
                     enemyColor = new Color(156, 6, 6);
                     enemyHealthColor = new Color(77, 8, 8);
-                    bossName = normalNames[random.Next(0,11)];
+                    bossName = normalNames[random.Next(0,10)];
                     break;
                 case 1: //Tanky
                     hitpoints = 750;
@@ -277,7 +277,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 45;
                     enemyColor = new Color(19, 138, 11);
                     enemyHealthColor = new Color(8, 77, 3);
-                    bossName = tankyNames[random.Next(0,11)];
+                    bossName = tankyNames[random.Next(0,10)];
                     break;
                 case 2: //Speedy
                     hitpoints = 250;
@@ -287,7 +287,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 20;
                     enemyColor = new Color(120, 6, 191);
                     enemyHealthColor = new Color(85, 5, 135);
-                    bossName = speedyNames[random.Next(0,11)];
+                    bossName = speedyNames[random.Next(0,10)];
                     break;
                 case 3: //Shooter
                     hitpoints = 400;
@@ -298,7 +298,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 30;
                     enemyColor = new Color(0, 0, 0);
                     enemyHealthColor = new Color(65, 65, 65);
-                    bossName = shooterNames[random.Next(0,11)];
+                    bossName = shooterNames[random.Next(0,10)];
                     break;
             }
             SpawnPosition(); //sätter vart enemy/boss ska spawna

@@ -8,6 +8,8 @@
  * inte när jag testade det
  * 
  * Min standard:
+ * Alla interfaces startar med I och sen Stor bokstav
+ * Alla classes Stor bokstav
  * Alla functioner Stor bokstav
  * Alla datatyper camelCase, första bokstaven liten
 */
@@ -53,7 +55,7 @@ namespace CircleSurvivors.Mechanics
                     continue;
                 }
 
-                Raylib.ClearBackground(Color.White);
+                Raylib.ClearBackground(new(208, 255, 201));
                 Raylib.BeginDrawing(); // <- drawing confines beginning
 
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
