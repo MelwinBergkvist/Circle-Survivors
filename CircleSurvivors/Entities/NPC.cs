@@ -30,6 +30,7 @@ namespace CircleSurvivors.Entities
 
         public float radius;
         float movementSpeed;
+        int scaling = (Config.wave-1) * 10;
         int hitpoints;
         int maxHitpoints; //behövs för damage radius
         public int enemyCollisionDamage;
@@ -265,8 +266,8 @@ namespace CircleSurvivors.Entities
             switch (bossType)
             {
                 case 0: //Normal
-                    hitpoints = 500;
-                    maxHitpoints = 500;
+                    hitpoints = 500 + scaling;
+                    maxHitpoints = hitpoints;
                     radius = 50;
                     movementSpeed = 40;
                     enemyCollisionDamage = 30;
@@ -275,7 +276,7 @@ namespace CircleSurvivors.Entities
                     bossName = normalNames[random.Next(0,10)];
                     break;
                 case 1: //Tanky
-                    hitpoints = 750;
+                    hitpoints = 750 + scaling;
                     maxHitpoints = 750;
                     radius = 55;
                     movementSpeed = 30;
@@ -286,7 +287,7 @@ namespace CircleSurvivors.Entities
                     break;
                 case 2: //Speedy
                     hitpoints = 250;
-                    maxHitpoints = 250;
+                    maxHitpoints = hitpoints;
                     radius = 35;
                     movementSpeed = 70;
                     enemyCollisionDamage = 20;
@@ -295,8 +296,8 @@ namespace CircleSurvivors.Entities
                     bossName = speedyNames[random.Next(0,10)];
                     break;
                 case 3: //Shooter
-                    hitpoints = 400;
-                    maxHitpoints = 400;
+                    hitpoints = 400 + scaling;
+                    maxHitpoints = hitpoints;
                     radius = 50;
                     movementSpeed = 40;
                     shouldShoot = true;
@@ -318,7 +319,7 @@ namespace CircleSurvivors.Entities
             switch(enemyType)
             {
                 case 0: //Default
-                    hitpoints = 100;
+                    hitpoints = 100 + scaling;
                     maxHitpoints = hitpoints;
                     radius = 10;
                     movementSpeed = 80;
@@ -327,7 +328,7 @@ namespace CircleSurvivors.Entities
                     enemyHealthColor = new(77, 8, 8);
                     break;
                 case 1: //Tanky
-                    hitpoints = 200;
+                    hitpoints = 200 + scaling;
                     maxHitpoints = hitpoints;
                     radius = 20;
                     movementSpeed = 50;
@@ -336,7 +337,7 @@ namespace CircleSurvivors.Entities
                     enemyHealthColor = new Color(8, 77, 3);
                     break;
                 case 2: //Speedy
-                    hitpoints = 50;
+                    hitpoints = 50 + scaling;
                     maxHitpoints = hitpoints;
                     radius = 5;
                     movementSpeed = 140;
@@ -345,7 +346,7 @@ namespace CircleSurvivors.Entities
                     enemyHealthColor = new Color(85, 5, 135);
                     break;
                 case 3: //Shooter
-                    hitpoints = 100;
+                    hitpoints = 100 + scaling;
                     maxHitpoints = hitpoints;
                     radius = 10;
                     movementSpeed = 80;
