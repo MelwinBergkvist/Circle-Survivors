@@ -17,8 +17,8 @@ namespace CircleSurvivors.Entities
     {
         public float bulletX;
         public float bulletY;
-        readonly float moveX;
-        readonly float moveY;
+        float moveX;
+        float moveY;
 
         /// <summary>
         /// skapar graf-linjen som bullet ska gå längst
@@ -26,18 +26,7 @@ namespace CircleSurvivors.Entities
         /// <param name="closestEnemy"></param>
         public BaseAbility(NPC closestEnemy) //constructor
         {
-            bulletX = Config.player.x;
-            bulletY = Config.player.y;
-
-            float dx = closestEnemy.x - bulletX;
-            float dy = closestEnemy.y - bulletY;
-            float distance = MathF.Sqrt(dx * dx + dy * dy);
-
-            moveX = dx / distance * Config.bulletSpeed;
-            moveY = dy / distance * Config.bulletSpeed;
-            //vi gör calculations i constructorn så den inte blir en homing bullet
-            //nästan like som NPC movements bara på lite olika platser
-            //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
+            ShootingTrajectory(closestEnemy);
         }
         /// <summary>
         /// ritar bullets
@@ -62,6 +51,21 @@ namespace CircleSurvivors.Entities
         public bool ShouldDespawn()
         {
             return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
+        }
+        public void ShootingTrajectory(NPC closestEnemy)
+        {
+            bulletX = Config.player.x;
+            bulletY = Config.player.y;
+
+            float dx = closestEnemy.x - bulletX;
+            float dy = closestEnemy.y - bulletY;
+            float distance = MathF.Sqrt(dx * dx + dy * dy);
+
+            moveX = dx / distance * Config.bulletSpeed;
+            moveY = dy / distance * Config.bulletSpeed;
+            //vi gör calculations i constructorn så den inte blir en homing bullet
+            //nästan like som NPC movements bara på lite olika platser
+            //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
         }
     }
 }

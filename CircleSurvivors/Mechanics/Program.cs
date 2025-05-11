@@ -58,7 +58,7 @@ namespace CircleSurvivors.Mechanics
                     continue;
                 }
 
-                Raylib.ClearBackground(new(208, 255, 201));
+                Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing(); // <- drawing confines beginning
 
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
@@ -85,10 +85,9 @@ namespace CircleSurvivors.Mechanics
         public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
         //npc,enemy
-        public static int enemyBulletDamage = 5;
-        public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;
+        public static int enemyBulletDamage = 5;
         public static int enemieSpawnCount = 10 + wave * wave;
         
         //boss

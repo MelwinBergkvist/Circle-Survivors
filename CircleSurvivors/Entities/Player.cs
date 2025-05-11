@@ -21,7 +21,11 @@ namespace CircleSurvivors.Entities
         public int maxHealthpoints = 100;
         float bulletCooldownTimer = 0f;
 
-
+        /// <summary>
+        /// specifiserar början av x, y för player
+        /// </summary>
+        /// <param name="x">player initial X</param>
+        /// <param name="y">player initial Y</param>
         public Player(int x, int y) //constructor
         {
             //specificerar att det är x och y från parametrarna

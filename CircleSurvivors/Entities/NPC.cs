@@ -27,17 +27,18 @@ namespace CircleSurvivors.Entities
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
         float enemyBulletCooldownTimer = 0f;
+        int bulletDamage = 5;
 
-        public float radius;
         float movementSpeed;
-        int scaling = (Config.wave-1) * 10;
+        public float radius;
+        readonly int scaling = (Config.wave-1) * 10;
         int hitpoints;
         int maxHitpoints; //behövs för damage radius
         public int enemyCollisionDamage;
 
         public bool shouldShoot = false;
-        readonly bool isBoss = false;
-        readonly Random random = new();
+        public bool isBoss = false;
+        readonly Random random = new Random();
 
         string bossName;
 
@@ -109,15 +110,9 @@ namespace CircleSurvivors.Entities
         public NPC() //constructor
         {
             if (Config.shouldBossSpawn)
-            {
                 CreateBoss();
-                isBoss = true;
-                enemyBulletCooldownTimer = 1.2f;
-            }
             else
-            {
                 CreateEnemy();
-            }
         }
 
         /// <summary>
@@ -302,11 +297,13 @@ namespace CircleSurvivors.Entities
                     movementSpeed = 40;
                     shouldShoot = true;
                     enemyCollisionDamage = 30;
+                    enemyBulletCooldownTimer = 1.2f;
                     enemyColor = new Color(0, 0, 0);
                     enemyHealthColor = new Color(65, 65, 65);
                     bossName = shooterNames[random.Next(0,10)];
                     break;
             }
+            isBoss = true;
             SpawnPosition(); //sätter vart enemy/boss ska spawna
         }
         /// <summary>
@@ -388,6 +385,9 @@ namespace CircleSurvivors.Entities
                     break;
             }
         }
+        /// <summary>
+        /// ritar boss namnet
+        /// </summary>
         public void DisplayBossName()
         {
             if (isBoss)

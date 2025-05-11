@@ -247,19 +247,19 @@ namespace CircleSurvivors.Mechanics
             //sedan texten efter, repeat på alla andra. alla -15 -100 och sånt är för centrering.
             Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
             Raylib.DrawRectangle(posX1 - 120, posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
-            Raylib.DrawRectangle(posX1 - 110, posY1 - 13, 220, 26, new(133, 173, 127)); //vit rektangel så den gröna ser ut som en outline
+            Raylib.DrawRectangle(posX1 - 110, posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
             int p1Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus1]}", 20); //kollar textens width för centrering
             Raylib.DrawText($"{powerUpsArray[powerUpStatus1]}", posX1 - p1Text / 2, posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
 
             Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 120, posY2 - 15, 240, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, new(133, 173, 127));
+            Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, Color.White);
             int p2Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus2]}", 20);
             Raylib.DrawText($"{powerUpsArray[powerUpStatus2]}", posX2 - p2Text / 2, posY2 - 10, 20, Color.Black);
 
             Raylib.DrawCircleLines(posX3, posY3, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX3 - 120, posY3 - 15, 240, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, new(133, 173, 127));
+            Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, Color.White);
             int p3Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus3]}", 20);
             Raylib.DrawText($"{powerUpsArray[powerUpStatus3]}", posX3 - p3Text / 2, posY3 - 10, 20, Color.Black);
 
