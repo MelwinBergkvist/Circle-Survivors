@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Mechanics
 {
+    /// <summary>
+    /// hanterar alla powerups
+    /// </summary>
     public class PowerUps
     {
         //alla positioner som powerupsen ska ligga på

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Mechanics
 {
+    /// <summary>
+    /// hanterar alla object
+    /// </summary>
     public class ObjectHandler
     {
         readonly float collisionCooldown = 1.5f;

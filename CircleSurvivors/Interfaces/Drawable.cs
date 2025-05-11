@@ -23,6 +23,9 @@ namespace CircleSurvivors.Interfaces
      * jag glömde att lägga till men jag fick mycket hjälp
      * av min broder med att skapa detta interface
      */
+    /// <summary>
+    /// hanterar Update, Draw, ShouldDespawn som ett interface
+    /// </summary>
     public interface IDrawable
     {
         /// <summary>

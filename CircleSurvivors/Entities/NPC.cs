@@ -17,6 +17,9 @@ using System.Reflection.Metadata;
 
 namespace CircleSurvivors.Entities
 {
+    /// <summary>
+    /// hanterar alla NPC
+    /// </summary>
     public class NPC : IDrawable
     {
         public float x, y;

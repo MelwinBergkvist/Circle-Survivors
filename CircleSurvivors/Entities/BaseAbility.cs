@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
+    /// <summary>
+    /// hanterar alla bullets av spelaren
+    /// </summary>
     public class BaseAbility : IDrawable
     {
         public float bulletX;

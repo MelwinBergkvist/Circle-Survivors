@@ -20,13 +20,16 @@ using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors.Mechanics
 {
+    /// <summary>
+    /// Main klassen som körs när programmet öppnas
+    /// </summary>
     internal class Program
     {
         /// <summary>
         /// initialiserar spelet och kör allt som behövs för det
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        static void Main()
         {
             float deltaTime;
             Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
@@ -66,6 +69,9 @@ namespace CircleSurvivors.Mechanics
             }
         }
     }
+    /// <summary>
+    /// Config klass, tar hand om datatyper som inte behöver vara lokala men behövs i många olika klasser
+    /// </summary>
     public static class Config
     {
         //program

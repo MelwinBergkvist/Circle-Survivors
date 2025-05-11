@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
+    /// <summary>
+    /// hanterar playern
+    /// </summary>
     public class Player : IDrawable
     {
         public float x, y;

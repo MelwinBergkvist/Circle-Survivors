@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Graphics
 {
+    /// <summary>
+    /// hanterar alla GUI changes, Timer, death screen, start screen etc
+    /// </summary>
     public class GUI
     {
         public float gameOverAlpha = 0f;

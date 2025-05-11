@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Mechanics
 {
+    /// <summary>
+    /// köter alla spawn mechanics för wavsen
+    /// </summary>
     public class SpawnMechanics
     {
         bool noMoreTempSpeed = false;
