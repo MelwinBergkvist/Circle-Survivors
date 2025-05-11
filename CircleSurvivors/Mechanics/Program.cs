@@ -12,6 +12,7 @@
  * Alla classes Stor bokstav
  * Alla functioner Stor bokstav
  * Alla datatyper camelCase, första bokstaven liten
+ * Alla listor ska ha List i slutet av namnet
 */
 using CircleSurvivors.Entities;
 using CircleSurvivors.Graphics;
@@ -111,9 +112,9 @@ namespace CircleSurvivors.Mechanics
         public static PowerUps powerUps = new PowerUps();
         public static ObjectHandler objectHandler = new ObjectHandler();
         public static List<IDrawable> drawableList = new List<IDrawable>();  //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
-        public static List<BaseAbility> bullets = new List<BaseAbility>();
-        public static List<NPC> enemies = new List<NPC>();
-        public static List<EnemyBullets> enemyBullet = new List<EnemyBullets>();
+        public static List<BaseAbility> bulletsList = new List<BaseAbility>();
+        public static List<NPC> enemiesList = new List<NPC>();
+        public static List<EnemyBullets> enemyBulletList = new List<EnemyBullets>();
 
         public static void ResetGameState()
         {
@@ -124,9 +125,9 @@ namespace CircleSurvivors.Mechanics
             player.healthpoints = 100;
             player.maxHealthpoints = 100;
             killCount = 0;
-            enemies.Clear();
+            enemiesList.Clear();
             drawableList.Clear();
-            bullets.Clear();
+            bulletsList.Clear();
             drawableList.Add(player);
             firstWaveAfterRestart = true;
             enemieSpawnCount = 10 + wave * wave;

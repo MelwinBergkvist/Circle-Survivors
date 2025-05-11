@@ -63,12 +63,12 @@ namespace CircleSurvivors.Entities
                 //make sure att det faktist finns enemies på skärmen,
                 //så vi inte försöker skjuta mot något som inte finns
                 //annars går spelet kapput, crashar
-                if (Config.enemies.Count > 0)
+                if (Config.enemiesList.Count > 0)
                 {
                     bulletCooldownTimer = 0;
-                    BaseAbility bullet = new BaseAbility(ClosestEnemy(Config.enemies));
+                    BaseAbility bullet = new BaseAbility(ClosestEnemy(Config.enemiesList));
                     Config.drawableList.Add(bullet);
-                    Config.bullets.Add(bullet);
+                    Config.bulletsList.Add(bullet);
                 }
             }
             //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt

@@ -30,12 +30,12 @@ namespace CircleSurvivors.Mechanics
                 {
                     if (item is NPC enemyNpc)
                     {
-                        Config.enemies.Remove(enemyNpc);
+                        Config.enemiesList.Remove(enemyNpc);
                         Config.killCount++;
                     }
                     if (item is BaseAbility bullet)
                     {
-                        Config.bullets.Remove(bullet);
+                        Config.bulletsList.Remove(bullet);
                     }
                     Config.drawableList.RemoveAt(i);
                     //om det ska despawna behövs det inte draw eller update så vi skippar till nästa
@@ -48,12 +48,12 @@ namespace CircleSurvivors.Mechanics
                 if (item is NPC npc)
                 {
                     //för varje bullet i bullets, kolla för collision med npc
-                    foreach (var bullet in Config.bullets)
+                    foreach (var bullet in Config.bulletsList)
                     {
                         npc.BulletCollision(bullet, deltaTime);
                     }
                     //för varje enemy i listan, kolla om collision cooldown är över, isåfall skada spelaren och resetta timern
-                    foreach (var enemy in Config.enemies)
+                    foreach (var enemy in Config.enemiesList)
                     {
                         if (collisionCooldownTimer >= collisionCooldown)
                         {
@@ -62,7 +62,7 @@ namespace CircleSurvivors.Mechanics
                         }
                     }
                     //för varje enemybullet i listan, kolla om despawn requierments har mötts
-                    foreach (var enemyBullets in Config.enemyBullet)
+                    foreach (var enemyBullets in Config.enemyBulletList)
                     {
                         enemyBullets.ShouldDespawn();
                     }

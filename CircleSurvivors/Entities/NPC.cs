@@ -155,7 +155,7 @@ namespace CircleSurvivors.Entities
             //make sure att det faktist finns enemies på skärmen,
             //så vi inte försöker skjuta mot något som inte finns
             enemyBulletCooldownTimer += deltaTime;
-            if (Config.enemies.Count > 0)
+            if (Config.enemiesList.Count > 0)
             {
                 ShootEnemyBullet(this);
             }
@@ -250,7 +250,7 @@ namespace CircleSurvivors.Entities
                         enemyBulletCooldownTimer = 0;
                     EnemyBullets enemyBullets = new EnemyBullets(enemy);
                     Config.drawableList.Add(enemyBullets);
-                    Config.enemyBullet.Add(enemyBullets);
+                    Config.enemyBulletList.Add(enemyBullets);
                 }
             }
         }

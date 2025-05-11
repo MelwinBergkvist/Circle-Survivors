@@ -21,9 +21,9 @@ namespace CircleSurvivors.Mechanics
         public void Spawn(float deltaTime)
         {
             //när alla enemies är döda, ny wave och +1 wave count
-            if (Config.enemies.Count <= 0 && Config.enemieSpawnCount <= 0 && Config.firstWaveAfterRestart != true)
+            if (Config.enemiesList.Count <= 0 && Config.enemieSpawnCount <= 0 && Config.firstWaveAfterRestart != true)
             {
-                Config.bullets.Clear();
+                Config.bulletsList.Clear();
 
                 //stoppar timern mellan waves
                 Config.countTime = false;
@@ -69,7 +69,7 @@ namespace CircleSurvivors.Mechanics
                 {
                     //eftersom NPCn är mer än en så deklrareras den mer än en gång
                     NPC npc = new NPC();
-                    Config.enemies.Add(npc);
+                    Config.enemiesList.Add(npc);
                     Config.drawableList.Add(npc);
                     Config.shouldBossSpawn = false;
 
