@@ -31,14 +31,13 @@ namespace CircleSurvivors.Mechanics
             float deltaTime;
             Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
-            SplashTexts splashText = new SplashTexts();
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
             GUI gui = new GUI();
 
             Config.ResetGameState();
 
-            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + SplashTexts.GetSplashText());
+            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + GUI.GetSplashText());
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
