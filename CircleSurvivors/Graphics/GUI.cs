@@ -18,13 +18,24 @@ namespace CircleSurvivors.Graphics
         float timeAliveSeconds = 0f;
         float timeAliveMinutes = 0f;
         float startScreenAlpha = 0f;
+        Random random = new Random();
+
+        List<GUI> startScreenEffectsList = new List<GUI>();
+        float circleSpawnCooldownTimer = 0f;
+        float circleSpawnCooldown = 0.2f;
+        float circleX;
+        float circleY;
 
         bool startFadeIn = false;
         bool hoveredStart;
         bool clickedStart;
         bool isTutorialHovered;
 
-        public GUI() { }
+        public GUI() 
+        {
+            circleY = random.Next(0, Config.WindowSizeHeight);
+            circleX = 0;
+        }
         /// <summary>
         /// displayar death screenen vid spelarens död
         /// ger också resart option
@@ -134,6 +145,15 @@ namespace CircleSurvivors.Graphics
                 Raylib.ClearBackground(Color.Black);
                 Raylib.BeginDrawing();
 
+                circleSpawnCooldownTimer += deltaTime;
+                if (circleSpawnCooldownTimer >= circleSpawnCooldown)
+                {
+                    circleSpawnCooldownTimer = 0;
+                    StartScreenEffects(deltaTime);
+                }
+                UpdateStartScreenEffects(deltaTime);
+                DrawStartScreenEffects();
+
                 int startScreenText = Raylib.MeasureText("Welcome to Circle survivors!", 64);
                 Raylib.DrawText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2 - startScreenText / 2, Config.WindowSizeHeight / 8, 64, Color.White);
 
@@ -198,7 +218,7 @@ namespace CircleSurvivors.Graphics
         /// <summary>
         /// displayar alla onscreen stats, inkluderar killcount och wave count
         /// </summary>
-        public void StatSheet()
+        public static void StatSheet()
         {
             //corner info
             Raylib.DrawText($"Kill count: {Config.killCount}", 0, 0, 28, Color.Red);
@@ -213,6 +233,40 @@ namespace CircleSurvivors.Graphics
             Raylib.DrawText($"player hitpoints stat: {Config.player.healthpoints}", 0, Config.WindowSizeHeight - 70, 12, Color.DarkGray);
             Raylib.DrawText($"player movement speed stat: {Config.player.movementSpeed}", 0, Config.WindowSizeHeight - 80, 12, Color.DarkGray);
             Raylib.DrawText($"stat sheet:", 0, Config.WindowSizeHeight - 90, 12, Color.DarkGray);
+        }
+        /// <summary>
+        /// skapar en ny circle för start screenen
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public void StartScreenEffects(float deltaTime)
+        {
+            GUI circle = new GUI();
+            startScreenEffectsList.Add(circle);
+        }
+        /// <summary>
+        /// ritar circle som flyger förbi på start screenen
+        /// </summary>
+        public void DrawStartScreenEffects()
+        {
+            foreach (GUI circle in startScreenEffectsList)
+                Raylib.DrawCircle((int)circle.circleX, (int)circle.circleY, 5, new(155,155,155));
+        }
+        /// <summary>
+        /// updaterar circle effekterna som flyger förbi på start screenen
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public void UpdateStartScreenEffects(float deltaTime)
+        {
+            foreach (GUI circle in startScreenEffectsList)
+            {
+                circle.circleX += deltaTime * 500;
+                if (circle.circleX >= Config.WindowSizeWidth)
+                    startScreenEffectsList.Remove(this);
+            }
+        }
+        public void ExitScreen()
+        {
+
         }
     }
 }

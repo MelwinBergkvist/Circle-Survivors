@@ -15,8 +15,6 @@ using CircleSurvivors.Entities;
 using CircleSurvivors.Graphics;
 using CircleSurvivors.Interfaces;
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
-using System;
-using System.Numerics;
 
 namespace CircleSurvivors.Mechanics
 {
@@ -60,7 +58,7 @@ namespace CircleSurvivors.Mechanics
 
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
                 objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
-                gui.StatSheet(); //displayar alla player stats
+                GUI.StatSheet(); //displayar alla player stats
                 gui.Timer(deltaTime); //displayar timern
 
                 Raylib.EndDrawing(); // <- drawing confines ending
@@ -70,8 +68,8 @@ namespace CircleSurvivors.Mechanics
     public static class Config
     {
         //program
-        public static int WindowSizeWidth = 1600;
-        public static int WindowSizeHeight = 800;
+        public const int WindowSizeWidth = 1600;
+        public const int WindowSizeHeight = 800;
         public static int killCount = 0;
         public static bool countTime = true;
         public static bool firstWaveAfterRestart = false;

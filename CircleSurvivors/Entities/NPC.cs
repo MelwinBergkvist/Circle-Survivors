@@ -37,6 +37,7 @@ namespace CircleSurvivors.Entities
 
         string bossName;
 
+        //Alla namn är tagna från en Dark Fantasy boss name generator jag hittade på google
         string[] normalNames = 
         {
             "Malithrax the Crimson Maw",
