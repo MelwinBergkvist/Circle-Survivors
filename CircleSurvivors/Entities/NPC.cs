@@ -23,16 +23,16 @@ namespace CircleSurvivors.Entities
     public class NPC : IDrawable
     {
         public float x, y;
+        float hitCooldown;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
-        float movementSpeed = 80;
-        float hitCooldown = 0f;
-        public float radius = 10;
         float enemyBulletCooldownTimer = 0f;
 
-        int hitpoints = 100;
-        int maxHitpoints;
-        public int enemyCollisionDamage = Config.enemyCollisionDamage;
+        public float radius;
+        float movementSpeed;
+        int hitpoints;
+        int maxHitpoints; //behövs för damage radius
+        public int enemyCollisionDamage;
 
         public bool shouldShoot = false;
         readonly bool isBoss = false;
@@ -41,7 +41,7 @@ namespace CircleSurvivors.Entities
         string bossName;
 
         //Alla namn är tagna från en Dark Fantasy boss name generator jag hittade på google
-        string[] normalNames = 
+        readonly string[] normalNames = 
         {
             "Malithrax the Crimson Maw",
             "The Scarlet Abyssal Ooze",
@@ -55,7 +55,7 @@ namespace CircleSurvivors.Entities
             "The Fiery Hemogoblin"
         };
 
-        string[] tankyNames =
+        readonly string[] tankyNames =
         {
             "Grisshath, the Mirebound Juggernaut",
             "Vrothmuk, the Sludge Tyrant",
@@ -69,7 +69,7 @@ namespace CircleSurvivors.Entities
             "Ograth'Zul, Lord of the Putrid Mire"
         };
 
-        string[] speedyNames = 
+        readonly string[] speedyNames = 
         {
             "Violeth Maw, the Swift Abyss",
             "Nyx'lor, the Violet Surge",
@@ -83,7 +83,7 @@ namespace CircleSurvivors.Entities
             "Vilethrix, the Violet Reaper"
         };
 
-        string[] shooterNames = 
+        readonly string[] shooterNames = 
         {
             "Doomgrip, the Blackened Torrent",
             "Oblivion Maw, the Leaden Fury",
@@ -97,8 +97,10 @@ namespace CircleSurvivors.Entities
             "Kalthrax, the Lead-Wreathed Terror"
         };
 
-        Color enemyColor = new(156, 6, 6);
-        Color enemyHealthColor = new(77, 8, 8);
+        //jag ger dessa färger exakt samma värde om det blir normal enemy men du ballar hela spelet ur???
+        //spelaren skjuter på ingenting och tar damage från saker som inte existerar?? wtf??
+        Color enemyColor;
+        Color enemyHealthColor;
 
         /// <summary>
         /// initializerar enemiesarna och gör dem till special enemies om random rollen är success
@@ -312,34 +314,47 @@ namespace CircleSurvivors.Entities
         public void CreateEnemy()
         {
             //Special enemies
-            if (random.Next(0, 101) > 90) // 10%
+            int enemyType = random.Next(0,4);
+            switch(enemyType)
             {
-                // Tanky
-                hitpoints += 100;
-                radius += 5f;
-                movementSpeed -= 30;
-                enemyColor = new Color(19, 138, 11);
-                enemyHealthColor = new Color(8, 77, 3);
-                enemyCollisionDamage += 10;
+                case 0: //Default
+                    hitpoints = 100;
+                    maxHitpoints = hitpoints;
+                    radius = 10;
+                    movementSpeed = 80;
+                    enemyCollisionDamage = 5;
+                    enemyColor = new(156, 6, 6);
+                    enemyHealthColor = new(77, 8, 8);
+                    break;
+                case 1: //Tanky
+                    hitpoints = 200;
+                    maxHitpoints = hitpoints;
+                    radius = 20;
+                    movementSpeed = 50;
+                    enemyCollisionDamage = 15;
+                    enemyColor = new Color(19, 138, 11);
+                    enemyHealthColor = new Color(8, 77, 3);
+                    break;
+                case 2: //Speedy
+                    hitpoints = 50;
+                    maxHitpoints = hitpoints;
+                    radius = 5;
+                    movementSpeed = 140;
+                    enemyCollisionDamage = 1;
+                    enemyColor = new Color(120, 6, 191);
+                    enemyHealthColor = new Color(85, 5, 135);
+                    break;
+                case 3: //Shooter
+                    hitpoints = 100;
+                    maxHitpoints = hitpoints;
+                    radius = 10;
+                    movementSpeed = 80;
+                    enemyCollisionDamage = 5;
+                    shouldShoot = true;
+                    enemyColor = new Color(0, 0, 0);
+                    enemyHealthColor = new Color(65, 65, 65);
+                    break;
             }
-            else if (random.Next(0, 101) > 80) // 18%
-            {
-                // Speedy                
-                hitpoints -= 50;
-                radius -= 5;
-                movementSpeed += 60;
-                enemyColor = new Color(120, 6, 191);
-                enemyHealthColor = new Color(85, 5, 135);
-                enemyCollisionDamage -= 4;
-            }
-            else if (random.Next(0, 101) > 90) // 7.2%
-            {
-                //Shooter
-                enemyColor = new Color(0, 0, 0);
-                enemyHealthColor = new Color(65, 65, 65);
-                shouldShoot = true;
-            }
-            maxHitpoints = hitpoints;
             SpawnPosition(); //sätter vart enemy/boss ska spawna
         }
         /// <summary>

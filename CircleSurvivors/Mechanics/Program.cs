@@ -85,7 +85,6 @@ namespace CircleSurvivors.Mechanics
         public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
         //npc,enemy
-        public static int enemyCollisionDamage = 5;
         public static int enemyBulletDamage = 5;
         public static int enemyBulletRadius = 5;
         public static float enemyBulletSpeed = 300f;

@@ -14,20 +14,22 @@ namespace CircleSurvivors.Graphics
     /// </summary>
     public class GUI
     {
-        public float gameOverAlpha = 0f;
-        public float fadeInSpeed = 50f;
-        readonly float fadeInSpeedStart = 100f;
+        readonly float fadeInSpeed = 50f;
+        float gameOverAlpha = 0f;
+
         Color fadeRed, fadeGray, fadeSkyBlue;
         float timeAliveSeconds = 0f;
         float timeAliveMinutes = 0f;
         float startScreenAlpha = 0f;
-        Random random = new Random();
+
+        readonly float fadeInSpeedStart = 100f;
+        readonly Random random = new Random();
 
         List<GUI> startScreenEffectsList = new List<GUI>();
         float circleSpawnCooldownTimer = 0f;
-        float circleSpawnCooldown = 0.2f;
+        readonly float circleSpawnCooldown = 0.2f;
+        readonly float circleY;
         float circleX;
-        float circleY;
 
         bool startFadeIn = false;
         bool hoveredStart;
