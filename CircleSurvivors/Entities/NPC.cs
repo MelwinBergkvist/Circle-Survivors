@@ -8,6 +8,12 @@ using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml.Linq;
+using static System.Formats.Asn1.AsnWriter;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection.Metadata;
 
 namespace CircleSurvivors.Entities
 {
@@ -28,6 +34,64 @@ namespace CircleSurvivors.Entities
         public bool shouldShoot = false;
         readonly bool isBoss = false;
         readonly Random random = new();
+
+        string bossName;
+
+        string[] normalNames = 
+        {
+            "Malithrax the Crimson Maw",
+            "The Scarlet Abyssal Ooze",
+            "Vermithor, Harbinger of Blood",
+            "Zyrgath, the Sanguine Horror",
+            "The Red Maw of Despair",
+            "The Ruby Blight",
+            "Eldrathis, Lord of the Scarlet Sludge",
+            "The Blistering Bloodspawn",
+            "Khorvax, the Crimson Corruptor",
+            "The Fiery Hemogoblin"
+        };
+
+        string[] tankyNames =
+        {
+            "Grisshath, the Mirebound Juggernaut",
+            "Vrothmuk, the Sludge Tyrant",
+            "Zalgorath, the Blighted Ooze",
+            "Malgroth, the Putrid Colossus",
+            "Grothul, the Verdant Behemoth",
+            "Ghulmire, the Viridian Rot",
+            "The Emerald Plagueheart",
+            "Morbgluth, the Bilebound Leviathan",
+            "The Verdant Sludge Reborn",
+            "Ograth'Zul, Lord of the Putrid Mire"
+        };
+
+        string[] speedyNames = 
+        {
+            "Violeth Maw, the Swift Abyss",
+            "Nyx'lor, the Violet Surge",
+            "The Purple Maw of Sorrow",
+            "Zhar'kul, the Blight Blob",
+            "The Amethyst Wraith",
+            "The forgotten blitzer",
+            "Caragon, the uncrowned Tyrant",
+            "The Indigo Wraithspawn",
+            "Nyxithra, the Amethyst Phantasm",
+            "Vilethrix, the Violet Reaper"
+        };
+
+        string[] shooterNames = 
+        {
+            "Doomgrip, the Blackened Torrent",
+            "Oblivion Maw, the Leaden Fury",
+            "Xyrrath, the Bullet-Soaked Horror",
+            "The Iron Veil of Destruction",
+            "Grimrath, the Shattered Singularity",
+            "Cinderbane, the Brass-Maw Tyrant",
+            "Necroshard, the Blackened Barrage",
+            "Vraxion, the Steel-Spitting Wraith",
+            "The Darkgun Behemoth",
+            "Kalthrax, the Lead-Wreathed Terror"
+        };
 
         Color enemyColor = new(156, 6, 6);
         Color enemyHealthColor = new(77, 8, 8);
@@ -55,6 +119,7 @@ namespace CircleSurvivors.Entities
         public void Draw()
         {
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor);
+            DisplayBossName();
 
             //2nd radius som en healthmeter typ
             float healthRadius = radius - radius * hitpoints / maxHitpoints;
@@ -201,6 +266,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 30;
                     enemyColor = new Color(156, 6, 6);
                     enemyHealthColor = new Color(77, 8, 8);
+                    bossName = normalNames[random.Next(0,11)];
                     break;
                 case 1: //Tanky
                     hitpoints = 750;
@@ -210,6 +276,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 45;
                     enemyColor = new Color(19, 138, 11);
                     enemyHealthColor = new Color(8, 77, 3);
+                    bossName = tankyNames[random.Next(0,11)];
                     break;
                 case 2: //Speedy
                     hitpoints = 250;
@@ -219,6 +286,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 20;
                     enemyColor = new Color(120, 6, 191);
                     enemyHealthColor = new Color(85, 5, 135);
+                    bossName = speedyNames[random.Next(0,11)];
                     break;
                 case 3: //Shooter
                     hitpoints = 400;
@@ -229,6 +297,7 @@ namespace CircleSurvivors.Entities
                     enemyCollisionDamage = 30;
                     enemyColor = new Color(0, 0, 0);
                     enemyHealthColor = new Color(65, 65, 65);
+                    bossName = shooterNames[random.Next(0,11)];
                     break;
             }
             SpawnPosition(); //sätter vart enemy/boss ska spawna
@@ -297,6 +366,14 @@ namespace CircleSurvivors.Entities
                     y = Config.WindowSizeHeight + radius;
                     x = random.Next(0, Config.WindowSizeWidth);
                     break;
+            }
+        }
+        public void DisplayBossName()
+        {
+            if (isBoss)
+            {
+                int bossNameMeasure = Raylib.MeasureText($"{bossName}", 14);
+                Raylib.DrawText($"{bossName}", (int)x - bossNameMeasure/2, (int)y + (int)radius + 10, 14, enemyColor);
             }
         }
     }
