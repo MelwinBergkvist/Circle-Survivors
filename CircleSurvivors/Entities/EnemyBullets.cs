@@ -1,4 +1,5 @@
-﻿using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Mechanics;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
-    public class EnemyBullets : Drawable
+    public class EnemyBullets : IDrawable
     {
         public float bulletX;
         public float bulletY;

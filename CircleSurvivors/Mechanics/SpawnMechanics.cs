@@ -73,10 +73,9 @@ namespace CircleSurvivors.Mechanics
                     //scaling för hur snabbt saker ska spawna så det inte tar 30 min per runda,
                     //också ser till att det aldrig blir instant
                     if (Config.enemieSpawnCount < 100)
-                    {
                         spawnTime = 1f - Config.enemieSpawnCount / 100f;
-                    }
-                    else spawnTime = 0.1f;
+                    else 
+                        spawnTime = 0.1f;
                     Config.enemieSpawnCount--;
                 }
             }

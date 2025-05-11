@@ -13,6 +13,7 @@
 */
 using CircleSurvivors.Entities;
 using CircleSurvivors.Graphics;
+using CircleSurvivors.Interfaces;
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 using System;
 using System.Numerics;
@@ -21,7 +22,6 @@ namespace CircleSurvivors.Mechanics
 {
     internal class Program
     {
-
         /// <summary>
         /// initialiserar spelet och kör allt som behövs för det
         /// </summary>
@@ -105,8 +105,7 @@ namespace CircleSurvivors.Mechanics
         public static Player player = new Player(WindowSizeWidth / 2, WindowSizeHeight / 2);
         public static PowerUps powerUps = new PowerUps();
         public static ObjectHandler objectHandler = new ObjectHandler();
-        public static Bosses bosses = new Bosses();
-        public static List<Drawable> drawableList = new List<Drawable>();  //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
+        public static List<IDrawable> drawableList = new List<IDrawable>();  //En list som kan draw, update och kolla om något ska despawna, NPC's bullets osv.
         public static List<BaseAbility> bullets = new List<BaseAbility>();
         public static List<NPC> enemies = new List<NPC>();
         public static List<EnemyBullets> enemyBullet = new List<EnemyBullets>();

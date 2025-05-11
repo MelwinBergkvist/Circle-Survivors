@@ -13,11 +13,11 @@ namespace CircleSurvivors.Graphics
     {
         public float gameOverAlpha = 0f;
         public float fadeInSpeed = 50f;
+        readonly float fadeInSpeedStart = 100f;
         Color fadeRed, fadeGray, fadeSkyBlue;
         float timeAliveSeconds = 0f;
         float timeAliveMinutes = 0f;
         float startScreenAlpha = 0f;
-        float fadeInSpeedStart = 100f;
 
         bool startFadeIn = false;
         bool hoveredStart;

@@ -10,23 +10,23 @@ namespace CircleSurvivors.Mechanics
     public class PowerUps
     {
         //alla positioner som powerupsen ska ligga på
-        int posX1 = Config.WindowSizeWidth / 2 - Config.WindowSizeWidth / 6;
-        int posY1 = Config.WindowSizeHeight / 4;
+        readonly int posX1 = Config.WindowSizeWidth / 2 - Config.WindowSizeWidth / 6;
+        readonly int posY1 = Config.WindowSizeHeight / 4;
 
-        int posX2 = Config.WindowSizeWidth / 2;
-        int posY2 = Config.WindowSizeHeight / 3;
+        readonly int posX2 = Config.WindowSizeWidth / 2;
+        readonly int posY2 = Config.WindowSizeHeight / 3;
 
-        int posX3 = Config.WindowSizeWidth / 2 + Config.WindowSizeWidth / 6;
-        int posY3 = Config.WindowSizeHeight / 4;
+        readonly int posX3 = Config.WindowSizeWidth / 2 + Config.WindowSizeWidth / 6;
+        readonly int posY3 = Config.WindowSizeHeight / 4;
 
+        readonly int radius = 50;
+        readonly Random random = new Random();
+        
         public bool p1, p2, p3 = false;
         public bool isPicked = false;
         public bool hasRolledThisRound = false;
         public float despawnTime = 0.5f;
 
-        int radius = 50;
-
-        Random random = new Random();
 
         Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
 
@@ -57,6 +57,13 @@ namespace CircleSurvivors.Mechanics
                 powerUpStatus1 = random.Next(0, 9);
                 powerUpStatus2 = random.Next(0, 9);
                 powerUpStatus3 = random.Next(0, 9);
+
+                //ser till att alla är olika
+                while (powerUpStatus1 == powerUpStatus2)
+                    powerUpStatus2 = random.Next(0, 9);
+                while (powerUpStatus1 == powerUpStatus3 || powerUpStatus2 == powerUpStatus3)
+                    powerUpStatus3 = random.Next(0, 9);
+
                 Config.powerUps.hasRolledThisRound = true;
             }
 

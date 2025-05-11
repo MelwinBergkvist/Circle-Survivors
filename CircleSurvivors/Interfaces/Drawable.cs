@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CircleSurvivors
+namespace CircleSurvivors.Interfaces
 {
     /*
      * Interface comments:
@@ -23,7 +23,7 @@ namespace CircleSurvivors
      * jag glömde att lägga till men jag fick mycket hjälp
      * av min broder med att skapa detta interface
      */
-    public interface Drawable
+    public interface IDrawable
     {
         /// <summary>
         /// grupp Update metod för alla classes som implementerar Drawable interfacet, updaterar objektet

@@ -1,4 +1,5 @@
-﻿using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Mechanics;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
-    public class BaseAbility : Drawable
+    public class BaseAbility : IDrawable
     {
         public float bulletX;
         public float bulletY;
-        float moveX;
-        float moveY;
+        readonly float moveX;
+        readonly float moveY;
 
         /// <summary>
         /// skapar graf-linjen som bullet ska gå längst
@@ -58,15 +59,6 @@ namespace CircleSurvivors.Entities
         public bool ShouldDespawn()
         {
             return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
-        }
-        public void shootAtBoss(Bosses bosses)
-        {
-            float dxB = bosses.x - bulletX;
-            float dyB = bosses.y - bulletY;
-            float distanceBoss = MathF.Sqrt(dxB * dxB + dyB * dyB);
-
-            moveX = dxB / distanceBoss * Config.bulletSpeed;
-            moveY = dyB / distanceBoss * Config.bulletSpeed;
         }
     }
 }

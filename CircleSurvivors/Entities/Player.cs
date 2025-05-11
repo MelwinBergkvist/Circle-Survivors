@@ -1,4 +1,5 @@
-﻿using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Mechanics;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
-    public class Player : Drawable
+    public class Player : IDrawable
     {
         public float x, y;
         public int movementSpeed = 100;

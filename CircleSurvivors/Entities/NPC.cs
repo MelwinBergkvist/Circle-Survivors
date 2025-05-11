@@ -1,4 +1,5 @@
-﻿using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Mechanics;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
-    public class NPC : Drawable
+    public class NPC : IDrawable
     {
         public float x, y;
         public float spawnImmunity = 0.5f;
@@ -25,10 +26,11 @@ namespace CircleSurvivors.Entities
         public int enemyCollisionDamage = Config.enemyCollisionDamage;
 
         public bool shouldShoot = false;
-        Random random = new Random();
+        readonly bool isBoss = false;
+        readonly Random random = new();
 
-        Color enemyColor = new Color(156, 6, 6);
-        Color enemyHealthColor = new Color(77, 8, 8);
+        Color enemyColor = new(156, 6, 6);
+        Color enemyHealthColor = new(77, 8, 8);
 
         /// <summary>
         /// initializerar enemiesarna och gör dem till special enemies om random rollen är success
@@ -36,12 +38,17 @@ namespace CircleSurvivors.Entities
         public NPC() //constructor
         {
             if (Config.shouldBossSpawn)
+            {
                 CreateBoss();
+                isBoss = true;
+                enemyBulletCooldownTimer = 1.2f;
+            }
             else
+            {
                 CreateEnemy();
-            SpawnPosition();
-            
+            }
         }
+
         /// <summary>
         /// ritar enemies
         /// </summary>
@@ -81,10 +88,7 @@ namespace CircleSurvivors.Entities
             enemyBulletCooldownTimer += deltaTime;
             if (Config.enemies.Count > 0)
             {
-                if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
-                {
-                    ShootEnemyBullet(this);
-                }
+                ShootEnemyBullet(this);
             }
 
             if (!shouldShoot)
@@ -167,12 +171,18 @@ namespace CircleSurvivors.Entities
             //exact samma logik som bullet cooldownen innan men för enemies
             //här har vi mer än en enemy so vi loopar igen hela enemies listan
             //så alla enemies individiuelt har sin egen cooldown
-            if (shouldShoot)
+            if (Config.enemyBulletCooldown <= enemyBulletCooldownTimer)
             {
-                enemyBulletCooldownTimer = 0;
-                EnemyBullets enemyBullets = new EnemyBullets(enemy);
-                Config.drawableList.Add(enemyBullets);
-                Config.enemyBullet.Add(enemyBullets);
+                if (shouldShoot)
+                {
+                    if (isBoss)
+                        enemyBulletCooldownTimer = 1.2f; //basically reduce cooldown till 0.3 för bossar
+                    else
+                        enemyBulletCooldownTimer = 0;
+                    EnemyBullets enemyBullets = new EnemyBullets(enemy);
+                    Config.drawableList.Add(enemyBullets);
+                    Config.enemyBullet.Add(enemyBullets);
+                }
             }
         }
         /// <summary>
@@ -221,6 +231,7 @@ namespace CircleSurvivors.Entities
                     enemyHealthColor = new Color(65, 65, 65);
                     break;
             }
+            SpawnPosition(); //sätter vart enemy/boss ska spawna
         }
         /// <summary>
         /// Skapar en enemy
@@ -256,6 +267,7 @@ namespace CircleSurvivors.Entities
                 shouldShoot = true;
             }
             maxHitpoints = hitpoints;
+            SpawnPosition(); //sätter vart enemy/boss ska spawna
         }
         /// <summary>
         /// Väljer vart enemy/boss ska spawnas

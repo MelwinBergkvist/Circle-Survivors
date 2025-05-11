@@ -9,10 +9,8 @@ namespace CircleSurvivors.Mechanics
 {
     public class ObjectHandler
     {
-        float collisionCooldown = 1.5f;
+        readonly float collisionCooldown = 1.5f;
         float collisionCooldownTimer = 0f;
-        float bossCollisionCooldown = 1.5f;
-        float bossCollisionCooldownTimer = 0f;
         /// <summary>
         /// Kollar Collision och Despawn reqs för alla object som interfacet hanterar inom drawableList
         /// </summary>
@@ -42,7 +40,6 @@ namespace CircleSurvivors.Mechanics
                 }
 
                 collisionCooldownTimer += deltaTime;
-                bossCollisionCooldownTimer += deltaTime;
                 item.Update(deltaTime);
                 //om itemet i listan är från NPC körs if satsen
                 if (item is NPC npc)
@@ -65,20 +62,6 @@ namespace CircleSurvivors.Mechanics
                     foreach (var enemyBullets in Config.enemyBullet)
                     {
                         enemyBullets.ShouldDespawn();
-                    }
-                }
-                if (item is Bosses bosses)
-                {
-                    //kolla alla bullets för collision med bossar
-                    foreach (var bullet in Config.bullets)
-                    {
-                        bosses.BulletCollisionBoss(bullet, deltaTime);
-                    }
-                    //cooldown och sen kollar physical collision mellan spelare och boss
-                    if (bossCollisionCooldownTimer >= bossCollisionCooldown)
-                    {
-                        bossCollisionCooldownTimer = 0;
-                        bosses.BossCollision(deltaTime);
                     }
                 }
                 item.Draw();
