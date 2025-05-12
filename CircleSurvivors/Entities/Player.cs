@@ -1,5 +1,5 @@
-﻿using CircleSurvivors.Interfaces;
-using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -97,7 +97,7 @@ namespace CircleSurvivors.Entities
         /// <param name="player">spelaren</param>
         /// <param name="npc">enemies</param>
         /// <returns>distancen mellan enemies och spelaren</returns>
-        public float EnemyDistance(Player player, NPC npc)
+        public static float EnemyDistance(Player player, NPC npc)
         {
             //Hur jag definerar i vilken ordning enemies ska vara sorted, räknar delta x och y
             float dx = npc.x - player.x;
@@ -109,7 +109,7 @@ namespace CircleSurvivors.Entities
         /// </summary>
         /// <param name="enemies">enemies</param>
         /// <returns>närmaste enemy</returns>
-        public NPC ClosestEnemy(List<NPC> enemies)
+        public static NPC ClosestEnemy(List<NPC> enemies)
         {
             //enemies = enemies.OrderBy(enemy => EnemyDistance(Config.player, enemy)).ToList();    <- min originella sortering
             enemies.Sort((a, b) => (int)(EnemyDistance(Config.player, a) - EnemyDistance(Config.player, b)));

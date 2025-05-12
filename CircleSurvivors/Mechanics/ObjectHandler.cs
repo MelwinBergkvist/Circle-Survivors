@@ -1,4 +1,5 @@
-﻿using CircleSurvivors.Entities;
+﻿using CircleSurvivors.Core;
+using CircleSurvivors.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

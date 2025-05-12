@@ -1,5 +1,4 @@
 ﻿using CircleSurvivors.Interfaces;
-using CircleSurvivors.Mechanics;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using static System.Formats.Asn1.AsnWriter;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
+using CircleSurvivors.Core;
 
 namespace CircleSurvivors.Entities
 {

@@ -1,5 +1,5 @@
-﻿using CircleSurvivors.Interfaces;
-using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
