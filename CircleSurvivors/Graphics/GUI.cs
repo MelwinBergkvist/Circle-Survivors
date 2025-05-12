@@ -107,7 +107,7 @@ namespace CircleSurvivors.Graphics
             int timeMeasureType2 = Raylib.MeasureText($"{(int)timeAliveMinutes}:0{(int)timeAliveSeconds}", 16);
             int timeMeasureType3 = Raylib.MeasureText($"0{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
             int timeMeasureType4 = Raylib.MeasureText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", 16);
-            if (Config.countTime)
+            if (Config.countTime && !Config.isPaused)
                 timeAliveSeconds += deltaTime;
             else
             {
@@ -126,7 +126,7 @@ namespace CircleSurvivors.Graphics
                         Raylib.DrawText($"{(int)timeAliveMinutes}:{(int)timeAliveSeconds}", Config.WindowSizeWidth / 2 - timeMeasureType4 / 2, 20, 24, Color.Red);
                 }
             }
-            if (Config.countTime)
+            if (Config.countTime && !Config.isPaused)
             {
                 if (timeAliveSeconds < 10)
                 {
@@ -291,9 +291,32 @@ namespace CircleSurvivors.Graphics
             splashText = randomSplashText.Next(0, splashTextsArray.Length);
             return splashTextsArray[splashText];
         }
-        public void ExitScreen()
+        /// <summary>
+        /// Visar en Pause screen
+        /// </summary>
+        public static void PauseScreen()
         {
+            if (Raylib.IsKeyPressed(KeyboardKey.P) && !Config.isAlreadyPaused) // pause
+            {
+                Config.isPaused = true;
+                Config.isAlreadyPaused = true;
+                Config.countTime = false;
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.P) && Config.isAlreadyPaused) // unpause
+            {
+                Config.isPaused = false;
+                Config.isAlreadyPaused = false;
+                Config.countTime = true;
+            }
 
+            if(Config.isPaused)
+            {
+                Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, new(110, 110, 110, 135));
+                int measurePauseText = Raylib.MeasureText("Game is now paused!", 46);
+                Raylib.DrawText("Game is now paused!", Config.WindowSizeWidth/2 - measurePauseText/2, (Config.WindowSizeHeight/2 - Config.WindowSizeHeight/4) / 2, 46, new(100, 25, 25));
+                int measurePauseUnderText = Raylib.MeasureText("Press P to unpause", 24);
+                Raylib.DrawText("Press P to unpause", Config.WindowSizeWidth/2 - measurePauseUnderText/2, (Config.WindowSizeHeight/2 - Config.WindowSizeHeight/8) / 2, 24, new(115, 115, 115));
+            }
         }
     }
 }

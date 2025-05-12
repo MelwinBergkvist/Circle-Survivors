@@ -44,6 +44,8 @@ namespace CircleSurvivors.Mechanics
                 }
 
                 collisionCooldownTimer += deltaTime;
+                item.Draw();
+                if (Config.isPaused) continue;
                 item.Update(deltaTime);
                 //om itemet i listan är från NPC körs if satsen
                 if (item is NPC npc)
@@ -68,7 +70,6 @@ namespace CircleSurvivors.Mechanics
                         enemyBullets.ShouldDespawn();
                     }
                 }
-                item.Draw();
             }
         }
     }

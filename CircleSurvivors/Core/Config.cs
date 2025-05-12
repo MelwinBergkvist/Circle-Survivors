@@ -23,6 +23,11 @@ namespace CircleSurvivors.Core
         public static bool startScreen = false;
         public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
+        //GUI
+        public static bool isPaused = false;
+        public static bool isAlreadyPaused = false;
+
+
         //npc,enemy
         public static float enemyBulletSpeed = 300f;
         public static float enemyBulletCooldown = 1.5f;

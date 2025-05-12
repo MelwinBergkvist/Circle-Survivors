@@ -24,7 +24,7 @@ namespace CircleSurvivors.Entities
         int enemyBulletRadius = 5;
 
         /// <summary>
-        /// bestämmer individuella graf linjen som enemy bullet ska skjutas vid
+        /// kallar på shootingTrajectory
         /// </summary>
         /// <param name="enemy">enemies(som ska skjuta)</param>
         public EnemyBullets(NPC enemy)

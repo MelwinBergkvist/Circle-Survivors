@@ -62,10 +62,11 @@ namespace CircleSurvivors.Core
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing(); // <- drawing confines beginning
 
-                spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
                 objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
+                spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
                 GUI.StatSheet(); //displayar alla player stats
                 gui.Timer(deltaTime); //displayar timern
+                GUI.PauseScreen();
 
                 Raylib.EndDrawing(); // <- drawing confines ending
             }

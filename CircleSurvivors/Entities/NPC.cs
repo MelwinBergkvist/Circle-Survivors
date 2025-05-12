@@ -99,8 +99,6 @@ namespace CircleSurvivors.Entities
             "Kalthrax, the Lead-Wreathed Terror"
         };
 
-        //jag ger dessa färger exakt samma värde om det blir normal enemy men du ballar hela spelet ur???
-        //spelaren skjuter på ingenting och tar damage från saker som inte existerar?? wtf??
         Color enemyColor;
         Color enemyHealthColor;
 
@@ -266,8 +264,8 @@ namespace CircleSurvivors.Entities
                     radius = 50;
                     movementSpeed = 40;
                     enemyCollisionDamage = 30;
-                    enemyColor = new Color(156, 6, 6);
-                    enemyHealthColor = new Color(77, 8, 8);
+                    enemyColor = new(156, 6, 6);
+                    enemyHealthColor = new(77, 8, 8);
                     bossName = normalNames[random.Next(0,10)];
                     break;
                 case 1: //Tanky
@@ -276,8 +274,8 @@ namespace CircleSurvivors.Entities
                     radius = 55;
                     movementSpeed = 30;
                     enemyCollisionDamage = 45;
-                    enemyColor = new Color(19, 138, 11);
-                    enemyHealthColor = new Color(8, 77, 3);
+                    enemyColor = new(19, 138, 11);
+                    enemyHealthColor = new(8, 77, 3);
                     bossName = tankyNames[random.Next(0,10)];
                     break;
                 case 2: //Speedy
@@ -286,8 +284,8 @@ namespace CircleSurvivors.Entities
                     radius = 35;
                     movementSpeed = 70;
                     enemyCollisionDamage = 20;
-                    enemyColor = new Color(120, 6, 191);
-                    enemyHealthColor = new Color(85, 5, 135);
+                    enemyColor = new(120, 6, 191);
+                    enemyHealthColor = new(85, 5, 135);
                     bossName = speedyNames[random.Next(0,10)];
                     break;
                 case 3: //Shooter
@@ -298,8 +296,8 @@ namespace CircleSurvivors.Entities
                     shouldShoot = true;
                     enemyCollisionDamage = 30;
                     enemyBulletCooldownTimer = 1.2f;
-                    enemyColor = new Color(0, 0, 0);
-                    enemyHealthColor = new Color(65, 65, 65);
+                    enemyColor = new(0, 0, 0);
+                    enemyHealthColor = new(65, 65, 65);
                     bossName = shooterNames[random.Next(0,10)];
                     break;
             }
@@ -330,17 +328,17 @@ namespace CircleSurvivors.Entities
                     radius = 20;
                     movementSpeed = 50;
                     enemyCollisionDamage = 15;
-                    enemyColor = new Color(19, 138, 11);
-                    enemyHealthColor = new Color(8, 77, 3);
+                    enemyColor = new(19, 138, 11);
+                    enemyHealthColor = new(8, 77, 3);
                     break;
                 case 2: //Speedy
-                    hitpoints = 50 + scaling;
+                    hitpoints = 20 + scaling;
                     maxHitpoints = hitpoints;
                     radius = 5;
                     movementSpeed = 140;
                     enemyCollisionDamage = 1;
-                    enemyColor = new Color(120, 6, 191);
-                    enemyHealthColor = new Color(85, 5, 135);
+                    enemyColor = new(120, 6, 191);
+                    enemyHealthColor = new(85, 5, 135);
                     break;
                 case 3: //Shooter
                     hitpoints = 100 + scaling;
@@ -349,8 +347,8 @@ namespace CircleSurvivors.Entities
                     movementSpeed = 80;
                     enemyCollisionDamage = 5;
                     shouldShoot = true;
-                    enemyColor = new Color(0, 0, 0);
-                    enemyHealthColor = new Color(65, 65, 65);
+                    enemyColor = new(0, 0, 0);
+                    enemyHealthColor = new(65, 65, 65);
                     break;
             }
             SpawnPosition(); //sätter vart enemy/boss ska spawna

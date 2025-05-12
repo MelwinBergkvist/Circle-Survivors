@@ -21,7 +21,7 @@ namespace CircleSurvivors.Entities
         float moveY;
 
         /// <summary>
-        /// skapar graf-linjen som bullet ska gå längst
+        /// kallar på shootingTrajectory
         /// </summary>
         /// <param name="closestEnemy"></param>
         public BaseAbility(NPC closestEnemy) //constructor
@@ -52,6 +52,10 @@ namespace CircleSurvivors.Entities
         {
             return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
         }
+        /// <summary>
+        /// gör shooting trajectory mellan spelare och närmaste enemy
+        /// </summary>
+        /// <param name="closestEnemy"></param>
         public void ShootingTrajectory(NPC closestEnemy)
         {
             bulletX = Config.player.x;
