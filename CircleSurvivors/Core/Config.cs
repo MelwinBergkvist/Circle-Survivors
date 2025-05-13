@@ -26,6 +26,8 @@ namespace CircleSurvivors.Core
         //GUI
         public static bool isPaused = false;
         public static bool isAlreadyPaused = false;
+        public static float timeAliveSeconds = 0f;
+        public static float timeAliveMinutes = 0f;
 
 
         //npc,enemy

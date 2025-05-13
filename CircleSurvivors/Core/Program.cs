@@ -30,7 +30,6 @@ namespace CircleSurvivors.Core
         /// <summary>
         /// initialiserar spelet och kör allt som behövs för det
         /// </summary>
-        /// <param name="args"></param>
         static void Main()
         {
             float deltaTime;

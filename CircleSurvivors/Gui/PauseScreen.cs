@@ -1,0 +1,41 @@
+﻿using CircleSurvivors.Core;
+using Raylib_cs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CircleSurvivors.Gui
+{
+    public class PauseScreen
+    {
+        /// <summary>
+        /// Visar en Pause screen
+        /// </summary>
+        public static void DisplayPauseScreen()
+        {
+            if (Raylib.IsKeyPressed(KeyboardKey.P) && !Config.isAlreadyPaused) // pause
+            {
+                Config.isPaused = true;
+                Config.isAlreadyPaused = true;
+                Config.countTime = false;
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.P) && Config.isAlreadyPaused) // unpause
+            {
+                Config.isPaused = false;
+                Config.isAlreadyPaused = false;
+                Config.countTime = true;
+            }
+
+            if (Config.isPaused)
+            {
+                Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, new(110, 110, 110, 135));
+                int measurePauseText = Raylib.MeasureText("Game is now paused!", 46);
+                Raylib.DrawText("Game is now paused!", Config.WindowSizeWidth / 2 - measurePauseText / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 4) / 2, 46, new(100, 25, 25));
+                int measurePauseUnderText = Raylib.MeasureText("Press P to unpause", 24);
+                Raylib.DrawText("Press P to unpause", Config.WindowSizeWidth / 2 - measurePauseUnderText / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 8) / 2, 24, new(115, 115, 115));
+            }
+        }
+    }
+}

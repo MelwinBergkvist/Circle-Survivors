@@ -332,7 +332,7 @@ namespace CircleSurvivors.Entities
                     enemyHealthColor = new(8, 77, 3);
                     break;
                 case 2: //Speedy
-                    hitpoints = 20 + scaling;
+                    hitpoints = 20 + scaling/2;
                     maxHitpoints = hitpoints;
                     radius = 5;
                     movementSpeed = 140;
