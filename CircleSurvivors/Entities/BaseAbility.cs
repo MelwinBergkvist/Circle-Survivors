@@ -58,6 +58,7 @@ namespace CircleSurvivors.Entities
         /// <param name="closestEnemy"></param>
         public void ShootingTrajectory(NPC closestEnemy)
         {
+            //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
             bulletX = Config.player.x;
             bulletY = Config.player.y;
 
@@ -67,9 +68,6 @@ namespace CircleSurvivors.Entities
 
             moveX = dx / distance * Config.bulletSpeed;
             moveY = dy / distance * Config.bulletSpeed;
-            //vi gör calculations i constructorn så den inte blir en homing bullet
-            //nästan like som NPC movements bara på lite olika platser
-            //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
         }
     }
 }

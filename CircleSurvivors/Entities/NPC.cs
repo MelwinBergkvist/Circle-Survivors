@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
 using CircleSurvivors.Core;
+using CircleSurvivors.UI_Helpers;
 
 namespace CircleSurvivors.Entities
 {
@@ -441,8 +442,7 @@ namespace CircleSurvivors.Entities
         {
             if (isBoss)
             {
-                int bossNameMeasure = Raylib.MeasureText($"{bossName}", 14);
-                Raylib.DrawText($"{bossName}", (int)x - bossNameMeasure/2, (int)y + (int)radius + 10, 14, enemyColor);
+                Helper.DrawCenteredText($"{bossName}", (int)x, (int)y + (int)radius + 10, 14, enemyColor);
             }
         }
     }

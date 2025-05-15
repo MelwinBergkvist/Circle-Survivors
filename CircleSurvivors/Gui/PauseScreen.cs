@@ -1,5 +1,6 @@
 ﻿using CircleSurvivors.Core;
 using CircleSurvivors.Interfaces;
+using CircleSurvivors.UI_Helpers;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -35,10 +36,8 @@ namespace CircleSurvivors.Gui
             if (Config.isPaused)
             {
                 Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, new(110, 110, 110, 135));
-                int measurePauseText = Raylib.MeasureText("Game is now paused!", 46);
-                Raylib.DrawText("Game is now paused!", Config.WindowSizeWidth / 2 - measurePauseText / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 4) / 2, 46, new(100, 25, 25));
-                int measurePauseUnderText = Raylib.MeasureText("Press P to unpause", 24);
-                Raylib.DrawText("Press P to unpause", Config.WindowSizeWidth / 2 - measurePauseUnderText / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 8) / 2, 24, new(115, 115, 115));
+                Helper.DrawCenteredText("Game is now paused!", Config.WindowSizeWidth / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 4) / 2, 46, new(100, 25, 25));
+                Helper.DrawCenteredText("Press P to unpause", Config.WindowSizeWidth / 2, (Config.WindowSizeHeight / 2 - Config.WindowSizeHeight / 8) / 2, 24, new(115, 115, 115));
             }
         }
     }

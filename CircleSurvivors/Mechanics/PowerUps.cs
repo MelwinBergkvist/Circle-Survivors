@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Core;
+using CircleSurvivors.UI_Helpers;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -221,16 +222,12 @@ namespace CircleSurvivors.Mechanics
         {
             if (!Config.powerUps.isPicked)
             {
-                int waveTextWidthWait = Raylib.MeasureText("Next wave after power-up has been chosen", 40);
-                Raylib.DrawText($"Next wave after power-up has been chosen", Config.WindowSizeWidth / 2 - waveTextWidthWait / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
-
-                int PickUpInstruction = Raylib.MeasureText("Power-up is picked up by walking inside the circle and pressing E", 18);
-                Raylib.DrawText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2 - PickUpInstruction / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 18, Instruction);
+                Helper.DrawCenteredText("Next wave after power-up has been chosen", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+                Helper.DrawCenteredText($"Power-up is picked up by walking inside the circle and pressing E", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 18, Instruction);
             }
             else
             {
-                int waveTextWidth = Raylib.MeasureText("Next wave in: 5", 40); //5 och inte {waveCooldown} för smoother centrering
-                Raylib.DrawText($"Next wave in: {(int)Config.waveCooldown}", Config.WindowSizeWidth / 2 - waveTextWidth / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
+                Helper.DrawCenteredText($"Next wave in: {(int)Config.waveCooldown}", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 8, 40, Color.DarkPurple);
             }
 
             if (Config.powerUps.isPicked)
@@ -249,20 +246,17 @@ namespace CircleSurvivors.Mechanics
             Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
             Raylib.DrawRectangle(posX1 - 120, posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
             Raylib.DrawRectangle(posX1 - 110, posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
-            int p1Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus1]}", 20); //kollar textens width för centrering
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus1]}", posX1 - p1Text / 2, posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus1]}", posX1, posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
 
             Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 120, posY2 - 15, 240, 30, Color.DarkGreen);
             Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, Color.White);
-            int p2Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus2]}", 20);
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus2]}", posX2 - p2Text / 2, posY2 - 10, 20, Color.Black);
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus2]}", posX2, posY2 - 10, 20, Color.Black);
 
             Raylib.DrawCircleLines(posX3, posY3, radius, Color.DarkGreen);
             Raylib.DrawRectangle(posX3 - 120, posY3 - 15, 240, 30, Color.DarkGreen);
             Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, Color.White);
-            int p3Text = Raylib.MeasureText($"{powerUpsArray[powerUpStatus3]}", 20);
-            Raylib.DrawText($"{powerUpsArray[powerUpStatus3]}", posX3 - p3Text / 2, posY3 - 10, 20, Color.Black);
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus3]}", posX3, posY3 - 10, 20, Color.Black);
 
         }
     }

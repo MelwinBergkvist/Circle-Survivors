@@ -1,5 +1,6 @@
 ﻿using CircleSurvivors.Core;
 using CircleSurvivors.Interfaces;
+using CircleSurvivors.UI_Helpers;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,6 @@ namespace CircleSurvivors.Graphics
     /// </summary>
     public class StartScreen : IGui
     {
-        readonly float fadeInSpeed = 50f;
-        float gameOverAlpha = 0f;
-
-        Color fadeRed, fadeGray, fadeSkyBlue;
-        float timeAliveSeconds = 0f;
-        float timeAliveMinutes = 0f;
         float startScreenAlpha = 0f;
 
         readonly float fadeInSpeedStart = 100f;
@@ -29,14 +24,10 @@ namespace CircleSurvivors.Graphics
         List<StartScreen> startScreenEffectsList = new List<StartScreen>();
         float circleSpawnCooldownTimer = 0f;
         readonly float circleSpawnCooldown = 0.2f;
-        readonly float circleY;
-        float circleX;
+        float circleY, circleX;
 
         bool startFadeIn = false;
-        bool hoveredStart;
-        bool clickedStart;
-        bool isTutorialHovered;
-
+        bool hoveredStart, clickedStart, isTutorialHovered;
         public StartScreen() 
         {
             circleY = random.Next(0, Config.WindowSizeHeight);
@@ -60,14 +51,12 @@ namespace CircleSurvivors.Graphics
             UpdateStartScreenEffects(deltaTime);
             DrawStartScreenEffects();
 
-            int startScreenText = Raylib.MeasureText("Welcome to Circle survivors!", 64);
-            Raylib.DrawText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2 - startScreenText / 2, Config.WindowSizeHeight / 8, 64, Color.White);
+            Helper.DrawCenteredText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 8, 64, Color.White);
 
             Raylib.DrawRectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100, Color.SkyBlue);
             Rectangle startButton = new Rectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100);
 
-            int startScreenBeginText = Raylib.MeasureText("Click here to begin!", 24);
-            Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
+            Helper.DrawCenteredText("Click here to begin!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
 
             Rectangle tutorialButton = new Rectangle(0, Config.WindowSizeHeight / 2, 120, 50);
             Raylib.DrawRectangle(0, Config.WindowSizeHeight / 2, 120, 50, Color.DarkGray);
@@ -99,7 +88,7 @@ namespace CircleSurvivors.Graphics
             if (hoveredStart) //så man ser att den är hovered
             {
                 Raylib.DrawRectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100, Color.Blue);
-                Raylib.DrawText("Click here to begin!", Config.WindowSizeWidth / 2 - startScreenBeginText / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.Black);
+                Helper.DrawCenteredText("Click here to begin!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.Black);
                 if (clickedStart)
                 {
                     startFadeIn = true; //initierar fade-in
