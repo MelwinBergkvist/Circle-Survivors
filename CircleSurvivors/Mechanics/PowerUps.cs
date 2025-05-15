@@ -38,9 +38,9 @@ namespace CircleSurvivors.Mechanics
 
         string[] powerUpsArray =
         {
-                "+5 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
+                "+20 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
                 "10% Faster Cooldown", "-1 Radius", "-10 Bullet Speed",
-                "-10% Enemy Cooldown", "+20 Hitpoints", "+10 Movement speed" // 0 - 8
+                "-10% Enemy Cooldown", "+20 Hitpoints", "+30 Movement speed" // 0 - 8
         };
 
         public PowerUps() { }
@@ -87,7 +87,7 @@ namespace CircleSurvivors.Mechanics
                     switch (powerUpStatus1)
                     {
                         case 0:
-                            Config.bulletDamage += 5;
+                            Config.bulletDamage += 20;
                             break;
                         case 1:
                             Config.bulletRadius += 2;
@@ -114,7 +114,7 @@ namespace CircleSurvivors.Mechanics
                             Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
-                            Config.tempMovementSpeedHolder += 10;
+                            Config.tempMovementSpeedHolder += 30;
                             break;
                     }
                     return;
@@ -133,7 +133,7 @@ namespace CircleSurvivors.Mechanics
                     switch (powerUpStatus2)
                     {
                         case 0:
-                            Config.bulletDamage += 5;
+                            Config.bulletDamage += 20;
                             break;
                         case 1:
                             Config.bulletRadius += 2;
@@ -160,7 +160,7 @@ namespace CircleSurvivors.Mechanics
                             Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
-                            Config.tempMovementSpeedHolder += 10;
+                            Config.tempMovementSpeedHolder += 30;
                             break;
                     }
                     return;
@@ -179,7 +179,7 @@ namespace CircleSurvivors.Mechanics
                     switch (powerUpStatus3)
                     {
                         case 0:
-                            Config.bulletDamage += 5;
+                            Config.bulletDamage += 20;
                             break;
                         case 1:
                             Config.bulletRadius += 2;
@@ -206,7 +206,7 @@ namespace CircleSurvivors.Mechanics
                             Config.player.maxHealthpoints += 20;
                             break;
                         case 8:
-                            Config.tempMovementSpeedHolder += 10;
+                            Config.tempMovementSpeedHolder += 30;
                             break;
                     }
                     return;
