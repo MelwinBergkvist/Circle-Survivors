@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
-    public class PauseScreen
+    /// <summary>
+    /// hanterar pause screen
+    /// </summary>
+    public class PauseScreen : IGui
     {
         /// <summary>
         /// Visar en Pause screen
         /// </summary>
-        public static void DisplayPauseScreen()
+        public void Display(float deltaTime)
         {
+            if (Config.isStartScreen)
+                return;
+
             if (Raylib.IsKeyPressed(KeyboardKey.P) && !Config.isAlreadyPaused) // pause
             {
                 Config.isPaused = true;

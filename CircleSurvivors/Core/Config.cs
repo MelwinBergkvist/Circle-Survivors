@@ -20,7 +20,6 @@ namespace CircleSurvivors.Core
         public static int killCount = 0;
         public static bool countTime = true;
         public static bool firstWaveAfterRestart = false;
-        public static bool startScreen = false;
         public static float waveCooldown = 3.99f; //3.99 så den inte flashar en 4 vid början av cooldownen
 
         //GUI
@@ -28,6 +27,7 @@ namespace CircleSurvivors.Core
         public static bool isAlreadyPaused = false;
         public static float timeAliveSeconds = 0f;
         public static float timeAliveMinutes = 0f;
+        public static bool isStartScreen = true;
 
 
         //npc,enemy

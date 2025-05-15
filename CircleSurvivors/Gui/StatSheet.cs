@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
-    public class StatSheet
+    /// <summary>
+    /// hanterar stat sheets
+    /// </summary>
+    public class StatSheet : IGui
     {
         /// <summary>
         /// displayar alla onscreen stats, inkluderar killcount och wave count
         /// </summary>
-        public static void DisplayStatSheet()
+        public void Display(float deltaTime)
         {
+            if (Config.isStartScreen)
+                return;
+
             //corner info
             Raylib.DrawText($"Kill count: {Config.killCount}", 0, 0, 28, Color.Red);
             Raylib.DrawText($"Wave: {Config.wave}", 0, 25, 28, Color.Red);

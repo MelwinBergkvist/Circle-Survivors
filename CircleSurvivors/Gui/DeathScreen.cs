@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
+    /// <summary>
+    /// hanterar deathscreenen
+    /// </summary>
     public class DeathScreen
     {
         readonly float fadeInSpeed = 50f;
@@ -19,8 +23,11 @@ namespace CircleSurvivors.Gui
         /// ger också resart option
         /// </summary>
         /// <param name="deltaTime"></param>
-        public void DisplayDeathScreen(float deltaTime)
+        public void Display(float deltaTime)
         {
+            if (Config.isStartScreen)
+                return;
+            
             //fade in effect för you lose screen
             if (gameOverAlpha < 255)
             {

@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Core;
+using CircleSurvivors.Interfaces;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,17 @@ using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
-    public class Timer
+    public class GameTimer : IGui
     {
         /// <summary>
         /// displayar timern som visas vid toppen av skärmen
         /// </summary>
         /// <param name="deltaTime">tid</param>
-        public void DisplayTimer(float deltaTime)
+        public void Display(float deltaTime)
         {
+            if (Config.isStartScreen)
+                return;
+
             int timeMeasureType1 = Raylib.MeasureText($"0{(int)Config.timeAliveMinutes}:0{(int)Config.timeAliveSeconds}", 16);
             int timeMeasureType2 = Raylib.MeasureText($"{(int)Config.timeAliveMinutes}:0{(int)Config.timeAliveSeconds}", 16);
             int timeMeasureType3 = Raylib.MeasureText($"0{(int)Config.timeAliveMinutes}:{(int)Config.timeAliveSeconds}", 16);

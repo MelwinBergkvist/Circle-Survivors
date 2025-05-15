@@ -42,11 +42,10 @@ namespace CircleSurvivors.Mechanics
                     //om det ska despawna behövs det inte draw eller update så vi skippar till nästa
                     continue;
                 }
+                if (!Config.isPaused)
+                    item.Update(deltaTime);
 
                 collisionCooldownTimer += deltaTime;
-                item.Draw();
-                if (Config.isPaused) continue;
-                item.Update(deltaTime);
                 //om itemet i listan är från NPC körs if satsen
                 if (item is NPC npc)
                 {
@@ -70,6 +69,7 @@ namespace CircleSurvivors.Mechanics
                         enemyBullets.ShouldDespawn();
                     }
                 }
+                item.Draw();
             }
         }
     }

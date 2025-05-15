@@ -18,6 +18,7 @@ using CircleSurvivors.Entities;
 using CircleSurvivors.Graphics;
 using CircleSurvivors.Interfaces;
 using CircleSurvivors.Mechanics;
+using CircleSurvivors.UI;
 using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors.Core
@@ -30,6 +31,7 @@ namespace CircleSurvivors.Core
         /// <summary>
         /// initialiserar spelet och kör allt som behövs för det
         /// </summary>
+        
         static void Main()
         {
             float deltaTime;
@@ -37,35 +39,23 @@ namespace CircleSurvivors.Core
 
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
-            GUI gui = new GUI();
+            GuiHandler guiHandler = new GuiHandler();
+            SplashText splashText = new SplashText();
 
             Config.ResetGameState();
 
-            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + GUI.GetSplashText());
+            Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + SplashText.GetSplashText());
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
 
-                if (Config.player.ShouldDespawn())
-                {
-                    gui.DeathScreen(deltaTime); //visar death screen
-                    continue;
-                }
-
-                if (!Config.startScreen)
-                {
-                    gui.StartScreen(deltaTime); //visar start screen
-                    continue;
-                }
-
                 Raylib.ClearBackground(Color.White);
                 Raylib.BeginDrawing(); // <- drawing confines beginning
 
+                guiHandler.Display(deltaTime);
+                if (Config.isStartScreen || Config.player.ShouldDespawn()) continue;
                 objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
-                GUI.StatSheet(); //displayar alla player stats
-                gui.Timer(deltaTime); //displayar timern
-                GUI.PauseScreen();
 
                 Raylib.EndDrawing(); // <- drawing confines ending
             }

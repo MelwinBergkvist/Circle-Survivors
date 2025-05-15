@@ -2,8 +2,9 @@
 {
     public interface IGui
     {
-        public void Draw();
-
-        public void Update();
+        /// <summary>
+        /// Update för alla Gui's
+        /// </summary>
+        public void Display(float deltaTime);
     }
 }
