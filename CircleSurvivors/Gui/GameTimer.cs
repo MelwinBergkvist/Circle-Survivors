@@ -17,9 +17,6 @@ namespace CircleSurvivors.Gui
         /// <param name="deltaTime">tid</param>
         public void Display(float deltaTime)
         {
-            if (Config.isStartScreen)
-                return;
-
             int timeMeasureType1 = Raylib.MeasureText($"0{(int)Config.timeAliveMinutes}:0{(int)Config.timeAliveSeconds}", 16);
             int timeMeasureType2 = Raylib.MeasureText($"{(int)Config.timeAliveMinutes}:0{(int)Config.timeAliveSeconds}", 16);
             int timeMeasureType3 = Raylib.MeasureText($"0{(int)Config.timeAliveMinutes}:{(int)Config.timeAliveSeconds}", 16);

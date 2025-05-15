@@ -19,9 +19,6 @@ namespace CircleSurvivors.Gui
         /// </summary>
         public void Display(float deltaTime)
         {
-            if (Config.isStartScreen)
-                return;
-
             if (Raylib.IsKeyPressed(KeyboardKey.P) && !Config.isAlreadyPaused) // pause
             {
                 Config.isPaused = true;

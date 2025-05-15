@@ -19,9 +19,6 @@ namespace CircleSurvivors.Gui
         /// </summary>
         public void Display(float deltaTime)
         {
-            if (Config.isStartScreen)
-                return;
-
             //corner info
             Raylib.DrawText($"Kill count: {Config.killCount}", 0, 0, 28, Color.Red);
             Raylib.DrawText($"Wave: {Config.wave}", 0, 25, 28, Color.Red);

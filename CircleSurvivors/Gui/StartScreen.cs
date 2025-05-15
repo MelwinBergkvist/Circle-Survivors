@@ -48,9 +48,6 @@ namespace CircleSurvivors.Graphics
         /// <param name="deltaTime">tid</param>
         public void Display(float deltaTime)
         {
-            if (!Config.isStartScreen)
-                return;
-
             Raylib.ClearBackground(Color.Black);
             Raylib.BeginDrawing();
 

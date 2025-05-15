@@ -22,12 +22,9 @@ namespace CircleSurvivors.Gui
         /// displayar death screenen vid spelarens död
         /// ger också resart option
         /// </summary>
-        /// <param name="deltaTime"></param>
+        /// <param name="deltaTime">tid</param>
         public void Display(float deltaTime)
         {
-            if (Config.isStartScreen)
-                return;
-            
             //fade in effect för you lose screen
             if (gameOverAlpha < 255)
             {
