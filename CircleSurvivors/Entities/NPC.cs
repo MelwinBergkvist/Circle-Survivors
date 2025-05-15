@@ -22,6 +22,10 @@ namespace CircleSurvivors.Entities
     /// </summary>
     public class NPC : IDrawable
     {
+        Vector2 velocity = new Vector2(0, 0);
+        float turnSpeed = 10f;
+        float friction = 3f;
+
         public float x, y;
         float hitCooldown;
         public float spawnImmunity = 0.5f;
@@ -148,18 +152,13 @@ namespace CircleSurvivors.Entities
         {
             sinceSpawn += deltaTime;
 
-            //Så de går mot spelaren
-            dx = Config.player.x - x;
-            dy = Config.player.y - y;
-            distance = MathF.Sqrt(dx * dx + dy * dy);
-
             //make sure att det faktist finns enemies på skärmen,
             //så vi inte försöker skjuta mot något som inte finns
             enemyBulletCooldownTimer += deltaTime;
             if (Config.enemiesList.Count > 0)
                 ShootEnemyBullet(this);
 
-            NPCmovements(deltaTime);
+            NpcMovements(deltaTime);
 
             foreach (var bullets in Config.bulletsList)
             {
@@ -380,36 +379,60 @@ namespace CircleSurvivors.Entities
                     break;
             }
         }
-        public void NPCmovements(float deltaTime)
+        /// <summary>
+        /// enemy movements updatering
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public void NpcMovements(float deltaTime)
         {
+
+            /*
+             * Matten här är lite svårförklarad för jag fick mycket hjälp med själva matten
+             * och Raylib har många inbyggda metoder för att räkna ut matten själv
+             * 
+             * vi kollar för euclidean distance mellan spelaren, sen skapar vi en Vector2 (2 för 2d space) //steg 1
+             * 
+             * sen så använder vi vector2 scale för att få slut direction att scalea till movement speed // steg 2
+             * 
+             * sen så använder vi vector 2 linear interpolation vilket använder 3 args (a, b, c) där c blendar mellan a och b // steg 3
+             * 
+             * sen är else samma som steg 3 fast till 0 för att stanna, och använder friction
+            */
+           
+            dx = Config.player.x - x;
+            dy = Config.player.y - y;
+            distance = MathF.Sqrt(dx * dx + dy * dy); //steg 1
+
             if (!shouldShoot)
             {
                 if (distance > 0)
                 {
-                    float moveX = dx / distance * movementSpeed * deltaTime;
-                    float moveY = dy / distance * movementSpeed * deltaTime;
-
-                    float newX = x + moveX;
-                    float newY = y + moveY;
-
-                    x = newX;
-                    y = newY;
+                    Vector2 direction = new Vector2(dx / distance, dy / distance);
+                    Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed); //steg 2
+                    
+                    velocity = Raymath.Vector2Lerp(velocity, endVelocity, turnSpeed * deltaTime); //steg 3
+                }
+                else
+                {
+                    velocity = Raymath.Vector2Lerp(velocity, new Vector2(0, 0), friction * deltaTime);
                 }
             }
             else if (shouldShoot) //kan bara ha "else" här, behövs ingen if (shouldShoot) men det är mest bara ifall jag lägger till något mer som har liknande condition
             {
                 if (distance > 400) //numret 400 var mest trail and error, inget specielt.
                 {
-                    float moveX = dx / distance * movementSpeed * deltaTime;
-                    float moveY = dy / distance * movementSpeed * deltaTime;
+                    Vector2 direction = new Vector2(dx / distance, dy / distance);
+                    Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed);
 
-                    float newX = x + moveX;
-                    float newY = y + moveY;
-
-                    x = newX;
-                    y = newY;
+                    velocity = Raymath.Vector2Lerp(velocity, endVelocity, turnSpeed * deltaTime);
+                }
+                else
+                {
+                    velocity = Raymath.Vector2Lerp(velocity, new Vector2(0, 0), turnSpeed * deltaTime);
                 }
             }
+            x += velocity.X * deltaTime;
+            y += velocity.Y * deltaTime;
         }
         /// <summary>
         /// ritar boss namnet

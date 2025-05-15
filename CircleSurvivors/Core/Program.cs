@@ -7,6 +7,9 @@
  * och inte i början av main, jag vet inte varför men det fungerade
  * inte när jag testade det
  * 
+ * All Raylib. var hittade antingen genom att jag sökte på dem eller från https://www.raylib.com/cheatsheet/cheatsheet.html
+ * All Raymath var från https://www.raylib.com/cheatsheet/raymath_cheatsheet.html 
+ * 
  * Min standard:
  * Alla interfaces startar med I och sen Stor bokstav
  * Alla classes Stor bokstav
