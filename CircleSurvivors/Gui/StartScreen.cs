@@ -1,13 +1,7 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Graphics
 {
@@ -17,19 +11,25 @@ namespace CircleSurvivors.Graphics
     public class StartScreen : IGui
     {
         float startScreenAlpha = 0f;
-
         readonly float fadeInSpeedStart = 100f;
-        readonly Random random = new Random();
+        bool startFadeIn = false;
 
         List<StartScreen> startScreenEffectsList = new List<StartScreen>();
         float circleSpawnCooldownTimer = 0f;
         readonly float circleSpawnCooldown = 0.2f;
         float circleY, circleX;
+        readonly Random random = new Random();
 
-        bool startFadeIn = false;
-        bool hoveredStart, clickedStart, isTutorialHovered;
+        bool isTutorialHovered;
+        bool clickedStart; 
+        bool hoveredStart;
+
+        /// <summary>
+        /// sätter x och y för cirkel effekterna
+        /// </summary>
         public StartScreen() 
         {
+            //ser till att alla cirkel effekter startar vid vänster sida av skrämen men på olika höjder
             circleY = random.Next(0, Config.WindowSizeHeight);
             circleX = 0;
         }
@@ -42,24 +42,29 @@ namespace CircleSurvivors.Graphics
             Raylib.ClearBackground(Color.Black);
             Raylib.BeginDrawing();
 
+            //Cooldown hantering för cirklarna
             circleSpawnCooldownTimer += deltaTime;
             if (circleSpawnCooldownTimer >= circleSpawnCooldown)
             {
                 circleSpawnCooldownTimer = 0;
                 StartScreenEffects(deltaTime);
             }
+            //updatera det
             UpdateStartScreenEffects(deltaTime);
             DrawStartScreenEffects();
 
-            Helper.DrawCenteredText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 8, 64, Color.White);
 
+            //start button
             Raylib.DrawRectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100, Color.SkyBlue);
             Rectangle startButton = new Rectangle(Config.WindowSizeWidth / 2 - 150, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4 - 38, 300, 100);
 
-            Helper.DrawCenteredText("Click here to begin!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
-
-            Rectangle tutorialButton = new Rectangle(0, Config.WindowSizeHeight / 2, 120, 50);
+            //tutorial button
             Raylib.DrawRectangle(0, Config.WindowSizeHeight / 2, 120, 50, Color.DarkGray);
+            Rectangle tutorialButton = new Rectangle(0, Config.WindowSizeHeight / 2, 120, 50);
+            
+            //texter
+            Helper.DrawCenteredText("Welcome to Circle survivors!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 8, 64, Color.White);
+            Helper.DrawCenteredText("Click here to begin!", Config.WindowSizeWidth / 2, Config.WindowSizeHeight / 2 + Config.WindowSizeHeight / 4, 24, Color.DarkBlue);
             Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight / 2 + 14, 16, Color.Black);
 
             isTutorialHovered = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), tutorialButton);
@@ -67,7 +72,7 @@ namespace CircleSurvivors.Graphics
             {
                 //ritar om rectangeln i annan färg så man ser att den är hovered
                 Raylib.DrawRectangle(0, Config.WindowSizeHeight / 2, 120, 50, Color.Gray);
-                Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight / 2 + 14, 16, Color.Black);
+                Raylib.DrawText("How to play?", 10, Config.WindowSizeHeight / 2 + 14, 16, Color.Black); //ritar texten igen så den inte blir överskriven
 
                 //tutorial så man vet vad man ska göra
                 Raylib.DrawRectangle(Config.WindowSizeWidth / 6 - 10, Config.WindowSizeHeight / 3 - 10, 320, 220, Color.DarkGray);
@@ -81,7 +86,6 @@ namespace CircleSurvivors.Graphics
             }
 
             //checkcollisionpointrec kollar om vektoren getmouseposition är inom rektangel startButton vilken är en kopia av drawrectangle vi gjorde innan
-            //om den är sann och left click är också nedklickad samtidigt så körs inte denna if satsen nåmer, om den inte är sann så skippar allt annat för "continue;"
             hoveredStart = Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), startButton);
             clickedStart = Raylib.IsMouseButtonPressed(MouseButton.Left);
 
@@ -102,10 +106,12 @@ namespace CircleSurvivors.Graphics
                     startScreenAlpha += fadeInSpeedStart * deltaTime;
                     if (startScreenAlpha > 255) startScreenAlpha = 255;
                 }
+
                 Color fadeIn = Raylib.Fade(Color.White, startScreenAlpha / 255f);
                 Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, fadeIn);
+
                 if (startScreenAlpha == 255) //när fade-in är klar (opaciteten är 100%) så säger vi att startscreenen är klar
-                    Config.isStartScreen = false;
+                    Config.isStartScreen = false; //start screen är över och klar
             }
             Raylib.EndDrawing();
         }

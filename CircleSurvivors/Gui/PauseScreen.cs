@@ -1,25 +1,21 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
     /// <summary>
     /// hanterar pause screen
     /// </summary>
-    public class PauseScreen : IGui
+    public class PauseScreen : IGui //implementerar gui interface
     {
         /// <summary>
         /// Visar en Pause screen
         /// </summary>
         public void Display(float deltaTime)
         {
+            //pause och unpause switch med samma knapp
             if (Raylib.IsKeyPressed(KeyboardKey.P) && !Config.isAlreadyPaused) // pause
             {
                 Config.isPaused = true;
@@ -33,6 +29,7 @@ namespace CircleSurvivors.Gui
                 Config.countTime = true;
             }
 
+            //om det är pausat visa en pause text
             if (Config.isPaused)
             {
                 Raylib.DrawRectangle(0, 0, Config.WindowSizeWidth, Config.WindowSizeHeight, new(110, 110, 110, 135));

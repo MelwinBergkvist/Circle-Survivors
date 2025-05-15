@@ -1,19 +1,14 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
     /// <summary>
     /// hanterar deathscreenen
     /// </summary>
-    public class DeathScreen : IGui
+    public class DeathScreen : IGui //implementerar gui interface
     {
         readonly float fadeInSpeed = 50f;
         float gameOverAlpha = 0f;

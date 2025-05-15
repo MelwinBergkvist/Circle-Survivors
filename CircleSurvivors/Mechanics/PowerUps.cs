@@ -1,11 +1,6 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.UI_Helpers;
+﻿using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Mechanics
 {

@@ -1,56 +1,47 @@
 ﻿using CircleSurvivors.Interfaces;
-using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-using static System.Formats.Asn1.AsnWriter;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection.Metadata;
-using CircleSurvivors.Core;
 using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
+using System.Numerics;
+using Raylib_cs;
 
 namespace CircleSurvivors.Entities
 {
     /// <summary>
     /// hanterar alla NPC
     /// </summary>
-    public class NPC : IDrawable
+    public class NPC : IDrawable //implementerar drawable interface
     {
+        //positioner
+        public float x, y;
         Vector2 velocity = new Vector2(0, 0);
+        float movementSpeed;
         float turnSpeed = 10f;
         float friction = 3f;
+        float dx, dy;
+        float distance;
 
-        public float x, y;
-        float hitCooldown;
-        public float spawnImmunity = 0.5f;
-        public float sinceSpawn = 0;
-        float enemyBulletCooldownTimer = 0f;
-        int bulletDamage = 5;
-
-        float distance, dx, dy;
-
-        float movementSpeed;
-        public float radius;
-        readonly int scaling = (Config.wave-1) * 10;
-        int hitpoints;
-        int maxHitpoints; //behövs för damage radius
-        public int enemyCollisionDamage;
-
+        //states
         public bool shouldShoot = false;
         public bool isBoss = false;
         readonly Random random = new Random();
+        string bossName;
 
+        //stats
+        int hitpoints;
+        int maxHitpoints; //behövs för damage radius
+        public int enemyCollisionDamage;
+        public float radius;
+
+        //timers
+        float hitCooldown;
+        float enemyBulletCooldownTimer = 0f;
         readonly float collisionCooldown = 1.5f;
         float collisionCooldownTimer = 0f;
+        public float spawnImmunity = 0.5f;
+        public float sinceSpawn = 0;
 
-        string bossName;
+        //scaling
+        readonly int scaling = (Config.wave-1) * 10;
 
         //Alla namn är tagna från en Dark Fantasy boss name generator jag hittade på google
         readonly string[] normalNames = 
@@ -113,9 +104,9 @@ namespace CircleSurvivors.Entities
         Color enemyHealthColor;
 
         /// <summary>
-        /// initializerar enemiesarna och gör dem till special enemies om random rollen är success
+        /// spawnar en boss först och sen enemies som resten
         /// </summary>
-        public NPC() //constructor
+        public NPC()
         {
             if (Config.shouldBossSpawn)
                 CreateBoss();
@@ -128,6 +119,7 @@ namespace CircleSurvivors.Entities
         /// </summary>
         public void Draw()
         {
+            //ritar enemies och displayar namn om den har det
             Raylib.DrawCircle((int)x, (int)y, radius, enemyColor);
             DisplayBossName();
 
@@ -151,6 +143,7 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
+            //spawn immunity
             sinceSpawn += deltaTime;
 
             //make sure att det faktist finns enemies på skärmen,
@@ -171,10 +164,9 @@ namespace CircleSurvivors.Entities
                 PlayerCollision(enemies, deltaTime);
             }
 
-            if (hitCooldown >= 0)
-                hitCooldown -= deltaTime;
-            if (collisionCooldown >= collisionCooldownTimer)
-                collisionCooldownTimer += deltaTime;
+            //cooldowns
+            if (hitCooldown >= 0) hitCooldown -= deltaTime;
+            if (collisionCooldown >= collisionCooldownTimer) collisionCooldownTimer += deltaTime;
         }
         /// <summary>
         /// Kollar om spelarens bullet collidar med enemy
@@ -206,16 +198,12 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void PlayerCollision(NPC enemies, float deltaTime)
         {
-            if (collisionCooldown <= collisionCooldownTimer)
-            {
-                collisionCooldownTimer = 0;
-            }
-            else if (collisionCooldown >= collisionCooldownTimer)
-            {
-                return;
-            }
+            if (collisionCooldown <= collisionCooldownTimer) 
+                collisionCooldownTimer = 0; //om cooldown är över resetta
+            else if (collisionCooldown >= collisionCooldownTimer) 
+                return; //om inte, skippa
             
-            //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
+            //Hit collision för spelare
             float playerEnemyDx = Config.player.x - enemies.x;
             float playerEnemyDy = Config.player.y - enemies.y;
             float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
@@ -238,7 +226,7 @@ namespace CircleSurvivors.Entities
                 if (shouldShoot)
                 {
                     if (isBoss)
-                        enemyBulletCooldownTimer = 1.2f; //basically reduce cooldown till 0.3 för bossar
+                        enemyBulletCooldownTimer = 1.2f; //basically reducar cooldown till 0.3 för bossar
                     else
                         enemyBulletCooldownTimer = 0;
                     EnemyBullets enemyBullets = new EnemyBullets(enemy);

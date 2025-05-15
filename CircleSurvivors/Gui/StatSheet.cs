@@ -1,18 +1,13 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
     /// <summary>
     /// hanterar stat sheets
     /// </summary>
-    public class StatSheet : IGui
+    public class StatSheet : IGui //implementerar gui interface
     {
         /// <summary>
         /// displayar alla onscreen stats, inkluderar killcount och wave count

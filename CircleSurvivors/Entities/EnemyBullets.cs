@@ -1,26 +1,18 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
     /// <summary>
     /// hanterar alla bullets hos enemies
     /// </summary>
-    public class EnemyBullets : IDrawable
+    public class EnemyBullets : IDrawable //implementerar drawable interface
     {
         Random random = new Random();
-        public float bulletX;
-        public float bulletY;
+        public float bulletX, bulletY; //bullet coordinates
+        float moveX, moveY; //vart den ska
         bool hasDealtDamage = false;
-        float moveX;
-        float moveY;
         int enemyBulletRadius = 5;
 
         /// <summary>
@@ -36,6 +28,7 @@ namespace CircleSurvivors.Entities
         /// </summary>
         public void Draw()
         {
+            //ritar bulleten
             Raylib.DrawCircle((int)bulletX, (int)bulletY, enemyBulletRadius, Color.Black);
         }
         /// <summary>
@@ -44,6 +37,7 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
+            //plussar på distansen den ska åka, gånger deltaTime för frame independent movement
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
 
@@ -90,6 +84,7 @@ namespace CircleSurvivors.Entities
             float dyBullet = Config.player.y - bulletY;
             if (enemy.isBoss)
             {
+                //om det är bossen som skjuter ska det targetta ett random stället och inte spelaren
                 dxBullet = random.Next(0, Config.WindowSizeWidth) - bulletX;
                 dyBullet = random.Next(0,Config.WindowSizeHeight) - bulletY;
                 enemyBulletRadius = 15;

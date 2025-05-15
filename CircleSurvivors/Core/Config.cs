@@ -1,11 +1,6 @@
-﻿using CircleSurvivors.Entities;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.Mechanics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CircleSurvivors.Entities;
 
 namespace CircleSurvivors.Core
 {
@@ -62,6 +57,9 @@ namespace CircleSurvivors.Core
         public static List<NPC> enemiesList = new List<NPC>();
         public static List<EnemyBullets> enemyBulletList = new List<EnemyBullets>();
 
+        /// <summary>
+        /// resettar gamestate vid död och restart
+        /// </summary>
         public static void ResetGameState()
         {
             wave = 1;

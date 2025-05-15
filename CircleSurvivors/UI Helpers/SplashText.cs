@@ -1,22 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CircleSurvivors.UI
+﻿namespace CircleSurvivors.UI
 {
+    /// <summary>
+    /// klassen som hanterar splashTexten
+    /// </summary>
     public class SplashText
     {
         static readonly string[] splashTextsArray =
         {
-            "Bravo 6, going circles.", "Circle of life... and death, probably.", "Circle up buddy", "This isn't a drill! (it's a spiral)",
-            "I'm in love with the shape of you - by circle sheeran", "On edge? We don't have edges here.", "Pop a wheelie", "I'm going aRound in circles",
-            "alternative title: Geometry wars", "Also try Circle Diers", "360 degrees of dangers", "Axis of evil", "No corners to hide behind",
-            "Roundabout rage", "Wheel of misfortune", "esnälla ge mig ett A", "Rotating regrets", "Circle one: fight!... i mean round",
-            "I need to count how many splashes made after this", "Rolling until further notice", "You're on a roll!... or not",
-            "Insert better pun here.", "This text does nothing.", "in circles since 2007",
-            "Tested on humans, not responsibly.", "This splash text is {Shadow Slave chapter 360}"
+            "I'm in love with the shape of you - by circle sheeran", 
+            "I need to count how many splashes made after this", 
+            "This splash text is {Shadow Slave chapter 360}",
+            "Circle of life... and death, probably.", 
+            "This isn't a drill! (it's a spiral)",
+            "On edge? We don't have edges here.", 
+            "Circle one: fight!... i mean round",
+            "Tested on humans, not responsibly.", 
+            "alternative title: Geometry wars", 
+            "Rolling until further notice", 
+            "I'm going aRound in circles",
+            "You're on a roll!... or not",
+            "No corners to hide behind",
+            "Bravo 6, going circles.", 
+            "Insert better pun here.", 
+            "This text does nothing.", 
+            "360 degrees of dangers", 
+            "Also try Circle Diers", 
+            "in circles since 2007",
+            "esnälla ge mig ett A", 
+            "Wheel of misfortune", 
+            "Rotating regrets", 
+            "Circle up buddy", 
+            "Roundabout rage", 
+            "Pop a wheelie", 
+            "Axis of evil", 
         }; //21st
 
         /// <summary>

@@ -1,16 +1,11 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Gui
 {
-    public class GameTimer : IGui
+    public class GameTimer : IGui //implementerar gui interface
     {
         /// <summary>
         /// displayar timern som visas vid toppen av skärmen
@@ -18,6 +13,7 @@ namespace CircleSurvivors.Gui
         /// <param name="deltaTime">tid</param>
         public void Display(float deltaTime)
         {
+            //om tiden ska ticka så räknar den på, annars ritar den timern i röd färg
             if (Config.countTime && !Config.isPaused)
                 Config.timeAliveSeconds += deltaTime;
             else
@@ -37,6 +33,8 @@ namespace CircleSurvivors.Gui
                         Helper.DrawCenteredText($"{(int)Config.timeAliveMinutes}:{(int)Config.timeAliveSeconds}", Config.WindowSizeWidth / 2, 20, 24, Color.Red);
                 }
             }
+
+            //om tiden ska ticka ritas timern i svart färg
             if (Config.countTime && !Config.isPaused)
             {
                 if (Config.timeAliveSeconds < 10)
@@ -55,6 +53,8 @@ namespace CircleSurvivors.Gui
 
                 }
             }
+
+            //konverterar 60 sec till 1 minut
             if (Config.timeAliveSeconds > 60)
             {
                 Config.timeAliveSeconds = 0;

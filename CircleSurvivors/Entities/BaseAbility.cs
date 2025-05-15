@@ -1,25 +1,16 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Core;
 using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CircleSurvivors.Entities
 {
     /// <summary>
     /// hanterar alla bullets av spelaren
     /// </summary>
-    public class BaseAbility : IDrawable
+    public class BaseAbility : IDrawable //implementerar drawable interface
     {
-        public float bulletX;
-        public float bulletY;
-        float moveX;
-        float moveY;
-
+        public float bulletX, bulletY; //bullet coordinates
+        float moveX, moveY; //vart bullet ska
         /// <summary>
         /// kallar på shootingTrajectory
         /// </summary>
@@ -33,6 +24,7 @@ namespace CircleSurvivors.Entities
         /// </summary>
         public void Draw()
         {
+            //ritar bulleten
             Raylib.DrawCircle((int)bulletX, (int)bulletY, Config.bulletRadius, Color.Blue);
         }
         /// <summary>
@@ -41,6 +33,7 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void Update(float deltaTime)
         {
+            //plussar på distansen den ska åka, gånger deltaTime för frame independent movement
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
         }
@@ -50,7 +43,8 @@ namespace CircleSurvivors.Entities
         /// <returns>returnar true eller false beroände på dess position</returns>
         public bool ShouldDespawn()
         {
-            return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight;
+            //om den är utanför canvasen så returnar den true, att den ska despawna
+            return bulletX < 0 || bulletX > Config.WindowSizeWidth || bulletY < 0 || bulletY > Config.WindowSizeHeight; 
         }
         /// <summary>
         /// gör shooting trajectory mellan spelare och närmaste enemy

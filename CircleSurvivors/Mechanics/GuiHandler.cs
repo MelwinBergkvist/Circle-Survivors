@@ -1,7 +1,7 @@
-﻿using CircleSurvivors.Core;
+﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.Graphics;
+using CircleSurvivors.Core;
 using CircleSurvivors.Gui;
-using CircleSurvivors.Interfaces;
 
 namespace CircleSurvivors.Mechanics
 {
@@ -10,12 +10,15 @@ namespace CircleSurvivors.Mechanics
     /// </summary>
     public class GuiHandler
     {
+        //listan
         public List<IGui> GuiList = new List<IGui>();
 
+        //de som ska in i listan
         public GameTimer timer = new GameTimer();
         public StatSheet statsheet = new StatSheet();
         public PauseScreen pauseScreen = new PauseScreen();
 
+        //de som inte ska in i listan men är forfarande gui som kommer användas
         public StartScreen startScreen = new StartScreen();
         public DeathScreen deathScreen = new DeathScreen();
 
@@ -34,15 +37,15 @@ namespace CircleSurvivors.Mechanics
         /// <param name="deltaTime"></param>
         public void Display(float deltaTime)
         {
-            if (Config.isStartScreen)
+            if (Config.isStartScreen) //om startscreen inte är genomgjord visa den
             {
                 startScreen.Display(deltaTime);
             }
-            else if (Config.player.ShouldDespawn())
+            else if (Config.player.ShouldDespawn()) //om död visa death screen
             {
                 deathScreen.Display(deltaTime);
             }
-            else
+            else //annars kör alla andra gui's
             {
                 foreach (var gui in GuiList)
                 {

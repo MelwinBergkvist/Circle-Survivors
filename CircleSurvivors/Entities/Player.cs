@@ -1,28 +1,28 @@
-﻿using CircleSurvivors.Core;
-using CircleSurvivors.Interfaces;
-using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Core;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Raylib_cs;
 
 namespace CircleSurvivors.Entities
 {
     /// <summary>
     /// hanterar playern
     /// </summary>
-    public class Player : IDrawable
+    public class Player : IDrawable //implementerar drawable interface
     {
+        //positioner
         Vector2 velocity = new Vector2(0, 0);
         public float x, y;
-        public int movementSpeed = 100;
         float turnSpeed = 10f;
         float friction = 3f;
+
+        //stats
+        public int movementSpeed = 100;
         public int radius = 15;
         public int healthpoints = 100;
         public int maxHealthpoints = 100;
+
+        //timers
         float bulletCooldownTimer = 0f;
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace CircleSurvivors.Entities
         /// </summary>
         /// <param name="x">player initial X</param>
         /// <param name="y">player initial Y</param>
-        public Player(int x, int y) //constructor
+        public Player(int x, int y)
         {
-            //specificerar att det är x och y från parametrarna
+            //specificerar att det är x och y inom parametrarna
             this.x = x;
             this.y = y;
         }
@@ -115,14 +115,10 @@ namespace CircleSurvivors.Entities
 
             Vector2 direction = new Vector2(0, 0);
             //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
-            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
-                direction.Y -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
-                direction.X -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
-                direction.Y += 1;
-            if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
-                direction.X += 1;
+            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))    direction.Y -= 1;
+            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))  direction.X -= 1;
+            if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))  direction.Y += 1;
+            if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right)) direction.X += 1;
 
             if (direction.X != 0 || direction.Y != 0)
             {

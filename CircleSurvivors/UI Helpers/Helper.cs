@@ -18,9 +18,7 @@ namespace CircleSurvivors.UI_Helpers
         public static void DrawCenteredText(String text, int x, int y, int fontSize, Color color)
         {
             int measureText = (Raylib.MeasureText(text, fontSize))/2;
-            
-            
-            (text, x - measureText, y, fontSize, color);
+            Raylib.DrawText(text, x - measureText, y, fontSize, color);
         } 
     }
 }

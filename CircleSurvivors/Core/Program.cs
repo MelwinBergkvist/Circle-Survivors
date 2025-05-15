@@ -1,11 +1,10 @@
-﻿/* Notes:
+﻿using CircleSurvivors.Mechanics;
+using CircleSurvivors.UI;
+using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs (som använder raylib functioner)
+/* Notes:
  * Kommentarerna kommer vara lite svengelska
  * 
  * Allt som ska ritas as raylibs måste vara inom Begin och End drawing
- * 
- * alla raylib.measuretext måste deklareras där de används, jag kunde ha deklararet det som tex "int Text;" och sedan ändrat värdet men jag ansåg att det ser fult och klunky ut
- * och inte i början av main, jag vet inte varför men det fungerade
- * inte när jag testade det
  * 
  * All Raylib. var hittade antingen genom att jag sökte på dem eller från https://www.raylib.com/cheatsheet/cheatsheet.html
  * All Raymath var från https://www.raylib.com/cheatsheet/raymath_cheatsheet.html 
@@ -17,12 +16,6 @@
  * Alla datatyper camelCase, första bokstaven liten
  * Alla listor ska ha List i slutet av namnet
 */
-using CircleSurvivors.Entities;
-using CircleSurvivors.Graphics;
-using CircleSurvivors.Interfaces;
-using CircleSurvivors.Mechanics;
-using CircleSurvivors.UI;
-using Raylib_cs; //Initierar Raylibs library, måste göras på alla .cs
 
 namespace CircleSurvivors.Core
 {
@@ -37,9 +30,10 @@ namespace CircleSurvivors.Core
         
         static void Main()
         {
-            float deltaTime;
+            float deltaTime; //Tiden mellan frames, delta tiden
             Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
 
+            //object instatiering
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
             GuiHandler guiHandler = new GuiHandler();
@@ -51,13 +45,13 @@ namespace CircleSurvivors.Core
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();
-
                 Raylib.ClearBackground(Color.White);
+
                 Raylib.BeginDrawing(); // <- drawing confines beginning
 
-                guiHandler.Display(deltaTime);
-                if (Config.isStartScreen || Config.player.ShouldDespawn()) continue;
-                objectHandler.CheckDespawn(deltaTime); //hanterar all collision och despawn checks
+                guiHandler.Display(deltaTime); //hanterar alla gui's
+                if (Config.isStartScreen || Config.player.ShouldDespawn()) continue; //om startScreen eller deathScreen, kör inte det andra
+                objectHandler.CheckDespawn(deltaTime); //hanterar alla despawn checks
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
 
                 Raylib.EndDrawing(); // <- drawing confines ending
