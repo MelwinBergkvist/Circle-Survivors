@@ -12,7 +12,7 @@ namespace CircleSurvivors.Gui
     /// <summary>
     /// hanterar deathscreenen
     /// </summary>
-    public class DeathScreen
+    public class DeathScreen : IGui
     {
         readonly float fadeInSpeed = 50f;
         float gameOverAlpha = 0f;

@@ -46,6 +46,8 @@ namespace CircleSurvivors.Entities
         {
             bulletX += moveX * deltaTime;
             bulletY += moveY * deltaTime;
+
+            ShouldDespawn();
         }
         /// <summary>
         /// kollar om bullet möter reqs för att despawna (utanför canvas/collide med spelare)

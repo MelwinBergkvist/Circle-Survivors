@@ -29,6 +29,8 @@ namespace CircleSurvivors.Entities
         float enemyBulletCooldownTimer = 0f;
         int bulletDamage = 5;
 
+        float distance, dx, dy;
+
         float movementSpeed;
         public float radius;
         readonly int scaling = (Config.wave-1) * 10;
@@ -39,6 +41,9 @@ namespace CircleSurvivors.Entities
         public bool shouldShoot = false;
         public bool isBoss = false;
         readonly Random random = new Random();
+
+        readonly float collisionCooldown = 1.5f;
+        float collisionCooldownTimer = 0f;
 
         string bossName;
 
@@ -144,49 +149,32 @@ namespace CircleSurvivors.Entities
             sinceSpawn += deltaTime;
 
             //Så de går mot spelaren
-            float dx = Config.player.x - x;
-            float dy = Config.player.y - y;
-            float distance = MathF.Sqrt(dx * dx + dy * dy);
+            dx = Config.player.x - x;
+            dy = Config.player.y - y;
+            distance = MathF.Sqrt(dx * dx + dy * dy);
 
             //make sure att det faktist finns enemies på skärmen,
             //så vi inte försöker skjuta mot något som inte finns
             enemyBulletCooldownTimer += deltaTime;
             if (Config.enemiesList.Count > 0)
-            {
                 ShootEnemyBullet(this);
+
+            NPCmovements(deltaTime);
+
+            foreach (var bullets in Config.bulletsList)
+            {
+                BulletCollision(bullets, deltaTime);
             }
 
-            if (!shouldShoot)
+            foreach (var enemies in Config.enemiesList)
             {
-                if (distance > 0)
-                {
-                    float moveX = dx / distance * movementSpeed * deltaTime;
-                    float moveY = dy / distance * movementSpeed * deltaTime;
-
-                    float newX = x + moveX;
-                    float newY = y + moveY;
-
-                    x = newX;
-                    y = newY;
-                }
-            }
-            else if (shouldShoot) //kan bara ha "else" här, behövs ingen if (shouldShoot) men det är mest bara ifall jag lägger till något mer som har liknande condition
-            {
-                if (distance > 400) //numret 400 var mest trail and error, inget specielt.
-                {
-                    float moveX = dx / distance * movementSpeed * deltaTime;
-                    float moveY = dy / distance * movementSpeed * deltaTime;
-
-                    float newX = x + moveX;
-                    float newY = y + moveY;
-
-                    x = newX;
-                    y = newY;
-                }
+                PlayerCollision(enemies, deltaTime);
             }
 
             if (hitCooldown >= 0)
                 hitCooldown -= deltaTime;
+            if (collisionCooldown >= collisionCooldownTimer)
+                collisionCooldownTimer += deltaTime;
         }
         /// <summary>
         /// Kollar om spelarens bullet collidar med enemy
@@ -218,6 +206,15 @@ namespace CircleSurvivors.Entities
         /// <param name="deltaTime">tid</param>
         public void PlayerCollision(NPC enemies, float deltaTime)
         {
+            if (collisionCooldown <= collisionCooldownTimer)
+            {
+                collisionCooldownTimer = 0;
+            }
+            else if (collisionCooldown >= collisionCooldownTimer)
+            {
+                return;
+            }
+            
             //Hit collision för spelare, basically en kopia av den som finns för bullets i NPC.cs, matte vis
             float playerEnemyDx = Config.player.x - enemies.x;
             float playerEnemyDy = Config.player.y - enemies.y;
@@ -381,6 +378,37 @@ namespace CircleSurvivors.Entities
                     y = Config.WindowSizeHeight + radius;
                     x = random.Next(0, Config.WindowSizeWidth);
                     break;
+            }
+        }
+        public void NPCmovements(float deltaTime)
+        {
+            if (!shouldShoot)
+            {
+                if (distance > 0)
+                {
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
+
+                    float newX = x + moveX;
+                    float newY = y + moveY;
+
+                    x = newX;
+                    y = newY;
+                }
+            }
+            else if (shouldShoot) //kan bara ha "else" här, behövs ingen if (shouldShoot) men det är mest bara ifall jag lägger till något mer som har liknande condition
+            {
+                if (distance > 400) //numret 400 var mest trail and error, inget specielt.
+                {
+                    float moveX = dx / distance * movementSpeed * deltaTime;
+                    float moveY = dy / distance * movementSpeed * deltaTime;
+
+                    float newX = x + moveX;
+                    float newY = y + moveY;
+
+                    x = newX;
+                    y = newY;
+                }
             }
         }
         /// <summary>

@@ -13,7 +13,7 @@ namespace CircleSurvivors.Graphics
     /// <summary>
     /// hanterar alla GUI changes, Timer, death screen, start screen etc
     /// </summary>
-    public class StartScreen
+    public class StartScreen : IGui
     {
         readonly float fadeInSpeed = 50f;
         float gameOverAlpha = 0f;

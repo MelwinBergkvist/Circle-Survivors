@@ -54,7 +54,7 @@ namespace CircleSurvivors.Core
 
                 guiHandler.Display(deltaTime);
                 if (Config.isStartScreen || Config.player.ShouldDespawn()) continue;
-                objectHandler.CheckDespawnAndCollision(deltaTime); //hanterar all collision och despawn checks
+                objectHandler.CheckDespawn(deltaTime); //hanterar all collision och despawn checks
                 spawnMechs.Spawn(deltaTime); //hanterar alla spawn mechanics
 
                 Raylib.EndDrawing(); // <- drawing confines ending
