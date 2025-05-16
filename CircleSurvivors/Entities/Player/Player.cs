@@ -1,10 +1,10 @@
-﻿using CircleSurvivors.Interfaces;
-using CircleSurvivors.Mechanics;
+﻿using CircleSurvivors.Entities.Enemies;
+using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using System.Numerics;
 using Raylib_cs;
 
-namespace CircleSurvivors.Entities
+namespace CircleSurvivors.Entities.Player
 {
     /// <summary>
     /// hanterar playern
@@ -14,7 +14,6 @@ namespace CircleSurvivors.Entities
         //positioner
         Vector2 velocity = new Vector2(0, 0);
         Vector2 direction;
-
         public float x, y;
         float turnSpeed = 10f;
         float friction = 3f;
@@ -28,8 +27,12 @@ namespace CircleSurvivors.Entities
         //timers
         float bulletCooldownTimer = 0f;
         float dashDuration = 0.5f;
-        float dashCooldown = 10f;
-        float dashCooldownTimer = 0f;
+        int dashRegain = 10;
+
+        //states
+        bool isDashing = false;
+        bool canDash = false;
+        bool startDash = false;
 
         /// <summary>
         /// specifiserar början av x, y för player
@@ -122,9 +125,9 @@ namespace CircleSurvivors.Entities
             direction = new Vector2(0, 0);
             
             DashMovement(deltaTime);
-            Raylib.DrawText($"{dashDuration}", 20, 250, 16, Color.Black);
             NormalMovement();
 
+            Raylib.DrawText($"{dashDuration}", 20, 250, 16, Color.Black);
             if (direction.X != 0 || direction.Y != 0)
             {
                 Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed);
@@ -166,7 +169,7 @@ namespace CircleSurvivors.Entities
         /// </summary>
         public void NormalMovement()
         {
-            if (Raylib.IsKeyDown(KeyboardKey.Space)) return;
+            if (isDashing) return;
             //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
             if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
                 direction.Y -= 1;
@@ -177,31 +180,63 @@ namespace CircleSurvivors.Entities
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
                 direction.X += 1;
         }
+        /// <summary>
+        /// movement för dashing
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public void DashMovement(float deltaTime)
         {
-            if (Raylib.IsKeyDown(KeyboardKey.Space))
+            //ser till att vi kan bara börja en dash när duration är full
+            if (dashDuration >= 0.5f)
+            {
+                canDash = true;
+            }
+            else if (dashDuration <= 0)
+            {
+                canDash = false;
+                startDash = false;
+            }
+
+            //ser till att det inte blir någon partial dashing
+            if (Raylib.IsKeyPressed(KeyboardKey.Space) && canDash)
+            {
+                startDash = true;
+            }
+
+            //om vi kan dasha och har tryckt space så dashar vi
+            if (startDash && canDash)
             {
                 if (dashDuration > 0)
+                {
+                    isDashing = true;
                     dashDuration -= deltaTime;
+                }
                 if (dashDuration <= 0)
                 {
+                    isDashing = false;
+                    dashDuration = -0.1f;
                     return;
                 }
             }
-            else 
+            //annars regainar vi bara våran dash duration
+            else
             {
+                isDashing = false;
                 if (dashDuration < 0.5f)
-                    dashDuration += deltaTime/10;
-                return; 
+                {
+                    dashDuration += deltaTime / dashRegain;
+                }
+                return;
             }
+
             if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
-                direction.Y -= 4;
+                direction.Y -= 3;
             if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
-                direction.X -= 4;
+                direction.X -= 3;
             if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
-                direction.Y += 4;
+                direction.Y += 3;
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
-                direction.X += 4;
+                direction.X += 3;
         }
     }
 }

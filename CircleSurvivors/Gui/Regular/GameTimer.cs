@@ -3,7 +3,7 @@ using CircleSurvivors.UI_Helpers;
 using CircleSurvivors.Core;
 using Raylib_cs;
 
-namespace CircleSurvivors.Gui
+namespace CircleSurvivors.Gui.Regular
 {
     public class GameTimer : IGui //implementerar gui interface
     {

@@ -2,7 +2,7 @@
 using CircleSurvivors.Core;
 using Raylib_cs;
 
-namespace CircleSurvivors.Gui
+namespace CircleSurvivors.Gui.Regular
 {
     /// <summary>
     /// hanterar stat sheets

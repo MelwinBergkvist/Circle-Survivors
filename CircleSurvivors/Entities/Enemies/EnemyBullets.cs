@@ -1,6 +1,7 @@
 ﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using Raylib_cs;
+using CircleSurvivors.Entities.Enemies;
 
 namespace CircleSurvivors.Entities
 {

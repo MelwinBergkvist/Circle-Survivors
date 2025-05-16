@@ -3,8 +3,9 @@ using CircleSurvivors.UI_Helpers;
 using CircleSurvivors.Core;
 using System.Numerics;
 using Raylib_cs;
+using CircleSurvivors.Entities.Player;
 
-namespace CircleSurvivors.Entities
+namespace CircleSurvivors.Entities.Enemies
 {
     /// <summary>
     /// hanterar alla NPC

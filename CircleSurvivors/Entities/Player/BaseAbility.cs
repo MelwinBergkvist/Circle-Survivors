@@ -1,8 +1,9 @@
 ﻿using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using Raylib_cs;
+using CircleSurvivors.Entities.Enemies;
 
-namespace CircleSurvivors.Entities
+namespace CircleSurvivors.Entities.Player
 {
     /// <summary>
     /// hanterar alla bullets av spelaren
