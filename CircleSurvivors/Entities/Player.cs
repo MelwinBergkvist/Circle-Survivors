@@ -1,4 +1,5 @@
 ﻿using CircleSurvivors.Interfaces;
+using CircleSurvivors.Mechanics;
 using CircleSurvivors.Core;
 using System.Numerics;
 using Raylib_cs;
@@ -12,6 +13,8 @@ namespace CircleSurvivors.Entities
     {
         //positioner
         Vector2 velocity = new Vector2(0, 0);
+        Vector2 direction;
+
         public float x, y;
         float turnSpeed = 10f;
         float friction = 3f;
@@ -24,6 +27,9 @@ namespace CircleSurvivors.Entities
 
         //timers
         float bulletCooldownTimer = 0f;
+        float dashDuration = 0.5f;
+        float dashCooldown = 10f;
+        float dashCooldownTimer = 0f;
 
         /// <summary>
         /// specifiserar början av x, y för player
@@ -113,12 +119,11 @@ namespace CircleSurvivors.Entities
         {
             //!!!Jag förklarar vector matten och vad Raymath gör i NPC.cs NpcMovements!!!
 
-            Vector2 direction = new Vector2(0, 0);
-            //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
-            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))    direction.Y -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))  direction.X -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))  direction.Y += 1;
-            if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right)) direction.X += 1;
+            direction = new Vector2(0, 0);
+            
+            DashMovement(deltaTime);
+            Raylib.DrawText($"{dashDuration}", 20, 250, 16, Color.Black);
+            NormalMovement();
 
             if (direction.X != 0 || direction.Y != 0)
             {
@@ -155,6 +160,48 @@ namespace CircleSurvivors.Entities
                     Config.bulletsList.Add(bullet);
                 }
             }
+        }
+        /// <summary>
+        /// vanlig movement logik utan dash aktiv
+        /// </summary>
+        public void NormalMovement()
+        {
+            if (Raylib.IsKeyDown(KeyboardKey.Space)) return;
+            //bara if och inte if else för att vi vill att Playern ska kunna gå diagonalt
+            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
+                direction.Y -= 1;
+            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
+                direction.X -= 1;
+            if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
+                direction.Y += 1;
+            if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
+                direction.X += 1;
+        }
+        public void DashMovement(float deltaTime)
+        {
+            if (Raylib.IsKeyDown(KeyboardKey.Space))
+            {
+                if (dashDuration > 0)
+                    dashDuration -= deltaTime;
+                if (dashDuration <= 0)
+                {
+                    return;
+                }
+            }
+            else 
+            {
+                if (dashDuration < 0.5f)
+                    dashDuration += deltaTime/10;
+                return; 
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
+                direction.Y -= 4;
+            if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
+                direction.X -= 4;
+            if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
+                direction.Y += 4;
+            if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
+                direction.X += 4;
         }
     }
 }
