@@ -26,13 +26,15 @@ namespace CircleSurvivors.Entities.Player
 
         //timers
         float bulletCooldownTimer = 0f;
-        float dashDuration = 0.5f;
-        int dashRegain = 10;
+        public float dashDuration = 0.5f;
+        public float maxDashDuration = 0.5f;
+        public float dashRegain = 10;
 
         //states
         bool isDashing = false;
         bool canDash = false;
         bool startDash = false;
+        bool isMoving = false;
 
         /// <summary>
         /// specifiserar början av x, y för player
@@ -57,6 +59,12 @@ namespace CircleSurvivors.Entities.Player
             Raylib.DrawRectangle((int)x - 15, (int)y + 25, 30, 8, Color.Green);
             float healthWidth = 30 - 30 * healthpoints / maxHealthpoints;
             Raylib.DrawRectangle((int)x - 15, (int)y + 25, (int)healthWidth, 8, Color.Red);
+
+            //dash bar
+            Raylib.DrawRectangle((int)x - 15, (int)y + 20, 30, 4, new(46, 241, 255));
+            float dashWidth = 30 - 30 * dashDuration / maxDashDuration;
+            if (dashWidth >= 30) dashWidth = 30;
+            Raylib.DrawRectangle((int)x - 15, (int)y + 20, (int)dashWidth, 4, new(18, 69, 255)); 
         }
         /// <summary>
         /// Kollar om spelaren ska despawna
@@ -132,9 +140,11 @@ namespace CircleSurvivors.Entities.Player
             {
                 Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed);
                 velocity = Raymath.Vector2Lerp(velocity, endVelocity, turnSpeed * deltaTime);
+                isMoving = true;
             }
             else
             {
+                isMoving = false;
                 velocity = Raymath.Vector2Lerp(velocity, new Vector2(0, 0), friction * deltaTime);
             }
 
@@ -197,8 +207,8 @@ namespace CircleSurvivors.Entities.Player
                 startDash = false;
             }
 
-            //ser till att det inte blir någon partial dashing
-            if (Raylib.IsKeyPressed(KeyboardKey.Space) && canDash)
+            //ser till att det inte blir någon partial dashing eller ingen dashing alls utan movement
+            if (Raylib.IsKeyPressed(KeyboardKey.Space) && canDash && isMoving)
             {
                 startDash = true;
             }

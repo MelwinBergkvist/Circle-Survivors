@@ -70,6 +70,9 @@ namespace CircleSurvivors.Core
             bulletSpeed = 300f;
             player.healthpoints = 100;
             player.maxHealthpoints = 100;
+            player.dashDuration = 0.5f;
+            player.maxDashDuration = 0.5f;
+            player.dashRegain = 10;
             killCount = 0;
             enemiesList.Clear();
             drawableList.Clear();

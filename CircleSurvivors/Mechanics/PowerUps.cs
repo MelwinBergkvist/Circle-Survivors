@@ -27,16 +27,23 @@ namespace CircleSurvivors.Mechanics
         public bool hasRolledThisRound = false;
         public float despawnTime = 0.5f;
 
-
         Color Instruction = Raylib.ColorAlpha(Color.DarkGray, 0.5f);
 
         int powerUpStatus1, powerUpStatus2, powerUpStatus3;
 
         string[] powerUpsArray =
         {
-                "+20 Bullet Damage", "+2 Bullet Radius", "+10 Bullet Speed",
-                "10% Faster Cooldown", "-1 Radius", "-10 Bullet Speed",
-                "-10% Enemy Cooldown", "+20 Hitpoints", "+30 Movement speed" // 0 - 8
+                "+20 Bullet Damage",        //0
+                "+2 Bullet Radius",         //1
+                "+10 Bullet Speed",         //2
+                "10% Faster Cooldown",      //3
+                "-1 Radius",                //4
+                "-10 Bullet Speed",         //5
+                "-10% Enemy Cooldown",      //6
+                "+20 Hitpoints",            //7
+                "+30 Movement speed",       //8
+                "+10% dash regain",         //9
+                "+10% dash duration"        //10
         };
 
         public PowerUps() { }
@@ -54,15 +61,15 @@ namespace CircleSurvivors.Mechanics
             //ser till att den inte rullar en ny powerup varje wave
             if (!Config.powerUps.hasRolledThisRound)
             {
-                powerUpStatus1 = random.Next(0, 9);
-                powerUpStatus2 = random.Next(0, 9);
-                powerUpStatus3 = random.Next(0, 9);
+                powerUpStatus1 = random.Next(0, powerUpsArray.Count());
+                powerUpStatus2 = random.Next(0, powerUpsArray.Count());
+                powerUpStatus3 = random.Next(0, powerUpsArray.Count());
 
                 //ser till att alla är olika
                 while (powerUpStatus1 == powerUpStatus2)
-                    powerUpStatus2 = random.Next(0, 9);
+                    powerUpStatus2 = random.Next(0, powerUpsArray.Count());
                 while (powerUpStatus1 == powerUpStatus3 || powerUpStatus2 == powerUpStatus3)
-                    powerUpStatus3 = random.Next(0, 9);
+                    powerUpStatus3 = random.Next(0, powerUpsArray.Count());
 
                 Config.powerUps.hasRolledThisRound = true;
             }
@@ -112,6 +119,13 @@ namespace CircleSurvivors.Mechanics
                         case 8:
                             Config.tempMovementSpeedHolder += 30;
                             break;
+                        case 9:
+                            Config.player.dashRegain = Config.player.dashRegain * 0.9f;
+                            break;
+                        case 10:
+                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
+                            Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
+                            break;
                     }
                     return;
                 }
@@ -158,6 +172,13 @@ namespace CircleSurvivors.Mechanics
                         case 8:
                             Config.tempMovementSpeedHolder += 30;
                             break;
+                        case 9:
+                            Config.player.dashRegain = Config.player.dashRegain * 0.9f;
+                            break;
+                        case 10:
+                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
+                            Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
+                            break;
                     }
                     return;
                 }
@@ -203,6 +224,13 @@ namespace CircleSurvivors.Mechanics
                             break;
                         case 8:
                             Config.tempMovementSpeedHolder += 30;
+                            break;
+                        case 9:
+                            Config.player.dashRegain = Config.player.dashRegain * 0.9f;
+                            break;
+                        case 10:
+                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
+                            Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
                             break;
                     }
                     return;
