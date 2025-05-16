@@ -10,14 +10,14 @@ namespace CircleSurvivors.Mechanics
     public class PowerUps
     {
         //alla positioner som powerupsen ska ligga på
-        readonly int posX1 = Config.WindowSizeWidth / 2 - Config.WindowSizeWidth / 6;
-        readonly int posY1 = Config.WindowSizeHeight / 4;
+        float posX1 = Config.WindowSizeWidth / 2 - Config.WindowSizeWidth / 6;
+        float posY1 = Config.WindowSizeHeight / 4;
 
-        readonly int posX2 = Config.WindowSizeWidth / 2;
-        readonly int posY2 = Config.WindowSizeHeight / 3;
+        float posX2 = Config.WindowSizeWidth / 2;
+        float posY2 = Config.WindowSizeHeight / 3;
 
-        readonly int posX3 = Config.WindowSizeWidth / 2 + Config.WindowSizeWidth / 6;
-        readonly int posY3 = Config.WindowSizeHeight / 4;
+        float posX3 = Config.WindowSizeWidth / 2 + Config.WindowSizeWidth / 6;
+        float posY3 = Config.WindowSizeHeight / 4;
 
         readonly int radius = 50;
         readonly Random random = new Random();
@@ -79,10 +79,8 @@ namespace CircleSurvivors.Mechanics
             //i program.cs så resetar vi isPicked, och alla pX så vi får välja powerup igen efter
             if (!Config.powerUps.p1)
             {
-                float powerUpDx1 = posX1 - Config.player.x;
-                float powerUpDy1 = posY1 - Config.player.y;
-                float distancePowerUp1 = powerUpDx1 * powerUpDx1 + powerUpDy1 * powerUpDy1;
-                if (distancePowerUp1 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
+                float distancePowerUp1 = Helper.EuclideanFloat(ref Config.player.x, ref posX1, ref Config.player.y, ref posY1).distance;
+                if (distancePowerUp1 <= radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.powerUps.isPicked = true;
                     Config.powerUps.p1 = true;
@@ -123,7 +121,6 @@ namespace CircleSurvivors.Mechanics
                             Config.player.dashRegain = Config.player.dashRegain * 0.9f;
                             break;
                         case 10:
-                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
                             Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
                             break;
                     }
@@ -133,10 +130,8 @@ namespace CircleSurvivors.Mechanics
 
             if (!Config.powerUps.p2)
             {
-                float powerUpDx2 = posX2 - Config.player.x;
-                float powerUpDy2 = posY2 - Config.player.y;
-                float distancePowerUp2 = powerUpDx2 * powerUpDx2 + powerUpDy2 * powerUpDy2;
-                if (distancePowerUp2 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
+                float distancePowerUp2 = Helper.EuclideanFloat(ref Config.player.x, ref posX2, ref Config.player.y, ref posY2).distance;
+                if (distancePowerUp2 <= radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.powerUps.isPicked = true;
                     Config.powerUps.p2 = true;
@@ -176,7 +171,6 @@ namespace CircleSurvivors.Mechanics
                             Config.player.dashRegain = Config.player.dashRegain * 0.9f;
                             break;
                         case 10:
-                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
                             Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
                             break;
                     }
@@ -186,10 +180,8 @@ namespace CircleSurvivors.Mechanics
 
             if (!Config.powerUps.p3)
             {
-                float powerUpDx3 = posX3 - Config.player.x;
-                float powerUpDy3 = posY3 - Config.player.y;
-                float distancePowerUp3 = powerUpDx3 * powerUpDx3 + powerUpDy3 * powerUpDy3;
-                if (distancePowerUp3 <= radiusSum * radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
+                float distancePowerUp3 = Helper.EuclideanFloat(ref Config.player.x, ref posX3, ref Config.player.y, ref posY3).distance;
+                if (distancePowerUp3 <= radiusSum && Raylib.IsKeyPressed(KeyboardKey.E))
                 {
                     Config.powerUps.isPicked = true;
                     Config.powerUps.p3 = true;
@@ -229,7 +221,6 @@ namespace CircleSurvivors.Mechanics
                             Config.player.dashRegain = Config.player.dashRegain * 0.9f;
                             break;
                         case 10:
-                            Config.player.dashDuration = Config.player.dashDuration * 1.1f;
                             Config.player.maxDashDuration = Config.player.maxDashDuration * 1.1f;
                             break;
                     }
@@ -266,20 +257,20 @@ namespace CircleSurvivors.Mechanics
             //väldigt confusing för allt ser så fult ut, den de skapar först cirkeln,
             //sen en grön rectangle, sen en vit rectangle för att göra det en outline
             //sedan texten efter, repeat på alla andra. alla -15 -100 och sånt är för centrering.
-            Raylib.DrawCircleLines(posX1, posY1, radius, Color.DarkGreen); //outline cirkeln
-            Raylib.DrawRectangle(posX1 - 120, posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
-            Raylib.DrawRectangle(posX1 - 110, posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
-            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus1]}", posX1, posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
+            Raylib.DrawCircleLines((int)posX1, (int)posY1, radius, Color.DarkGreen); //outline cirkeln
+            Raylib.DrawRectangle((int)posX1 - 120, (int)posY1 - 15, 240, 30, Color.DarkGreen); //dark green rektangel
+            Raylib.DrawRectangle((int)posX1 - 110, (int)posY1 - 13, 220, 26, Color.White); //vit rektangel så den gröna ser ut som en outline
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus1]}", (int)posX1, (int)posY1 - 10, 20, Color.Black); //texten som säger vad för powerup det är
 
-            Raylib.DrawCircleLines(posX2, posY2, radius, Color.DarkGreen);
-            Raylib.DrawRectangle(posX2 - 120, posY2 - 15, 240, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX2 - 110, posY2 - 13, 220, 26, Color.White);
-            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus2]}", posX2, posY2 - 10, 20, Color.Black);
+            Raylib.DrawCircleLines((int)posX2, (int)posY2, radius, Color.DarkGreen);
+            Raylib.DrawRectangle((int)posX2 - 120, (int)posY2 - 15, 240, 30, Color.DarkGreen);
+            Raylib.DrawRectangle((int)posX2 - 110, (int)posY2 - 13, 220, 26, Color.White);
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus2]}", (int)posX2, (int)posY2 - 10, 20, Color.Black);
 
-            Raylib.DrawCircleLines(posX3, posY3, radius, Color.DarkGreen);
-            Raylib.DrawRectangle(posX3 - 120, posY3 - 15, 240, 30, Color.DarkGreen);
-            Raylib.DrawRectangle(posX3 - 110, posY3 - 13, 220, 26, Color.White);
-            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus3]}", posX3, posY3 - 10, 20, Color.Black);
+            Raylib.DrawCircleLines((int)posX3, (int)posY3, radius, Color.DarkGreen);
+            Raylib.DrawRectangle((int)posX3 - 120, (int)posY3 - 15, 240, 30, Color.DarkGreen);
+            Raylib.DrawRectangle((int)posX3 - 110, (int)posY3 - 13, 220, 26, Color.White);
+            Helper.DrawCenteredText($"{powerUpsArray[powerUpStatus3]}", (int)posX3, (int)posY3 - 10, 20, Color.Black);
 
         }
     }

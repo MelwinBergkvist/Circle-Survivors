@@ -3,6 +3,7 @@ using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using System.Numerics;
 using Raylib_cs;
+using CircleSurvivors.UI_Helpers;
 
 namespace CircleSurvivors.Entities.Player
 {
@@ -15,8 +16,8 @@ namespace CircleSurvivors.Entities.Player
         Vector2 velocity = new Vector2(0, 0);
         Vector2 direction;
         public float x, y;
-        float turnSpeed = 10f;
-        float friction = 3f;
+        const float turnSpeed = 10f;
+        const float friction = 3f;
 
         //stats
         public int movementSpeed = 100;
@@ -63,8 +64,11 @@ namespace CircleSurvivors.Entities.Player
             //dash bar
             Raylib.DrawRectangle((int)x - 15, (int)y + 20, 30, 4, new(46, 241, 255));
             float dashWidth = 30 - 30 * dashDuration / maxDashDuration;
-            if (dashWidth >= 30) dashWidth = 30;
-            Raylib.DrawRectangle((int)x - 15, (int)y + 20, (int)dashWidth, 4, new(18, 69, 255)); 
+            if (dashWidth >= 30) dashWidth = 30; //ser till att rektangeln inte blir för lång
+            Raylib.DrawRectangle((int)x - 15, (int)y + 20, (int)dashWidth, 4, new(18, 69, 255));
+
+            //Direction pointer
+            //Raylib.DrawCircle((int)x + (int)velocity.X/2, (int)y + (int)velocity.Y/2, 2, Color.Blue);
         }
         /// <summary>
         /// Kollar om spelaren ska despawna
@@ -93,9 +97,7 @@ namespace CircleSurvivors.Entities.Player
         public static float EnemyDistance(Player player, NPC npc)
         {
             //Hur jag definerar i vilken ordning enemies ska vara sorted, räknar delta x och y
-            float dx = npc.x - player.x;
-            float dy = npc.y - player.y;
-            return dx * dx + dy * dy;
+            return Helper.EuclideanFloat(ref player.x, ref npc.x, ref player.y, ref npc.y).distance;
         }
         /// <summary>
         /// sorterar alla enemies som är spawnade från närmaste till längst bort
@@ -135,7 +137,6 @@ namespace CircleSurvivors.Entities.Player
             DashMovement(deltaTime);
             NormalMovement();
 
-            Raylib.DrawText($"{dashDuration}", 20, 250, 16, Color.Black);
             if (direction.X != 0 || direction.Y != 0)
             {
                 Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed);
@@ -232,7 +233,7 @@ namespace CircleSurvivors.Entities.Player
             else
             {
                 isDashing = false;
-                if (dashDuration < 0.5f)
+                if (dashDuration < maxDashDuration)
                 {
                     dashDuration += deltaTime / dashRegain;
                 }

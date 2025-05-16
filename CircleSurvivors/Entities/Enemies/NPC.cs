@@ -1,9 +1,9 @@
-﻿using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Entities.Player;
+using CircleSurvivors.Interfaces;
 using CircleSurvivors.UI_Helpers;
 using CircleSurvivors.Core;
 using System.Numerics;
 using Raylib_cs;
-using CircleSurvivors.Entities.Player;
 
 namespace CircleSurvivors.Entities.Enemies
 {
@@ -18,7 +18,6 @@ namespace CircleSurvivors.Entities.Enemies
         float movementSpeed;
         float turnSpeed = 10f;
         float friction = 3f;
-        float dx, dy;
         float distance;
 
         //states
@@ -178,12 +177,10 @@ namespace CircleSurvivors.Entities.Enemies
         {
             if (sinceSpawn < spawnImmunity) return;
 
-            //Kollar om bullet och enemies overlappar
-            float bulletEnemyDx = bullets.bulletX - x;
-            float bulletEnemyDy = bullets.bulletY - y;
-            float distanceBulletEnemy = bulletEnemyDx * bulletEnemyDx + bulletEnemyDy * bulletEnemyDy;
             float radiusSum = Config.bulletRadius + radius;
-            if (distanceBulletEnemy <= radiusSum * radiusSum)
+            float distanceBulletEnemy = Helper.EuclideanFloat(ref x, ref bullets.bulletX, ref y, ref bullets.bulletY).distance;
+
+            if (distanceBulletEnemy <= radiusSum) //kollar om distansen mellan bullet och enemy är mindre en deras radius tillsammans
             {
                 if (hitCooldown <= 0)
                 {
@@ -204,13 +201,10 @@ namespace CircleSurvivors.Entities.Enemies
             else if (collisionCooldown >= collisionCooldownTimer) 
                 return; //om inte, skippa
             
-            //Hit collision för spelare
-            float playerEnemyDx = Config.player.x - enemies.x;
-            float playerEnemyDy = Config.player.y - enemies.y;
-            float distancePlayerEnemy = playerEnemyDx * playerEnemyDx + playerEnemyDy * playerEnemyDy;
             float radiusSum = Config.player.radius + enemies.radius;
+            float distancePlayerEnemy = Helper.EuclideanFloat(ref Config.player.x, ref enemies.x, ref Config.player.y, ref enemies.y).distance;
 
-            if (distancePlayerEnemy <= radiusSum * radiusSum)
+            if (distancePlayerEnemy <= radiusSum) //kollar om distanse mellan spelare och enemy är mindre än deras radius tillsammans
                 Config.player.healthpoints -= enemyCollisionDamage;
         }
         /// <summary>
@@ -381,6 +375,7 @@ namespace CircleSurvivors.Entities.Enemies
              * och Raylib har många inbyggda metoder för att räkna ut matten själv
              * 
              * vi kollar för euclidean distance mellan spelaren, sen skapar vi en Vector2 (2 för 2d space) //steg 1
+             * (gör det nu med min helper class jag har skrivit)
              * 
              * sen så använder vi vector2 scale för att få slut direction att scalea till movement speed // steg 2
              * 
@@ -388,16 +383,14 @@ namespace CircleSurvivors.Entities.Enemies
              * 
              * sen är else samma som steg 3 fast till 0 för att stanna, och använder friction
             */
-           
-            dx = Config.player.x - x;
-            dy = Config.player.y - y;
-            distance = MathF.Sqrt(dx * dx + dy * dy); //steg 1
+
+            float distance = Helper.EuclideanFloat(ref x, ref Config.player.x, ref y, ref Config.player.y).distance;
 
             if (!shouldShoot)
             {
                 if (distance > 0)
                 {
-                    Vector2 direction = new Vector2(dx / distance, dy / distance);
+                    Vector2 direction = Helper.EuclideanVector2(ref x, ref Config.player.x, ref y, ref Config.player.y); //steg 1
                     Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed); //steg 2
                     
                     velocity = Raymath.Vector2Lerp(velocity, endVelocity, turnSpeed * deltaTime); //steg 3
@@ -411,7 +404,7 @@ namespace CircleSurvivors.Entities.Enemies
             {
                 if (distance > 400) //numret 400 var mest trail and error, inget specielt.
                 {
-                    Vector2 direction = new Vector2(dx / distance, dy / distance);
+                    Vector2 direction = Helper.EuclideanVector2(ref x, ref Config.player.x, ref y, ref Config.player.y);
                     Vector2 endVelocity = Raymath.Vector2Scale(direction, movementSpeed);
 
                     velocity = Raymath.Vector2Lerp(velocity, endVelocity, turnSpeed * deltaTime);

@@ -1,7 +1,8 @@
-﻿using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Entities.Enemies;
+using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using Raylib_cs;
-using CircleSurvivors.Entities.Enemies;
+using CircleSurvivors.UI_Helpers;
 
 namespace CircleSurvivors.Entities
 {
@@ -55,9 +56,7 @@ namespace CircleSurvivors.Entities
                 return true;
 
             //om den colliderar med spelare tar bort, behövs ingen piercing
-            float dx = bulletX - Config.player.x;
-            float dy = bulletY - Config.player.y;
-            float despawnDistance = MathF.Sqrt(dx * dx + dy * dy);
+            float despawnDistance = Helper.EuclideanFloat(ref Config.player.x, ref bulletX, ref Config.player.y, ref bulletY).distance;
             float radiusSum = Config.bulletRadius + Config.player.radius;
             if (despawnDistance < radiusSum)
             {
@@ -77,23 +76,24 @@ namespace CircleSurvivors.Entities
         /// <param name="enemy">enemies</param>
         public void ShootingTrajectory(NPC enemy)
         {
-            //Likadan som BaseAbility.cs fast reversed, kollar euclidean distance och updaterar inte det, håller samma linje
+            //kollar euclidean distance och updaterar inte det, håller samma linje
             bulletX = enemy.x;
             bulletY = enemy.y;
 
-            float dxBullet = Config.player.x - bulletX;
-            float dyBullet = Config.player.y - bulletY;
+            float distanceX = Helper.EuclideanVector2(ref bulletX, ref Config.player.x, ref bulletY, ref Config.player.y).X;
+            float distanceY = Helper.EuclideanVector2(ref bulletX, ref Config.player.x, ref bulletY, ref Config.player.y).Y;
             if (enemy.isBoss)
             {
                 //om det är bossen som skjuter ska det targetta ett random stället och inte spelaren
-                dxBullet = random.Next(0, Config.WindowSizeWidth) - bulletX;
-                dyBullet = random.Next(0,Config.WindowSizeHeight) - bulletY;
-                enemyBulletRadius = 15;
+                float randomX = random.Next((int)enemy.x - 100, (int)enemy.x + 100);
+                float randomY = random.Next((int)enemy.y - 100, (int)enemy.y + 100);
+                distanceX = Helper.EuclideanVector2(ref bulletX, ref randomX, ref bulletY, ref randomY).X;
+                distanceY = Helper.EuclideanVector2(ref bulletX, ref randomX, ref bulletY, ref randomY).Y;
+                enemyBulletRadius = 10;
             }
-            float distanceBullets = MathF.Sqrt(dxBullet * dxBullet + dyBullet * dyBullet);
 
-            moveX = dxBullet / distanceBullets * Config.enemyBulletSpeed;
-            moveY = dyBullet / distanceBullets * Config.enemyBulletSpeed;
+            moveX = distanceX * Config.enemyBulletSpeed;
+            moveY = distanceY * Config.enemyBulletSpeed;
         }
     }
 }

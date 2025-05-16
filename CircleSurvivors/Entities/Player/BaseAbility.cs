@@ -1,7 +1,8 @@
-﻿using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Entities.Enemies;
+using CircleSurvivors.UI_Helpers;
+using CircleSurvivors.Interfaces;
 using CircleSurvivors.Core;
 using Raylib_cs;
-using CircleSurvivors.Entities.Enemies;
 
 namespace CircleSurvivors.Entities.Player
 {
@@ -50,19 +51,29 @@ namespace CircleSurvivors.Entities.Player
         /// <summary>
         /// gör shooting trajectory mellan spelare och närmaste enemy
         /// </summary>
-        /// <param name="closestEnemy"></param>
+        /// <param name="closestEnemy">närmaste enemy</param>
         public void ShootingTrajectory(NPC closestEnemy)
         {
             //räknar fram euclidean distance som en linje på en graf, och ändrar inte den.
             bulletX = Config.player.x;
             bulletY = Config.player.y;
 
-            float dx = closestEnemy.x - bulletX;
-            float dy = closestEnemy.y - bulletY;
-            float distance = MathF.Sqrt(dx * dx + dy * dy);
+            float distanceXvector = Helper.EuclideanVector2(ref bulletX, ref closestEnemy.x, ref bulletY, ref closestEnemy.y).X;
+            float distanceYvector = Helper.EuclideanVector2(ref bulletX, ref closestEnemy.x, ref bulletY, ref closestEnemy.y).Y;
 
-            moveX = dx / distance * Config.bulletSpeed;
-            moveY = dy / distance * Config.bulletSpeed;
+            moveX = distanceXvector * Config.bulletSpeed;
+            moveY = distanceYvector * Config.bulletSpeed;
         }
+        //public void ClosestEnemyPointer(NPC closestEnemy)
+        //{
+        //    float dx = closestEnemy.x - Config.player.x;
+        //    float dy = closestEnemy.y - Config.player.y;
+        //    float distance = MathF.Sqrt(dx * dx + dy * dy);
+
+        //    float directionX = dx / distance * Config.bulletSpeed;
+        //    float directionY = dy / distance * Config.bulletSpeed;
+
+        //    Raylib.DrawCircle((int)Config.player.x + (int)directionX / 8, (int)Config.player.y + (int)directionY / 8, 2, Color.Blue);
+        //}
     }
 }

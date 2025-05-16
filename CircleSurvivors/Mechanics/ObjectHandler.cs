@@ -1,6 +1,6 @@
-﻿using CircleSurvivors.Core;
+﻿using CircleSurvivors.Entities.Enemies;
 using CircleSurvivors.Entities.Player;
-using CircleSurvivors.Entities.Enemies;
+using CircleSurvivors.Core;
 
 namespace CircleSurvivors.Mechanics
 {
