@@ -384,7 +384,7 @@ namespace CircleSurvivors.Entities.Enemies
              * sen är else samma som steg 3 fast till 0 för att stanna, och använder friction
             */
 
-            float distance = Helper.EuclideanFloat(ref x, ref Config.player.x, ref y, ref Config.player.y).distance;
+            distance = Helper.EuclideanFloat(ref x, ref Config.player.x, ref y, ref Config.player.y).distance;
 
             if (!shouldShoot)
             {

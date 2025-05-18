@@ -19,17 +19,22 @@ namespace CircleSurvivors.Entities.Player
         const float turnSpeed = 10f;
         const float friction = 3f;
 
+        double cos = 0;
+        double radiusAimer = 40;
+
         //stats
         public int movementSpeed = 100;
         public int radius = 15;
         public int healthpoints = 100;
         public int maxHealthpoints = 100;
+        public int dashSpeed = 3;
 
         //timers
         float bulletCooldownTimer = 0f;
         public float dashDuration = 0.5f;
         public float maxDashDuration = 0.5f;
         public float dashRegain = 10;
+        float aimerCooldown = 0.5f;
 
         //states
         bool isDashing = false;
@@ -68,7 +73,7 @@ namespace CircleSurvivors.Entities.Player
             Raylib.DrawRectangle((int)x - 15, (int)y + 20, (int)dashWidth, 4, new(18, 69, 255));
 
             //Direction pointer
-            //Raylib.DrawCircle((int)x + (int)velocity.X/2, (int)y + (int)velocity.Y/2, 2, Color.Blue);
+            Raylib.DrawCircle((int)x + (int)velocity.X/2, (int)y + (int)velocity.Y/2, 2, Color.Blue);
         }
         /// <summary>
         /// Kollar om spelaren ska despawna
@@ -87,6 +92,7 @@ namespace CircleSurvivors.Entities.Player
             ShootBullet(deltaTime);
             VectorMovement(deltaTime);
             CanvasBorder();
+            Aim(deltaTime);
         }
         /// <summary>
         /// kollar distancen mellan alla enemies och spelaren, används för enemies listan sortering
@@ -241,13 +247,31 @@ namespace CircleSurvivors.Entities.Player
             }
 
             if (Raylib.IsKeyDown(KeyboardKey.W) || Raylib.IsKeyDown(KeyboardKey.Up))
-                direction.Y -= 3;
+                direction.Y -= dashSpeed;
             if (Raylib.IsKeyDown(KeyboardKey.A) || Raylib.IsKeyDown(KeyboardKey.Left))
-                direction.X -= 3;
+                direction.X -= dashSpeed;
             if (Raylib.IsKeyDown(KeyboardKey.S) || Raylib.IsKeyDown(KeyboardKey.Down))
-                direction.Y += 3;
+                direction.Y += dashSpeed;
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
-                direction.X += 3;
+                direction.X += dashSpeed;
+        }
+        public void Aim(float deltaTime)
+        {
+            double pointerX = x + radiusAimer * Math.Cos(cos);
+            double pointerY = y + radiusAimer* Math.Sin(cos);
+
+            if (aimerCooldown > 0)
+            {
+                aimerCooldown -= deltaTime;
+            }
+            if (aimerCooldown < 0)
+            {
+                aimerCooldown = 0.01f;
+                cos += 0.1f;
+            }
+
+            Raylib.DrawCircle((int)pointerX, (int)pointerY, 3, Color.Black);
+
         }
     }
 }

@@ -27,13 +27,13 @@ namespace CircleSurvivors.Core
         /// <summary>
         /// initialiserar spelet och kör allt som behövs för det
         /// </summary>
-        
         static void Main()
         {
             float deltaTime; //Tiden mellan frames, delta tiden
             Raylib.SetTargetFPS(60); //nästan som Thread.sleep(16); men bättre
+            Image icon = Raylib.LoadImage("Images\\CSI.png");
 
-            //object instatiering
+            //object instantiering
             SpawnMechanics spawnMechs = new SpawnMechanics();
             ObjectHandler objectHandler = Config.objectHandler;
             GuiHandler guiHandler = new GuiHandler();
@@ -42,6 +42,7 @@ namespace CircleSurvivors.Core
             Config.ResetGameState();
 
             Raylib.InitWindow(Config.WindowSizeWidth, Config.WindowSizeHeight, "Circle Survivors - " + SplashText.GetSplashText());
+            Raylib.SetWindowIcon(icon);
             while (!Raylib.WindowShouldClose()) //Game loop
             {
                 deltaTime = Raylib.GetFrameTime();

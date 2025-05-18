@@ -1,5 +1,5 @@
-﻿using Raylib_cs;
-using System.Numerics;
+﻿using System.Numerics;
+using Raylib_cs;
 
 namespace CircleSurvivors.UI_Helpers
 {
@@ -36,6 +36,14 @@ namespace CircleSurvivors.UI_Helpers
             float distanceVectorEuc = MathF.Sqrt(dx * dx + dy * dy);
             return new Vector2(dx / distanceVectorEuc, dy / distanceVectorEuc);
         }
+        /// <summary>
+        /// tar fram Euclidean distansen och returnerar den som en float
+        /// </summary>
+        /// <param name="x">x</param>
+        /// <param name="x2">x2</param>
+        /// <param name="y"><y/param>
+        /// <param name="y2">y2</param>
+        /// <returns>en tuple av dx/distance, dy/distance, och distansen</returns>
         public static (float dxDistance, float dyDistance, float distance) EuclideanFloat(ref float x, ref float x2, ref float y, ref float y2)
         {
             float dx = x2 - x;

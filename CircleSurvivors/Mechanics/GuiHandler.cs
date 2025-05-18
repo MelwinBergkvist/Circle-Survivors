@@ -1,8 +1,8 @@
-﻿using CircleSurvivors.Interfaces;
+﻿using CircleSurvivors.Gui.Regular;
+using CircleSurvivors.Gui.Special;
+using CircleSurvivors.Interfaces;
 using CircleSurvivors.Graphics;
 using CircleSurvivors.Core;
-using CircleSurvivors.Gui.Special;
-using CircleSurvivors.Gui.Regular;
 
 namespace CircleSurvivors.Mechanics
 {
