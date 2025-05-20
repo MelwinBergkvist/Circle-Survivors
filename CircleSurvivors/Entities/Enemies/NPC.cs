@@ -22,15 +22,18 @@ namespace CircleSurvivors.Entities.Enemies
 
         //states
         public bool shouldShoot = false;
+        bool isSpinner = false;
         public bool isBoss = false;
         readonly Random random = new Random();
         string bossName;
+        bool extendRadius = true;
 
         //stats
         int hitpoints;
         int maxHitpoints; //behövs för damage radius
         public int enemyCollisionDamage;
         public float radius;
+        int spinnerRadius = 10;
 
         //timers
         float hitCooldown;
@@ -39,6 +42,10 @@ namespace CircleSurvivors.Entities.Enemies
         float collisionCooldownTimer = 0f;
         public float spawnImmunity = 0.5f;
         public float sinceSpawn = 0;
+        float aimerCooldown = 0.5f;
+
+        double angle = 0;
+        double radiusAimer = 40;
 
         //scaling
         readonly int scaling = (Config.wave-1) * 10;
@@ -164,6 +171,8 @@ namespace CircleSurvivors.Entities.Enemies
                 PlayerCollision(enemies, deltaTime);
             }
 
+            Spinner(deltaTime);
+
             //cooldowns
             if (hitCooldown >= 0) hitCooldown -= deltaTime;
             if (collisionCooldown >= collisionCooldownTimer) collisionCooldownTimer += deltaTime;
@@ -244,6 +253,7 @@ namespace CircleSurvivors.Entities.Enemies
                     radius = 50;
                     movementSpeed = 40;
                     enemyCollisionDamage = 30;
+                    isSpinner = true;
                     enemyColor = new(156, 6, 6);
                     enemyHealthColor = new(77, 8, 8);
                     bossName = normalNames[random.Next(0,10)];
@@ -425,6 +435,41 @@ namespace CircleSurvivors.Entities.Enemies
             if (isBoss)
             {
                 Helper.DrawCenteredText($"{bossName}", (int)x, (int)y + (int)radius + 10, 14, enemyColor);
+            }
+        }
+        /// <summary>
+        /// metoden som handler spinning balls runt default boss enemy
+        /// </summary>
+        /// <param name="deltaTime">tid</param>
+        public void Spinner(float deltaTime)
+        {
+            // WIP - har inte gjort collision än
+            if (isSpinner)
+            {
+                double pointerX = x + (radius + spinnerRadius) * Math.Cos(angle);
+                double pointerY = y + (radius + spinnerRadius) * Math.Sin(angle);
+
+                if (aimerCooldown > 0)
+                {
+                    aimerCooldown -= deltaTime;
+                }
+                if (aimerCooldown < 0)
+                {
+                    aimerCooldown = 0.01f;
+                    angle += 0.05f;
+
+                    if (spinnerRadius <= 10)
+                        extendRadius = true;
+                    else if (spinnerRadius >= 70)
+                        extendRadius = false;
+
+                    if (extendRadius)
+                        spinnerRadius += 3;
+                    else if (!extendRadius)
+                        spinnerRadius -= 3;
+                }
+
+                Raylib.DrawCircle((int)pointerX, (int)pointerY, 10, Color.Red);
             }
         }
     }

@@ -19,9 +19,6 @@ namespace CircleSurvivors.Entities.Player
         const float turnSpeed = 10f;
         const float friction = 3f;
 
-        double cos = 0;
-        double radiusAimer = 40;
-
         //stats
         public int movementSpeed = 100;
         public int radius = 15;
@@ -34,7 +31,6 @@ namespace CircleSurvivors.Entities.Player
         public float dashDuration = 0.5f;
         public float maxDashDuration = 0.5f;
         public float dashRegain = 10;
-        float aimerCooldown = 0.5f;
 
         //states
         bool isDashing = false;
@@ -92,7 +88,7 @@ namespace CircleSurvivors.Entities.Player
             ShootBullet(deltaTime);
             VectorMovement(deltaTime);
             CanvasBorder();
-            Aim(deltaTime);
+            //Aim(deltaTime);
         }
         /// <summary>
         /// kollar distancen mellan alla enemies och spelaren, används för enemies listan sortering
@@ -254,24 +250,6 @@ namespace CircleSurvivors.Entities.Player
                 direction.Y += dashSpeed;
             if (Raylib.IsKeyDown(KeyboardKey.D) || Raylib.IsKeyDown(KeyboardKey.Right))
                 direction.X += dashSpeed;
-        }
-        public void Aim(float deltaTime)
-        {
-            double pointerX = x + radiusAimer * Math.Cos(cos);
-            double pointerY = y + radiusAimer* Math.Sin(cos);
-
-            if (aimerCooldown > 0)
-            {
-                aimerCooldown -= deltaTime;
-            }
-            if (aimerCooldown < 0)
-            {
-                aimerCooldown = 0.01f;
-                cos += 0.1f;
-            }
-
-            Raylib.DrawCircle((int)pointerX, (int)pointerY, 3, Color.Black);
-
         }
     }
 }
